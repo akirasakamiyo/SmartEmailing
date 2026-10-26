@@ -117,7 +117,7 @@ function speak(text, btn) {
   u.lang = 'id-ID';
   const v = speechSynthesis.getVoices().find(x => (x.lang || '').toLowerCase().startsWith('id'));
   if (v) u.voice = v;
-  u.onend = u.onerror = () => btn && btn.classList.remove('on');
+  u.onend = u.onerror = () => { if (btn) { btn.classList.remove('on'); if (btn.classList.contains('au-play')) { btn.innerHTML = icon('play'); const n = $('#narasi'); n && n.classList.remove('playing'); } } };
   btn && btn.classList.add('on');
   speechSynthesis.speak(u);
 }
@@ -291,15 +291,20 @@ function mcq(el, { q, opts, onDone, store, key }) {
    NAVIGASI SAMPING (halaman scene, latihan, evaluasi)
    ========================================================================= */
 function sideNav(cur) {
-  const link = id => {
-    const lk = locked(id), d = state.done[id];
-    return `<a class="side-link ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}"><span class="sl-st">${d ? icon('check') : lk ? icon('lock') : id.slice(1)}</span><span>${SCENES[id].title}</span></a>`;
+  const unread = ORDER.filter(id => !state.done[id] && !locked(id)).length;
+  const row = id => {
+    const lk = locked(id), d = state.done[id], sc = SCENES[id];
+    return `<a class="ib-row ${id === cur ? 'cur' : ''} ${d ? 'done' : 'unread'} ${lk ? 'locked' : ''}" href="#/scene/${id}">
+      <span class="ib-av">${lk ? icon('lock') : id}</span>
+      <span class="ib-t"><b>${sc.title}</b><small>${sc.type}</small></span>
+      <span class="ib-st">${d ? icon('check') : lk ? '' : '<i class="ib-dot"></i>'}</span></a>`;
   };
-  return `<a class="side-back" href="#/materi">${icon('left')} Semua materi</a>
-    <div class="side-prog"><span class="bar"><i style="width:${pct()}%"></i></span><small>${doneCount()} / 13 scene selesai</small></div>
-    <details class="side-list" ${window.innerWidth > 1080 ? 'open' : ''}><summary>${icon('list')} Daftar scene</summary><div class="side-groups">${MATERI.map(m => `<div class="side-group"><div class="side-gh">${m.id === 'akhir' ? 'Latihan & Evaluasi' : m.short}</div>
-      ${m.id === 'akhir' ? `<a class="side-link ${cur === 'L' ? 'cur' : ''}" href="#/latihan"><span class="sl-st">L</span><span>Latihan Soal</span></a>` : ''}
-      ${m.scenes.map(link).join('')}</div>`).join('')}</div></details>`;
+  return `<div class="ib-head"><span class="ib-ic">${icon('inbox')}</span><div><b>Kotak Masuk Materi</b><small>${unread ? `${unread} belum dibuka` : 'Semua sudah dibuka'}</small></div></div>
+    <div class="side-prog"><span class="bar"><i style="width:${pct()}%"></i></span><small>${doneCount()} / 13 selesai</small></div>
+    <details class="side-list" ${window.innerWidth > 1080 ? 'open' : ''}><summary>${icon('list')} Daftar scene</summary><div class="side-groups">${MATERI.map(m => `<div class="side-group"><div class="side-gh">${icon(m.id === 'akhir' ? 'flag' : 'book')} ${m.id === 'akhir' ? 'Latihan & Evaluasi' : m.short}</div>
+      ${m.id === 'akhir' ? `<a class="ib-row ${cur === 'L' ? 'cur' : ''}" href="#/latihan"><span class="ib-av">L</span><span class="ib-t"><b>Latihan Soal</b><small>${LATIHAN.length} soal campuran</small></span><span class="ib-st"></span></a>` : ''}
+      ${m.scenes.map(row).join('')}</div>`).join('')}</div></details>
+    <a class="side-back" href="#/materi">${icon('grid')} Lihat semua materi</a>`;
 }
 
 /* =========================================================================
@@ -431,29 +436,60 @@ const uraianSections = s => s.uraian.map((u, i) => `<section class="u-sec" id="u
 const uraianHTML = uraianSections;
 
 function viewScene(id) {
-  const s = SCENES[id], m = materiOf(id);
+  const s = SCENES[id], m = materiOf(id), i = ORDER.indexOf(id);
   const text = ((s.uraian || []).map(u => u.p.join(' ')).join(' ') + ' ' + (s.narasi || '')).replace(/<[^>]+>/g, '');
   const mins = Math.max(1, Math.round(text.split(/\s+/).length / 170));
-  const showUraian = s.uraian && !(s.uraianAfter && !state.done[id]);
-  const chips = [
-    ...(s.uraian ? (showUraian ? s.uraian.map((u, i) => ['u' + i, u.h]) : [['uraian', 'Materi']]) : []),
-    ...(s.narasi && id !== 'S01' ? [['narasi', 'Narasi']] : []),
-    ['aktivitas', s.type],
-  ];
+  const prev = ORDER[i - 1], next = ORDER[i + 1];
   return `<div class="lesson wrap">
     <aside class="side" id="side">${sideNav(id)}</aside>
-    <article class="sheet">
-      <div class="eyebrow">${m.short} · <span class="scode">${id}</span> · ${s.type}</div>
-      <h1 class="display">${s.title}</h1>
-      <p class="meta">± ${mins} menit · 1 aktivitas interaktif</p>
-      <div class="goal-box"><div class="box-h">Tujuan halaman ini</div><p>${icon('target')}<span>${s.tujuan}</span></p></div>
-      <div class="toc-box"><div class="box-h">Di halaman ini</div><div class="toc">${chips.map(([k, t]) => `<button type="button" class="toc-chip ${k === 'aktivitas' ? 'strong' : ''}" data-jump="${k}">${k === 'aktivitas' ? icon('pointer') + ' ' : ''}${t}</button>`).join('')}</div></div>
-      ${s.uraian ? `<div id="uraian">${showUraian ? uraianSections(s) : `<section class="u-sec"><p class="locked-note">${icon('eyeoff')} Rangkuman kesalahan baru muncul setelah kamu menemukan semuanya di aktivitas bawah, supaya jawabannya tidak bocor.</p></section>`}</div>` : ''}
-      ${s.narasi && id !== 'S01' ? `<section class="narasi" id="narasi"><div class="narasi-h">${icon('chat')}<span>Narasi</span><button type="button" class="chip-btn" data-speak>${icon('vol')}<span>Dengarkan</span></button></div><p>${s.narasi}</p></section>` : ''}
-      <section class="act-sec" id="aktivitas"><h2 class="sec-title">${id === 'S01' ? 'Tonton dulu' : id === 'S12' ? 'Kerjakan evaluasi' : id === 'S13' ? 'Rangkuman' : 'Ayo coba'}</h2><div class="act-card" id="activity"></div></section>
+    <article class="sheet mail-view">
+      <div class="mv-bar">
+        <a class="mv-btn" href="#/materi" title="Semua materi">${icon('left')}<span>Materi</span></a>
+        <span class="mv-pos">${i + 1} dari ${ORDER.length}</span>
+        <span class="mv-nav">
+          ${prev ? `<a class="mv-btn sq" href="#/scene/${prev}" title="Scene sebelumnya" aria-label="Scene sebelumnya">${icon('up')}</a>` : ''}
+          ${next ? `<a class="mv-btn sq" href="#/scene/${next}" title="Scene berikutnya" aria-label="Scene berikutnya">${icon('down')}</a>` : ''}
+        </span>
+      </div>
+      <header class="mv-head">
+        <span class="mv-av">${LOGO}</span>
+        <div class="mv-meta">
+          <div class="mv-from"><b>Smart Emailing</b><small>kepada: kamu · ± ${mins} menit</small></div>
+          <h1 class="display">${s.title}</h1>
+          <div class="mv-labels"><span class="lbl">${m.short}</span><span class="lbl code">${id}</span><span class="lbl soft">${icon('pointer')} ${s.type}</span></div>
+        </div>
+      </header>
+      <div class="pin-note"><span class="pin" aria-hidden="true"></span><b>Tujuan</b><p>${s.tujuan}</p></div>
+      ${s.narasi && id !== 'S01' ? `<section class="audio" id="narasi">
+        <button type="button" class="au-play" data-speak aria-label="Putar narasi">${icon('play')}</button>
+        <div class="au-body"><div class="au-top"><b>Narasi</b><button type="button" class="au-link" data-script>Lihat teks</button></div>
+          <div class="au-wave" aria-hidden="true">${Array.from({ length: 36 }, (_, k) => `<i style="--h:${(30 + Math.abs(Math.sin(k * 1.7)) * 70).toFixed(0)}%;--d:${(k * 45) % 900}ms"></i>`).join('')}</div></div>
+        <p class="au-script" hidden>${s.narasi}</p>
+      </section>` : ''}
+      ${s.uraian ? `<section class="stepper" id="uraian"></section>` : ''}
+      <section class="act-sec" id="aktivitas"><div class="act-label"><span class="act-num">${icon(id === 'S01' ? 'play' : id === 'S12' ? 'flag' : id === 'S13' ? 'award' : 'pointer')}</span><div><small>${id === 'S01' ? 'Tonton dulu' : id === 'S12' ? 'Evaluasi akhir' : id === 'S13' ? 'Penutup' : 'Aktivitas'}</small><h2 class="sec-title">${id === 'S01' ? 'Video pembuka' : id === 'S12' ? 'Kerjakan evaluasi' : id === 'S13' ? 'Rangkuman pelatihan' : 'Ayo coba: ' + s.type.toLowerCase()}</h2></div></div><div class="act-card" id="activity"></div></section>
       <nav class="lesson-nav">${lessonNav(id)}</nav>
     </article>
   </div>`;
+}
+
+/* Materi dibaca per kartu; posisi kartu disimpan */
+function renderSteps(id) {
+  const box = $('#uraian'); if (!box) return;
+  const s = SCENES[id], st = A(id);
+  if (s.uraianAfter && !state.done[id]) {
+    box.innerHTML = `<div class="step-card locked">${icon('eyeoff')}<div><b>Materi masih disembunyikan</b><p>Rangkuman kesalahan baru terbuka setelah kamu menemukan semuanya di aktivitas bawah, supaya jawabannya tidak bocor.</p><button type="button" class="btn btn-primary btn-sm" data-go-act>Ke aktivitas ${icon('down')}</button></div></div>`;
+    return;
+  }
+  const n = s.uraian.length, k = Math.min(st.step || 0, n - 1);
+  const u = s.uraian[k];
+  box.innerHTML = `<div class="step-tabs" role="tablist">${s.uraian.map((x, j) => `<button type="button" role="tab" class="st-tab ${j === k ? 'cur' : ''} ${j < k ? 'past' : ''}" data-step="${j}" aria-selected="${j === k}"><span>${j + 1}</span>${x.h}</button>`).join('')}</div>
+    <div class="step-card" key="${k}"><small class="sc-k">Bagian ${k + 1} dari ${n}</small><h2 class="sec-title">${u.h}</h2>${u.p.map(p => p.startsWith('<ol') ? p : `<p>${p}</p>`).join('')}</div>
+    <div class="step-nav">
+      <button type="button" class="btn btn-outline btn-sm" data-step="${k - 1}" ${k === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
+      <span class="st-dots">${s.uraian.map((_, j) => `<i class="${j === k ? 'cur' : j < k ? 'past' : ''}"></i>`).join('')}</span>
+      ${k < n - 1 ? `<button type="button" class="btn btn-primary btn-sm" data-step="${k + 1}">Berikutnya ${icon('right')}</button>` : `<button type="button" class="btn btn-gold btn-sm" data-go-act>Kerjakan aktivitas ${icon('down')}</button>`}
+    </div>`;
 }
 
 function lessonNav(id) {
@@ -466,15 +502,23 @@ function lessonNav(id) {
 function mountScene(id) {
   const btn = $('#nextBtn');
   if (btn) btn.addEventListener('click', e => { if (btn.classList.contains('is-locked')) { e.preventDefault(); toast('Selesaikan aktivitas di halaman ini dulu, ya.'); $('#aktivitas').scrollIntoView({ behavior: 'smooth' }); } });
-  const sp = $('[data-speak]'); if (sp) sp.onclick = () => speak(SCENES[id].narasi, sp);
-  $$('[data-jump]').forEach(b => b.onclick = () => { const t = document.getElementById(b.dataset.jump); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  const sp = $('[data-speak]');
+  if (sp) sp.onclick = () => { speak(SCENES[id].narasi, sp); const on = sp.classList.contains('on'); $('#narasi').classList.toggle('playing', on); sp.innerHTML = icon(on ? 'pause' : 'play'); };
+  const scr = $('[data-script]'); if (scr) scr.onclick = () => { const p = $('.au-script'); p.hidden = !p.hidden; scr.textContent = p.hidden ? 'Lihat teks' : 'Sembunyikan teks'; };
+  renderSteps(id);
+  const ur = $('#uraian');
+  if (ur) ur.addEventListener('click', e => {
+    const g = e.target.closest('[data-go-act]'); if (g) { $('#aktivitas').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const b = e.target.closest('[data-step]'); if (!b || b.disabled) return;
+    A(id).step = Math.max(0, +b.dataset.step); save(); sfx(); renderSteps(id);
+  });
   const done = silent => {
     const freshDone = !state.done[id];
     state.done[id] = true; save(); updateBar();
     if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
     if (freshDone && !silent) celebrate();
-    $$('.side-link').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.querySelector('.sl-st').innerHTML = icon('check'); } });
-    const ur = $('#uraian'); if (ur && SCENES[id].uraianAfter) ur.innerHTML = uraianSections(SCENES[id]);
+    $$('.ib-row').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.classList.remove('unread'); a.querySelector('.ib-st').innerHTML = icon('check'); } });
+    if (SCENES[id].uraianAfter) renderSteps(id);
   };
   ACT[id]($('#activity'), done, A(id));
 }
@@ -1050,8 +1094,8 @@ function mountLatihan() {
     const go = e.target.closest('[data-go]'); if (go) { L.i = +go.dataset.go; save(); render(); return; }
     if (e.target.closest('[data-prev]')) { L.i = Math.max(0, L.i - 1); save(); render(); return; }
     if (e.target.closest('[data-next]')) { L.i = Math.min(LATIHAN.length - 1, L.i + 1); save(); render(); return; }
-    if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; save(); sfx(ok ? 'ok' : 'no'); render(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan sudah kamu kerjakan!'); return; }
-    if (e.target.closest('[data-reset]')) { if (!confirm('Ulangi latihan dari awal? Jawaban latihan akan dihapus.')) return; state.lat = { i: 0, ans: {}, res: {} }; save(); mountLatihan(); }
+    if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; save(); sfx(ok ? 'ok' : 'no'); render(); updateBar(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan sudah kamu kerjakan!'); return; }
+    if (e.target.closest('[data-reset]')) { if (!confirm('Ulangi latihan dari awal? Jawaban latihan akan dihapus.')) return; state.lat = { i: 0, ans: {}, res: {} }; save(); updateBar(); mountLatihan(); }
   });
 }
 
@@ -1253,7 +1297,10 @@ async function route() {
     navKey = p.nav || '';
     document.title = p.title ? `${p.title} — Smart Emailing` : 'Smart Emailing — Pelatihan Menulis Email Profesional';
   }
+  if (!isScene && !page) navKey = 'home';
   $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === navKey));
+  requestAnimationFrame(() => moveInd(activeTab()));
+  $('#readLine').style.width = '0%';
   document.body.classList.toggle('is-home', !isScene && !page);
   window.scrollTo({ top: 0, behavior: 'instant' });
   app.focus({ preventScroll: true });
@@ -1264,20 +1311,55 @@ async function route() {
 }
 
 function updateBar() {
-  $('#progFill').style.width = pct() + '%';
-  $('#progText').textContent = pct() + '%';
+  const p = pct(), C = 2 * Math.PI * 16;
+  const ring = $('#progRing'); ring.style.strokeDasharray = C; ring.style.strokeDashoffset = C * (1 - p / 100);
+  $('#progText').textContent = p + '%';
   const sb = $('#soundBtn');
   sb.innerHTML = icon(state.sound ? 'vol' : 'mute');
   sb.setAttribute('aria-label', state.sound ? 'Matikan efek suara' : 'Nyalakan efek suara'); sb.title = sb.getAttribute('aria-label');
+  /* Badge ala notifikasi email */
+  const belum = LATIHAN.length - Object.keys((state.lat && state.lat.res) || {}).length;
+  const bl = $('#badgeLat'); bl.textContent = belum > 0 ? belum : ''; bl.classList.toggle('on', belum > 0); bl.title = belum > 0 ? `${belum} soal latihan belum dikerjakan` : '';
+  const be = $('#badgeEv'); be.className = 'tbadge ' + (evalPassed() ? 'on ok' : !materiDone() ? 'on lock' : '');
+  be.innerHTML = evalPassed() ? icon('check') : !materiDone() ? icon('lock') : '';
+  be.title = evalPassed() ? 'Evaluasi sudah lulus' : !materiDone() ? 'Terbuka setelah semua materi selesai' : '';
+  if (!$('#progPop').hidden) renderPop();
 }
-function closeMenu() { document.body.classList.remove('menu-open'); $('#menuBtn').setAttribute('aria-expanded', 'false'); }
+function renderPop() {
+  const latOk = state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
+  const ev = state.ev && state.ev.done ? state.ev.score : null;
+  $('#progPop').innerHTML = `<div class="pp-h"><b>Progres kamu</b><small>${doneCount()} dari 13 scene selesai</small></div>
+    ${MATERI.map(m => { const d = m.scenes.filter(id => state.done[id]).length; return `<div class="pp-row"><span>${m.short}</span><span class="bar"><i style="width:${d / m.scenes.length * 100}%"></i></span><b>${d}/${m.scenes.length}</b></div>`; }).join('')}
+    <div class="pp-sub"><span>${icon('pen')} Latihan</span><b>${latOk}/${LATIHAN.length} benar</b></div>
+    <div class="pp-sub"><span>${icon('flag')} Evaluasi</span><b>${ev !== null ? 'Nilai ' + ev : materiDone() ? 'Siap dikerjakan' : 'Terkunci'}</b></div>
+    <a class="btn btn-primary btn-sm" href="${doneCount() ? resumeHref() : '#/scene/S01'}">${doneCount() ? 'Lanjutkan belajar' : 'Mulai belajar'} ${icon('right')}</a>`;
+}
+function togglePop(force) {
+  const pop = $('#progPop'), open = force !== undefined ? force : pop.hidden;
+  if (open) renderPop();
+  pop.hidden = !open; $('#progBtn').setAttribute('aria-expanded', String(open));
+}
+/* Penanda tab yang meluncur mengikuti kursor */
+function moveInd(el) {
+  const ind = $('#tabInd'), tabs = $('#navLinks');
+  if (!el || getComputedStyle(ind).display === 'none') { ind.style.opacity = 0; return; }
+  const r = el.getBoundingClientRect(), t = tabs.getBoundingClientRect();
+  ind.style.opacity = 1; ind.style.width = r.width + 'px'; ind.style.transform = `translateX(${r.left - t.left}px)`;
+}
+const activeTab = () => $('#navLinks a.active');
+function closeMenu() { togglePop(false); }
 
 /* ---------- Mulai ---------- */
 $('#brandMark').innerHTML = LOGO;
-$('#menuBtn').innerHTML = icon('grid');
-$('#menuBtn').onclick = () => { const o = document.body.classList.toggle('menu-open'); $('#menuBtn').setAttribute('aria-expanded', String(o)); };
+$$('.t-ic').forEach(e => { e.innerHTML = icon(e.dataset.ic); });
+$$('#navLinks a').forEach(a => { a.addEventListener('mouseenter', () => moveInd(a)); a.addEventListener('focus', () => moveInd(a)); });
+$('#navLinks').addEventListener('mouseleave', () => moveInd(activeTab()));
+$('#progBtn').onclick = e => { e.stopPropagation(); togglePop(); };
+document.addEventListener('click', e => { if (!$('#progPop').hidden && !e.target.closest('#progPop')) togglePop(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') togglePop(false); });
+window.addEventListener('resize', () => moveInd(activeTab()));
 $('.curtain-in').insertAdjacentHTML('afterbegin', `<span class="cur-logo">${LOGO}</span>`);
 $('#soundBtn').onclick = () => { state.sound = !state.sound; save(); updateBar(); sfx(); toast(state.sound ? 'Efek suara aktif.' : 'Efek suara dimatikan.'); };
 window.addEventListener('hashchange', route);
-window.addEventListener('scroll', () => $('#nav').classList.toggle('scrolled', window.scrollY > 8), { passive: true });
+window.addEventListener('scroll', () => { const max = document.documentElement.scrollHeight - innerHeight; $('#nav').classList.toggle('scrolled', scrollY > 8); $('#readLine').style.width = (max > 0 ? scrollY / max * 100 : 0) + '%'; }, { passive: true });
 route();

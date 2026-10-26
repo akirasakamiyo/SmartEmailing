@@ -14,24 +14,26 @@
     <div class="wrap nav-in">
       <a class="brand" href="#/" aria-label="Smart Emailing, ke beranda">
         <span class="brand-mark" id="brandMark"></span>
-        <span class="brand-text">Smart<b>Emailing</b></span>
+        <span class="brand-text"><b>Smart<em>Emailing</em></b><small>Pelatihan email lamaran</small></span>
       </a>
-      <nav class="nav-links" id="navLinks" aria-label="Navigasi utama">
-        <a href="#/materi" data-nav="materi">Materi</a>
-        <a href="#/latihan" data-nav="latihan">Latihan</a>
-        <a href="#/scene/S12" data-nav="evaluasi">Evaluasi</a>
-        <a href="#/petunjuk" data-nav="panduan">Panduan</a>
+      <nav class="tabs" id="navLinks" aria-label="Navigasi utama">
+        <span class="tab-ind" id="tabInd" aria-hidden="true"></span>
+        <a href="#/" data-nav="home"><span class="t-ic" data-ic="home"></span><span class="t-l">Beranda</span></a>
+        <a href="#/materi" data-nav="materi"><span class="t-ic" data-ic="book"></span><span class="t-l">Materi</span></a>
+        <a href="#/latihan" data-nav="latihan"><span class="t-ic" data-ic="pen"></span><span class="t-l">Latihan</span><span class="tbadge" id="badgeLat"></span></a>
+        <a href="#/scene/S12" data-nav="evaluasi"><span class="t-ic" data-ic="flag"></span><span class="t-l">Evaluasi</span><span class="tbadge" id="badgeEv"></span></a>
+        <a href="#/petunjuk" data-nav="panduan"><span class="t-ic" data-ic="help"></span><span class="t-l">Panduan</span></a>
       </nav>
       <div class="nav-tools">
         <button class="icon-btn" id="soundBtn" type="button" aria-label="Efek suara"></button>
-        <a class="prog-pill" href="#/materi" title="Progres materi">
-          <span class="prog-l">Progres</span>
-          <span class="prog-bar"><i id="progFill"></i></span>
+        <button class="ring-btn" id="progBtn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Lihat progres">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><circle class="rb-bg" cx="20" cy="20" r="16"/><circle class="rb-fg" id="progRing" cx="20" cy="20" r="16"/></svg>
           <b id="progText">0%</b>
-        </a>
-        <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Buka menu" aria-expanded="false"></button>
+        </button>
+        <div class="prog-pop" id="progPop" role="dialog" aria-label="Progres kamu" hidden></div>
       </div>
     </div>
+    <span class="read-line" aria-hidden="true"><i id="readLine"></i></span>
   </header>
 
   <main id="app" tabindex="-1"></main>
