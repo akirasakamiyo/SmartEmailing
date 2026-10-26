@@ -4,19 +4,27 @@ Modul pelatihan interaktif untuk belajar menulis email lamaran kerja yang rapi d
 Tata letaknya mengikuti gaya halaman pelajaran: beranda, katalog materi, 13 scene (S01–S13) dengan sidebar daftar scene, latihan soal, dan evaluasi.
 
 ## Cara membuka (offline)
-- Klik dua kali `dist/SmartEmailing_Tim7_offline.html`. Semua aset ada di dalam satu file ini.
-- Atau buka `index.html` di folder ini.
-- Tidak butuh internet, akun, ataupun layanan luar (Google Forms, Quizizz, dan sejenisnya).
+- Klik dua kali `dist/SmartEmailing_Tim7_offline.html`. Semua aset ada di dalam satu file ini, tidak butuh internet.
+- Tidak ada akun, Google Forms, Quizizz, atau layanan luar lainnya.
 
 ## Untuk LMS
-Unggah `dist/SmartEmailing_Tim7.zip` (paket folder) atau `dist/SmartEmailing_Tim7_offline.html` (satu file).
+| File | Dipakai untuk |
+|---|---|
+| `dist/SmartEmailing_Tim7_SCORM.zip` | **Paket SCORM 1.2.** Unggah sebagai aktivitas SCORM (Moodle: *Add an activity → SCORM package*). Status belajar dan nilai evaluasi otomatis tercatat di LMS (lulus bila nilai ≥ 75). |
+| `dist/SmartEmailing_Tim7_offline.html` | Satu file HTML. Bisa diunggah sebagai *File* atau dikirim langsung. |
+| `dist/SmartEmailing_Tim7.zip` | Paket folder web biasa (untuk aktivitas *Folder* / *IMS content*). |
 
-## Publikasi lewat GitHub Desktop + GitHub Pages
-1. Buka **GitHub Desktop** → **File → Add Local Repository…** → pilih folder `SmartEmailing_Tim7`.
-2. Klik **Publish repository**. Hilangkan centang *Keep this code private* kalau mau dipublikasikan lewat Pages.
-3. Buka repositorinya di github.com → **Settings → Pages** → *Source*: **Deploy from a branch** → Branch **main**, folder **/(root)** → **Save**.
-4. Tunggu 1–2 menit. Webnya tampil di `https://<username>.github.io/SmartEmailing_Tim7/`.
-5. Kalau nanti ada perubahan: jalankan `python3 tools/build.py`, lalu di GitHub Desktop isi *Summary* → **Commit to main** → **Push origin**.
+## Web online (GitHub Pages)
+https://akirasakamiyo.github.io/SmartEmailing/
+
+## Cara update web
+Setelah mengedit file di folder ini, pilih salah satu:
+1. **Klik dua kali `Update ke GitHub.command`** di Finder. Paket offline, ZIP, dan SCORM dibuat ulang, lalu diunggah ke GitHub.
+2. **Sinkron otomatis:** klik dua kali `Sinkron Otomatis.command` dan biarkan jendelanya terbuka. Setiap kali kamu menyimpan file, 10 detik kemudian perubahan otomatis diunggah.
+3. **Lewat Terminal:** `./tools/publish.sh "pesan perubahan"`.
+4. **Lewat GitHub Desktop:** jalankan `python3 tools/build.py` dulu, lalu *Commit to main* → *Push origin*.
+
+GitHub Pages memperbarui web sekitar 1–2 menit setelah unggahan.
 
 ## Struktur folder
 ```
@@ -25,8 +33,11 @@ SmartEmailing_Tim7/
 ├── css/styles.css      ← tampilan (marun · krem · emas)
 ├── js/app.js           ← isi materi, scene, aktivitas, latihan, evaluasi
 ├── assets/img/         ← logo dan favicon
-├── tools/build.py      ← membuat paket offline di dist/
-└── dist/               ← paket siap kirim (offline .html dan .zip)
+├── tools/build.py      ← membuat paket offline, ZIP, dan SCORM di dist/
+├── tools/publish.sh    ← build + commit + unggah ke GitHub
+├── tools/autosync.py   ← unggah otomatis setiap file disimpan
+├── Update ke GitHub.command / Sinkron Otomatis.command ← klik dua kali di Finder
+└── dist/               ← paket siap kirim (offline .html, .zip, SCORM .zip)
 ```
 
 ## Isi per scene

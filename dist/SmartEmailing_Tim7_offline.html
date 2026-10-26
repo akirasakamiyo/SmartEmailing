@@ -1149,7 +1149,36 @@ const LOGO = `<svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect wid
 const KEY = 'smart-emailing:v2';
 const fresh = () => ({ done: {}, act: {}, lat: null, ev: null, feedback: null, sound: true, last: null });
 let state = (() => { try { return Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return fresh(); } })();
-function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* mode privat */ } }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* mode privat */ } SCORM.sync(); }
+
+/* ---------- Koneksi LMS (SCORM 1.2) ----------
+   Bila dibuka di dalam LMS, status belajar dan nilai evaluasi dikirim ke LMS.
+   Bila dibuka biasa (offline / GitHub Pages), bagian ini diam saja. */
+const SCORM = (() => {
+  let api = null, last = '';
+  try {
+    let w = window;
+    for (let i = 0; i < 12 && w; i++) { if (w.API) { api = w.API; break; } if (w === w.parent) break; w = w.parent; }
+    if (!api && window.opener && window.opener.API) api = window.opener.API;
+    if (api && String(api.LMSInitialize('')) !== 'true') api = null;
+  } catch (e) { api = null; }
+  const set = (k, v) => { try { api.LMSSetValue(k, String(v)); } catch (e) { /* abaikan */ } };
+  if (api) window.addEventListener('beforeunload', () => { try { api.LMSCommit(''); api.LMSFinish(''); } catch (e) { /* abaikan */ } });
+  return {
+    on: !!api,
+    sync() {
+      if (!api) return;
+      const ev = state.ev && state.ev.done ? state.ev.score : null;
+      const status = ev === null ? 'incomplete' : ev >= KKM ? 'passed' : 'failed';
+      const key = status + '|' + ev + '|' + (state.last || '');
+      if (key === last) return; last = key;
+      set('cmi.core.lesson_status', status);
+      if (ev !== null) { set('cmi.core.score.min', 0); set('cmi.core.score.max', 100); set('cmi.core.score.raw', ev); }
+      if (state.last) set('cmi.core.lesson_location', state.last);
+      try { api.LMSCommit(''); } catch (e) { /* abaikan */ }
+    },
+  };
+})();
 const A = id => (state.act[id] = state.act[id] || {});
 
 /* ---------- Suara ---------- */
