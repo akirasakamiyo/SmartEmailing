@@ -1,0 +1,1971 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Emailing — Pelatihan Menulis Email Profesional</title>
+  <meta name="description" content="Smart Emailing: modul pelatihan interaktif menulis email lamaran kerja yang rapi dan sopan untuk fresh graduate.">
+  <meta name="theme-color" content="#3b1119">
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMTMiIGZpbGw9IiM3YTFmMmUiLz48cmVjdCB4PSI4IiB5PSIxNCIgd2lkdGg9IjMxIiBoZWlnaHQ9IjIyIiByeD0iNC41IiBmaWxsPSIjZmJmNWVjIi8+PHBhdGggZD0iTTEyIDE4LjUgMjEuNSAyNiAzNS41IDE1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNiMTExOSIgc3Ryb2tlLXdpZHRoPSIzLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0zOCAzLjUgMzkuOCA4LjIgNDQuNSAxMCAzOS44IDExLjggMzggMTYuNSAzNi4yIDExLjggMzEuNSAxMCAzNi4yIDguMloiIGZpbGw9IiNlMmIwNGEiIHN0cm9rZT0iIzdhMWYyZSIgc3Ryb2tlLXdpZHRoPSIxLjYiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4K" type="image/svg+xml">
+  <style>
+/* =========================================================================
+   SMART EMAILING — modul 16:9, palet marun · krem · emas
+   ========================================================================= */
+:root {
+  --maroon: #7a1f2e;
+  --maroon-d: #5c1522;
+  --maroon-2: #3b1119;
+  --maroon-3: #240a10;
+  --gold: #c9952e;
+  --gold-l: #e2b04a;
+  --gold-s: #f6e7c4;
+  --cream: #fbf5ec;
+  --card: #fffaf3;
+  --sand: #f3e6d0;
+  --blush: #f4ddd6;
+  --ink: #2a1a1c;
+  --muted: #6e5a5c;
+  --line: rgba(92, 21, 34, .14);
+  --ok: #2f6f4e;
+  --ok-bg: #e3efe6;
+  --bad: #b3412f;
+  --bad-bg: #f8e2dc;
+  --info-bg: #f6ebd3;
+  --r: 16px;
+  --r-sm: 11px;
+  --shadow: 0 1px 2px rgba(59, 17, 25, .06), 0 8px 22px -12px rgba(59, 17, 25, .25);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --icf: #e2b04a;
+}
+
+/* Ukuran huruf ikut ukuran bingkai 16:9 (bingkai 1280px = 16px) */
+html { font-size: clamp(13px, calc(min(100vw - 40px, (100vh - 40px) * 1.7778) / 80), 20px); -webkit-text-size-adjust: 100%; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; font-family: 'Poppins', ui-rounded, 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+  color: var(--ink); line-height: 1.5; -webkit-font-smoothing: antialiased;
+  background: radial-gradient(1200px 700px at 20% 0%, #4a1520, transparent 60%), linear-gradient(160deg, var(--maroon-2), var(--maroon-3));
+  display: grid; place-items: center; overflow: hidden;
+}
+a { color: inherit; }
+button, input, textarea, select { font: inherit; color: inherit; }
+h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .45em; letter-spacing: -.01em; }
+p { margin: 0 0 .7em; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+.muted { color: var(--muted); }
+.small { font-size: .86rem; }
+
+/* ---------- Bingkai 16:9 ---------- */
+.stage {
+  position: relative; width: min(calc(100vw - 40px), calc((100vh - 40px) * 1.7778)); aspect-ratio: 16 / 9;
+  background: var(--cream); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .06);
+}
+.stage-body { flex: 1; min-height: 0; overflow: auto; position: relative; outline: none; }
+
+/* ---------- Bilah atas & bawah ---------- */
+.bar { display: flex; align-items: center; gap: 1rem; padding: 0 1.1rem; flex: none; }
+.bar-top { height: 3.4rem; background: var(--maroon-2); color: var(--cream); }
+.bar-bottom { height: 3.6rem; background: var(--card); border-top: 1px solid var(--line); justify-content: space-between; }
+.bar-bottom:empty { display: none; }
+.brand { display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; flex: none; }
+.brand-mark { width: 2.1rem; height: 2.1rem; display: block; flex: none; }
+.brand-mark.sm { width: 1.9rem; height: 1.9rem; }
+.logo { width: 100%; height: 100%; overflow: visible; }
+.brand-text { font-weight: 800; letter-spacing: .02em; font-size: .95rem; }
+.brand-text b { color: var(--gold-l); font-weight: 800; }
+.bar-title { flex: 1; min-width: 0; text-align: center; font-weight: 600; font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: rgba(251, 245, 236, .85); }
+.bt-code { display: inline-block; background: var(--gold-l); color: var(--maroon-2); font-weight: 800; font-size: .72rem; padding: .1em .5em; border-radius: 6px; margin-right: .5em; vertical-align: 1px; }
+.bar-tools { display: flex; align-items: center; gap: .5rem; flex: none; }
+.prog { display: flex; align-items: center; gap: .5rem; font-size: .8rem; }
+.prog-bar { width: 5rem; height: .35rem; border-radius: 9px; background: rgba(251, 245, 236, .18); overflow: hidden; }
+.prog-bar i { display: block; height: 100%; width: 0; background: var(--gold-l); border-radius: inherit; transition: width .5s var(--ease); }
+.prog b { color: var(--gold-l); min-width: 2.4em; text-align: right; }
+.icon-btn { width: 2.25rem; height: 2.25rem; border-radius: 999px; border: 1px solid rgba(251, 245, 236, .22); background: transparent; color: var(--cream); display: grid; place-items: center; cursor: pointer; text-decoration: none; }
+.icon-btn:hover { background: rgba(255, 255, 255, .08); }
+.stage.is-cover .bar-title, .stage.is-cover .prog { visibility: hidden; }
+
+/* ---------- Ikon ---------- */
+.ic { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; overflow: visible; }
+.ic.duo { stroke-width: 1.8; }
+.ic .f { fill: var(--icf); stroke: none; transform: translate(2px, 2px); opacity: .85; }
+.ic .s { fill: none; }
+.bar-top, .narasi, .lscreen, .compose-top, .vacancy, .fnode.dark, .cm-root, .ip-ic, .curtain { --icf: rgba(226, 176, 74, .55); }
+.btn .ic .f, .icon-btn .ic .f, .chip-btn .ic .f, .fb .ic .f, .vbtn .ic .f, .counter .ic .f, .chip-f .ic .f, .menu-links .ic .f, .rec-link .ic .f, .o-btn .ic .f, .tile-code .ic .f { display: none; }
+.vplay .ic .s { fill: currentColor; }
+.vplay .ic .f { display: none; }
+.stars .ic .s { fill: inherit; }
+
+/* ---------- Tombol ---------- */
+.btn { position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: .45em; padding: .55em 1.1em; border-radius: 999px; border: 2px solid transparent; font-weight: 600; font-size: .9rem; text-decoration: none; cursor: pointer; white-space: nowrap; transition: background .18s, transform .18s, box-shadow .18s, border-color .18s, color .18s; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--maroon); color: #fff; box-shadow: 0 6px 16px -8px rgba(122, 31, 46, .8); }
+.btn-primary:hover { background: var(--maroon-d); }
+.btn-primary:disabled, .btn-primary.is-locked { background: #b9a2a5; box-shadow: none; cursor: not-allowed; }
+.btn-outline { background: transparent; color: var(--maroon); border-color: var(--line); }
+.btn-outline:hover { border-color: var(--maroon); }
+.btn-outline:disabled { opacity: .4; cursor: default; }
+.btn-ghost { background: rgba(251, 245, 236, .1); color: var(--cream); border-color: rgba(251, 245, 236, .35); }
+.btn-ghost:hover { background: rgba(251, 245, 236, .18); }
+.btn-lg { padding: .75em 1.5em; font-size: 1rem; }
+.btn-sm { padding: .42em .9em; font-size: .82rem; }
+.btn.glow { animation: glow 1.4s ease-out 3; }
+@keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(201, 149, 46, .7); } 100% { box-shadow: 0 0 0 16px rgba(201, 149, 46, 0); } }
+.chip-btn { display: inline-flex; align-items: center; gap: .35em; border: 1px solid rgba(251, 245, 236, .3); background: rgba(251, 245, 236, .08); color: var(--cream); border-radius: 999px; padding: .25em .7em; font-size: .75rem; font-weight: 600; cursor: pointer; margin-left: auto; }
+.chip-btn.on { background: var(--gold); border-color: var(--gold); color: var(--maroon-2); }
+.row-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin: .6rem 0; }
+
+.eyebrow { display: flex; align-items: center; gap: .5em; font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .45em; }
+.scode { display: inline-block; background: var(--maroon); color: var(--gold-s); padding: .15em .55em; border-radius: 7px; letter-spacing: .06em; }
+.h2 { font-size: 1.1rem; color: var(--maroon-2); margin-top: 1.2rem; }
+
+/* ---------- Sampul ---------- */
+.cover { height: 100%; display: grid; grid-template-columns: 1.15fr .85fr; align-items: center; gap: 2rem; padding: 0 3.2rem; background: radial-gradient(700px 420px at 85% 20%, rgba(201, 149, 46, .18), transparent 70%), linear-gradient(150deg, var(--maroon) 0%, var(--maroon-2) 75%); color: var(--cream); }
+.pill-tag { display: inline-flex; align-items: center; gap: .55rem; padding: .35em .9em; border: 1px solid rgba(246, 231, 196, .3); border-radius: 999px; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--gold-s); margin-bottom: 1.1rem; }
+.dot { width: .5rem; height: .5rem; border-radius: 50%; background: var(--gold-l); box-shadow: 0 0 0 4px rgba(226, 176, 74, .25); }
+.cover-title { font-size: 4.6rem; font-weight: 800; line-height: .95; letter-spacing: -.035em; margin: 0 0 .35em; }
+.cover-title span { position: relative; display: inline-block; color: var(--gold-l); padding-bottom: .1em; }
+.swoosh { position: absolute; left: -2%; bottom: -.12em; width: 104%; height: .3em; overflow: visible; }
+.swoosh path { fill: none; stroke: var(--gold-s); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 320; stroke-dashoffset: 320; animation: draw 1s cubic-bezier(.6, 0, .2, 1) .7s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.cover-hook { font-size: 1.25rem; font-weight: 600; max-width: 28ch; line-height: 1.35; margin-bottom: .6rem; }
+.q-mark { font-family: Georgia, serif; color: var(--gold-l); font-size: 2em; line-height: 0; vertical-align: -.35em; margin-right: .06em; }
+.cover-hook mark { color: var(--maroon-2); background: linear-gradient(var(--gold-s), var(--gold-s)) no-repeat 0 85% / 100% 70%; padding: 0 .12em; border-radius: 4px; }
+.cover-sub { color: rgba(251, 245, 236, .78); max-width: 46ch; font-size: .95rem; }
+.cover-cta { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1.3rem 0 1rem; }
+.cover .btn-primary { background: var(--gold-l); color: var(--maroon-2); box-shadow: 0 8px 22px -10px rgba(0, 0, 0, .5); }
+.cover .btn-primary:hover { background: var(--gold-s); }
+.cover-links { display: flex; gap: .6rem; font-size: .85rem; color: rgba(251, 245, 236, .6); }
+.cover-links a { color: var(--gold-s); text-decoration: none; }
+.cover-links a:hover { text-decoration: underline; }
+.cover-art { position: relative; justify-self: center; width: 100%; max-width: 22rem; }
+.mailcard { background: var(--card); color: var(--ink); border-radius: 16px; padding: 1rem 1.15rem 1.2rem; box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .6); transform: rotate(3deg); animation: float 6s ease-in-out infinite; }
+.mc-top { display: flex; gap: 5px; margin-bottom: .8rem; }
+.mc-top i, .lbar i, .mf-top i { width: 8px; height: 8px; border-radius: 50%; background: var(--sand); display: block; }
+.mc-top i:first-child, .lbar i:first-child, .mf-top i:first-child { background: #d98a74; }
+.mc-top i:nth-child(2), .lbar i:nth-child(2), .mf-top i:nth-child(2) { background: var(--gold-l); }
+.mc-row { font-weight: 600; font-size: .85rem; color: var(--maroon-2); padding-bottom: .7rem; margin-bottom: .8rem; border-bottom: 1px solid var(--line); }
+.mc-row small, .hs-subject small, .pc-mail small { display: block; font-weight: 500; color: var(--muted); font-size: .66rem; text-transform: uppercase; letter-spacing: .1em; }
+.mc-line { height: 7px; border-radius: 7px; background: var(--sand); margin-bottom: 8px; }
+.mc-line.w70 { width: 70%; } .mc-line.w85 { width: 85%; }
+.mc-attach, .attach { display: inline-flex; align-items: center; gap: 5px; font-size: .76rem; font-weight: 600; background: var(--gold-s); color: var(--maroon-2); padding: .3em .75em; border-radius: 999px; margin-top: .4rem; }
+.chip-f { position: absolute; display: inline-flex; align-items: center; gap: 5px; padding: .45em .85em; border-radius: 999px; font-size: .76rem; font-weight: 700; background: var(--card); color: var(--maroon-2); box-shadow: 0 12px 26px -12px rgba(0, 0, 0, .6); animation: float 5s ease-in-out infinite; white-space: nowrap; }
+.chip-f.c1 { left: -2.4rem; bottom: 3.2rem; background: var(--maroon); color: #fff; animation-delay: -1s; }
+.chip-f.c2 { right: -1rem; top: -1.2rem; background: var(--gold-l); animation-delay: -2.4s; }
+.chip-f.c3 { right: 1rem; bottom: -1.1rem; animation-delay: -3.6s; }
+@keyframes float { 50% { translate: 0 -8px; } }
+
+/* ---------- Menu ---------- */
+.menu { height: 100%; display: grid; grid-template-columns: 13.5rem 1fr; gap: 1.1rem; padding: 1.1rem 1.3rem; }
+.menu-side { display: flex; flex-direction: column; align-items: stretch; gap: .8rem; background: var(--card); border-radius: var(--r); padding: 1rem; box-shadow: var(--shadow); }
+.menu-side .ring { align-self: center; }
+.menu-links { display: grid; gap: .15rem; margin-top: .2rem; }
+.menu-links a { display: flex; align-items: center; gap: .55rem; padding: .45rem .55rem; border-radius: 9px; text-decoration: none; font-size: .85rem; font-weight: 500; }
+.menu-links a:hover { background: var(--sand); color: var(--maroon); }
+.menu-main { display: grid; grid-template-rows: auto 1fr auto; gap: .7rem; min-height: 0; }
+.menu-row { display: grid; grid-template-columns: 1fr; gap: .7rem; }
+.menu-row.two { grid-template-columns: 1.3fr 1fr 1fr; }
+.menu-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; min-height: 0; }
+.mcol { background: var(--card); border-radius: var(--r); padding: .75rem; display: flex; flex-direction: column; gap: .4rem; box-shadow: var(--shadow); }
+.mcol-h { display: flex; align-items: center; gap: .6rem; padding-bottom: .4rem; border-bottom: 1px solid var(--line); margin-bottom: .1rem; }
+.mcol-h small { display: block; font-size: .66rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.mcol-h b { font-size: .88rem; color: var(--maroon-2); line-height: 1.2; display: block; }
+.mcol-ic { width: 2.2rem; height: 2.2rem; border-radius: 10px; background: var(--maroon); color: var(--cream); display: grid; place-items: center; flex: none; --icf: rgba(226, 176, 74, .6); }
+.tile { display: flex; align-items: center; gap: .6rem; padding: .5rem .6rem; border-radius: var(--r-sm); background: var(--cream); border: 1px solid transparent; text-decoration: none; transition: border-color .2s, background .2s, transform .2s; }
+.menu-row .tile { background: var(--card); box-shadow: var(--shadow); }
+.tile:hover { border-color: var(--maroon); background: #fff; transform: translateY(-1px); }
+.tile-code { width: 2.1rem; height: 2.1rem; border-radius: 50%; display: grid; place-items: center; background: var(--sand); color: var(--maroon); font-weight: 800; font-size: .72rem; flex: none; }
+.tile.done .tile-code { background: var(--maroon); color: var(--gold-s); }
+.tile.locked { opacity: .6; }
+.tile.locked .tile-code { background: #e7dcd5; color: var(--muted); }
+.tile.big .tile-code { background: var(--gold-l); color: var(--maroon-2); }
+.tile-t { display: grid; min-width: 0; }
+.tile-t b { font-size: .84rem; line-height: 1.25; }
+.tile-t small { color: var(--muted); font-size: .72rem; }
+
+.ring { --p: 0; width: 7.5rem; height: 7.5rem; border-radius: 50%; display: grid; place-content: center; text-align: center; background: radial-gradient(closest-side, var(--card) 78%, transparent 79% 100%), conic-gradient(var(--maroon) calc(var(--p) * 1%), var(--sand) 0); }
+.ring b { font-size: 1.6rem; color: var(--maroon-2); line-height: 1; }
+.ring small { color: var(--muted); font-size: .72rem; }
+.ring.big { width: 9rem; height: 9rem; }
+.ring.big b { font-size: 2.2rem; }
+
+/* ---------- Scene: materi (kiri) + aktivitas (kanan) ---------- */
+.scene { height: 100%; display: grid; grid-template-columns: minmax(0, 38%) minmax(0, 1fr); }
+.scene.wide { grid-template-columns: minmax(0, 27%) minmax(0, 1fr); }
+.scene-info { overflow: auto; padding: 1.1rem 1.2rem 1.2rem 1.3rem; border-right: 1px solid var(--line); background: var(--card); }
+.scene-info h1 { font-size: 1.45rem; color: var(--maroon-2); font-weight: 800; }
+.tujuan { display: flex; gap: .5rem; align-items: flex-start; background: var(--gold-s); border-left: 3px solid var(--gold); padding: .55rem .7rem; border-radius: 0 9px 9px 0; font-size: .84rem; margin-bottom: .8rem; }
+.tujuan .ic { color: var(--maroon); margin-top: 2px; }
+.uraian h3 { font-size: .98rem; color: var(--maroon); margin: .7em 0 .35em; }
+.uraian p, .uraian li { font-size: .88rem; }
+.uraian q { font-weight: 600; color: var(--maroon-2); quotes: "“" "”"; }
+code, .code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .84em; background: var(--sand); padding: .1em .35em; border-radius: 5px; }
+.ol { padding-left: 1.2em; margin: 0 0 .7em; }
+.locked-note { display: flex; gap: .5rem; align-items: flex-start; font-size: .84rem; background: var(--sand); padding: .6rem .7rem; border-radius: 9px; }
+.narasi { background: var(--maroon-2); color: var(--cream); border-radius: var(--r-sm); padding: .8rem .9rem; margin-top: .8rem; }
+.narasi-h { display: flex; align-items: center; gap: .4rem; font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; color: var(--gold-l); margin-bottom: .4rem; }
+.narasi p { font-size: .84rem; margin: 0; color: rgba(251, 245, 236, .9); font-style: italic; }
+.scene-act { overflow: auto; padding: 1.1rem 1.3rem 1.3rem; }
+
+/* ---------- Aktivitas umum ---------- */
+.act-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .7rem; flex-wrap: wrap; }
+.act-tag { display: inline-flex; align-items: center; gap: .45rem; font-weight: 700; font-size: .74rem; text-transform: uppercase; letter-spacing: .1em; color: var(--maroon); }
+.counter { font-size: .78rem; font-weight: 600; background: var(--sand); padding: .25em .75em; border-radius: 999px; color: var(--maroon-2); }
+.counter b { color: var(--maroon); }
+.hint { color: var(--muted); font-size: .84rem; margin-bottom: .6rem; }
+.q { font-weight: 600; font-size: .98rem; margin-bottom: .6rem; }
+.opts { display: grid; gap: .45rem; }
+.opt { display: flex; align-items: center; gap: .6rem; text-align: left; border: 2px solid var(--line); background: var(--card); border-radius: var(--r-sm); padding: .5rem .7rem; cursor: pointer; font-size: .9rem; transition: border-color .15s, background .15s, transform .2s; }
+.opt:hover:not(:disabled) { border-color: var(--maroon); transform: translateX(3px); }
+.opt:disabled { cursor: default; }
+.opt-l { width: 1.7rem; height: 1.7rem; border-radius: 7px; display: grid; place-items: center; background: var(--sand); font-weight: 700; color: var(--maroon); flex: none; font-size: .8rem; }
+.opt.ok { border-color: var(--ok); background: var(--ok-bg); }
+.opt.ok .opt-l { background: var(--ok); color: #fff; }
+.opt.no { border-color: var(--bad); background: var(--bad-bg); opacity: .85; }
+.opt.no .opt-l { background: var(--bad); color: #fff; }
+.opt.picked { border-color: var(--maroon); background: var(--gold-s); }
+.opt.picked .opt-l { background: var(--maroon); color: var(--cream); }
+.fb { display: flex; gap: .5rem; align-items: flex-start; padding: .55rem .8rem; border-radius: var(--r-sm); margin-top: .6rem; font-size: .86rem; animation: popIn .35s var(--ease); }
+.fb .ic { margin-top: 2px; }
+.fb-ok { background: var(--ok-bg); color: #1f4d36; }
+.fb-no { background: var(--bad-bg); color: #7d2a1d; }
+.fb-info { background: var(--info-bg); color: var(--maroon-2); }
+.quiz-box { margin-top: 1rem; padding-top: .8rem; border-top: 1px dashed var(--line); }
+@keyframes popIn { from { opacity: 0; transform: translateY(8px) scale(.97); } }
+.shake { animation: shake .4s; }
+@keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.ip-empty { display: grid; justify-items: center; text-align: center; gap: .4rem; color: var(--muted); padding: 1rem; border: 2px dashed var(--line); border-radius: var(--r-sm); font-size: .85rem; }
+.ip-empty p { margin: 0; }
+.ip-card { background: var(--gold-s); border-radius: var(--r-sm); padding: .9rem 1rem; animation: popIn .3s var(--ease); }
+.ip-card h4 { font-size: 1rem; color: var(--maroon-2); margin: .5rem 0 .2rem; }
+.ip-card p { margin: 0; font-size: .88rem; }
+.ip-ic, .hs-num { width: 2.4rem; height: 2.4rem; border-radius: 11px; background: var(--maroon); color: var(--gold-s); display: grid; place-items: center; font-weight: 800; }
+
+/* S01 video */
+.video { border-radius: var(--r); overflow: hidden; background: var(--maroon-3); color: var(--cream); }
+.vscreen { position: relative; aspect-ratio: 16 / 8; overflow: hidden; background: radial-gradient(500px 260px at 80% 0%, rgba(201, 149, 46, .3), transparent 70%), linear-gradient(160deg, var(--maroon), var(--maroon-3)); }
+.vinbox { position: absolute; left: 50%; top: 50%; width: min(86%, 30rem); transform: translate(-50%, -42%); background: var(--card); color: var(--ink); border-radius: 13px; padding: .7rem; box-shadow: 0 20px 50px -20px rgba(0, 0, 0, .6); opacity: 0; transition: opacity .6s, transform .6s; }
+.vinbox-top { display: flex; align-items: center; gap: .4rem; font-weight: 700; font-size: .78rem; color: var(--maroon-2); padding: 0 .2rem .5rem; border-bottom: 1px solid var(--line); margin-bottom: .3rem; }
+.irow { display: flex; align-items: center; gap: .5rem; padding: .45rem .3rem; border-radius: 9px; transition: background .4s, transform .5s, box-shadow .4s; }
+.iav { width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--sand); flex: none; display: grid; place-items: center; font-size: .58rem; font-weight: 700; color: var(--maroon); }
+.iline { height: 7px; border-radius: 7px; background: var(--sand); }
+.itime { width: 1.8rem; height: 6px; border-radius: 6px; background: var(--sand); margin-left: auto; }
+.irow.target { font-size: .74rem; }
+.imsg { position: relative; flex: 1; min-height: 1.3em; min-width: 0; }
+.imsg .messy, .imsg .tidy { position: absolute; inset: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity .5s, transform .5s; }
+.imsg em { color: var(--muted); font-style: normal; }
+.imsg .messy { color: var(--bad); }
+.imsg .tidy { opacity: 0; transform: translateY(8px); color: var(--maroon-2); }
+.ibadge { font-size: .6rem; font-weight: 700; background: var(--bad-bg); color: var(--bad); padding: .15em .5em; border-radius: 999px; opacity: 0; transition: opacity .4s; }
+.vend { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; padding: 1rem; opacity: 0; transform: scale(.96); transition: opacity .7s, transform .7s; pointer-events: none; }
+.vend-logo { width: 3.2rem; height: 3.2rem; display: block; margin-bottom: .4rem; }
+.vend h3 { font-size: 2rem; color: var(--gold-l); font-weight: 800; margin-bottom: .15em; }
+.vend p { color: rgba(251, 245, 236, .8); max-width: 26rem; margin: 0 auto .7rem; font-size: .85rem; }
+.vend ol { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center; }
+.vend li { background: rgba(251, 245, 236, .1); border: 1px solid rgba(251, 245, 236, .2); padding: .35em .8em; border-radius: 999px; font-size: .78rem; display: flex; gap: .4rem; }
+.vend li span { color: var(--gold-l); font-weight: 700; }
+.vpost { display: inline-flex; gap: .35rem; align-items: center; margin-top: .7rem; background: var(--gold); color: var(--maroon-3); padding: .3em .8em; border-radius: 999px; font-size: .76rem; font-weight: 700; opacity: 0; transition: opacity .5s; }
+.vplay { position: absolute; inset: 0; margin: auto; width: fit-content; height: fit-content; display: flex; flex-direction: column; align-items: center; gap: .6rem; background: none; border: 0; color: var(--cream); cursor: pointer; font-weight: 600; z-index: 3; }
+.vplay .ic { width: 4rem; height: 4rem; padding: 1.2rem 1.05rem 1.2rem 1.35rem; border-radius: 50%; background: var(--gold); color: var(--maroon-3); box-shadow: 0 0 0 10px rgba(201, 149, 46, .22); transition: transform .2s; }
+.vplay:hover .ic { transform: scale(1.06); }
+.video.s1 .vplay, .video.playing .vplay, .video.ended .vplay { display: none; }
+.video.s1 .vinbox { opacity: 1; transform: translate(-50%, -50%); }
+.video.s2 .irow.target { background: var(--bad-bg); box-shadow: 0 0 0 2px var(--bad); }
+.video.s2 .ibadge { opacity: 1; }
+.video.s3 .irow.target { transform: scale(1.05); }
+.video.s4 .irow.target { background: var(--ok-bg); box-shadow: 0 0 0 2px var(--ok); }
+.video.s4 .messy { opacity: 0; transform: translateY(-8px); }
+.video.s4 .tidy { opacity: 1; transform: none; }
+.video.s4 .ibadge { opacity: 0; }
+.video.s5 .vinbox { opacity: 0; transform: translate(-50%, -60%); }
+.video.s5 .vend { opacity: 1; transform: none; }
+.video.s6 .vpost { opacity: 1; }
+.vcap { min-height: 2.8em; padding: .55rem .9rem; text-align: center; font-size: .88rem; background: var(--maroon-3); display: grid; place-items: center; }
+.vcap:empty::before { content: "Tekan putar untuk memulai video pembuka."; color: rgba(251, 245, 236, .5); }
+.vbar { display: flex; align-items: center; gap: .6rem; padding: .45rem .7rem; background: var(--maroon-3); border-top: 1px solid rgba(251, 245, 236, .08); }
+.vbtn { background: rgba(251, 245, 236, .1); border: 0; color: var(--cream); border-radius: 999px; height: 2rem; min-width: 2rem; display: grid; place-items: center; cursor: pointer; }
+.vbtn.txt { padding: 0 .8rem; font-size: .76rem; font-weight: 600; }
+.vprog { flex: 1; height: 4px; border-radius: 4px; background: rgba(251, 245, 236, .15); overflow: hidden; }
+.vprog i { display: block; height: 100%; width: 0; background: var(--gold-l); transition: width .5s; }
+
+/* S02 laptop */
+.s02 { display: grid; grid-template-columns: 1.25fr 1fr; gap: 1rem; align-items: center; }
+.lscreen { background: var(--maroon-2); border: 8px solid #3a2a2d; border-bottom-width: 11px; border-radius: 13px 13px 5px 5px; padding: .6rem; aspect-ratio: 16 / 10; display: flex; flex-direction: column; }
+.lbar { display: flex; align-items: center; gap: 4px; color: rgba(251, 245, 236, .6); font-size: .66rem; margin-bottom: .5rem; }
+.lbar span { margin-left: 6px; }
+.lgrid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: .45rem; }
+.lico { border: 1px solid rgba(251, 245, 236, .15); background: rgba(251, 245, 236, .06); border-radius: 10px; color: var(--cream); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .3rem; cursor: pointer; font-size: .72rem; font-weight: 600; padding: .3rem; transition: background .2s, transform .2s; }
+.lico:hover { background: rgba(251, 245, 236, .14); transform: translateY(-2px); }
+.lico.active { background: var(--gold-s); color: var(--maroon-2); }
+.lico-c { position: relative; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: rgba(251, 245, 236, .12); display: grid; place-items: center; }
+.lico-ck { position: absolute; right: -3px; top: -3px; width: 1rem; height: 1rem; border-radius: 50%; background: var(--gold); color: var(--maroon-3); display: none; place-items: center; }
+.lico-ck .ic { width: .6rem; height: .6rem; stroke-width: 3; }
+.lico.seen .lico-ck { display: grid; }
+.lbase { height: 10px; background: linear-gradient(#cdbfb5, #a8998f); border-radius: 0 0 13px 13px; margin: 0 -18px; }
+.compare { margin-top: .8rem; background: var(--gold-s); border-radius: var(--r-sm); padding: .65rem .8rem; animation: popIn .3s; font-size: .88rem; }
+.cmp-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .4rem; }
+.cmp-chips span { display: inline-flex; align-items: center; gap: .35rem; background: var(--card); border-radius: 999px; padding: .3em .75em; font-size: .8rem; font-weight: 600; color: var(--maroon-2); }
+
+/* S03 seret & letakkan */
+.dnd { display: grid; grid-template-columns: 11rem 1fr; gap: .9rem; align-items: start; }
+.dcards { display: grid; gap: .45rem; align-content: start; }
+.dcard { display: flex; align-items: center; gap: .5rem; padding: .55rem .7rem; border-radius: 10px; border: 2px solid var(--line); background: var(--gold-s); font-weight: 600; font-size: .86rem; cursor: grab; text-align: left; transition: transform .15s, box-shadow .15s, border-color .15s; }
+.dcard:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.dcard.sel { border-color: var(--maroon); box-shadow: 0 0 0 4px rgba(122, 31, 46, .15); background: #fff; }
+.dcard.dragging { opacity: .5; }
+.dcard .ic { color: var(--gold); }
+.mframe { background: #fff; border-radius: 13px; border: 1px solid var(--line); box-shadow: var(--shadow); padding: .6rem .8rem .8rem; display: grid; gap: .45rem; }
+.mf-top { display: flex; align-items: center; gap: 4px; font-size: .7rem; color: var(--muted); padding-bottom: .4rem; border-bottom: 1px solid var(--line); }
+.mf-top span { margin-left: 6px; }
+.slot { display: flex; align-items: center; gap: .6rem; padding: .45rem .6rem; border: 2px dashed rgba(92, 21, 34, .25); border-radius: 10px; min-height: 2.6rem; cursor: pointer; transition: background .2s, border-color .2s; }
+.slot:hover, .slot.over { border-color: var(--maroon); background: rgba(122, 31, 46, .04); }
+.slot-n { width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--sand); display: grid; place-items: center; font-weight: 700; font-size: .74rem; flex: none; }
+.ghost { flex: 1; display: grid; gap: 5px; }
+.ghost i { display: block; height: 6px; border-radius: 6px; background: var(--sand); }
+.slot-subject .ghost i:nth-child(n+2), .slot-greeting .ghost i:nth-child(n+2), .slot-closing .ghost i:nth-child(n+2), .slot-signature .ghost i:nth-child(n+2) { display: none; }
+.slot-subject .ghost i { width: 70%; height: 8px; }
+.slot-greeting .ghost i { width: 40%; }
+.slot-body { min-height: 4.6rem; }
+.slot-body .ghost i:nth-child(2) { width: 90%; } .slot-body .ghost i:nth-child(3) { width: 65%; }
+.slot-closing .ghost i { width: 30%; }
+.slot-signature .ghost i { width: 22%; height: 9px; }
+.slot.filled { border-style: solid; border-color: var(--ok); background: var(--ok-bg); cursor: default; animation: popIn .25s; }
+.slot.filled .slot-n { background: var(--ok); color: #fff; }
+.slot-txt { display: grid; font-size: .86rem; }
+.slot-txt small { color: var(--muted); font-size: .76rem; }
+
+/* S04 */
+.ibx-compare, .salam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+.salam-grid { margin-top: .7rem; }
+.ibx { border-radius: var(--r-sm); padding: .65rem; border: 2px solid; }
+.ibx.bad { border-color: rgba(179, 65, 47, .35); background: #fdf3ef; }
+.ibx.good { border-color: rgba(47, 111, 78, .4); background: #f2f8f3; }
+.ibx-h { display: flex; align-items: center; gap: .35rem; font-weight: 700; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .45rem; }
+.bad .ibx-h { color: var(--bad); } .good .ibx-h { color: var(--ok); }
+.cmp-row { display: flex; align-items: center; gap: .5rem; background: #fff; padding: .45rem .55rem; border-radius: 8px; margin-bottom: .35rem; font-weight: 600; font-size: .84rem; }
+.ibx-note { font-size: .78rem; color: var(--muted); margin: .3rem 0 0; }
+.salam { background: var(--gold-s); border-radius: var(--r-sm); padding: .6rem .7rem; }
+.salam h4 { color: var(--maroon-2); font-size: .86rem; margin-bottom: .2rem; }
+.salam .code { display: block; background: #fff; padding: .4rem .55rem; margin-top: .35rem; border-radius: 8px; }
+
+/* S05/S07/S10 email */
+.hs-wrap, .spot-wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: .9rem; align-items: start; }
+.mail { background: #fff; border-radius: 13px; border: 1px solid var(--line); box-shadow: var(--shadow); padding: .5rem .8rem .8rem; }
+.mail-meta { display: flex; gap: .6rem; align-items: center; padding: .4rem 0; border-bottom: 1px solid var(--line); font-size: .84rem; flex-wrap: wrap; }
+.mail-meta > span:first-child { width: 3.6rem; color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; flex: none; }
+.mail-body { padding-top: .4rem; display: grid; gap: .2rem; }
+.mail-body.plain p { margin: 0 0 .5em; font-size: .86rem; }
+.mail-attach { display: flex; gap: .6rem; align-items: center; border-top: 1px solid var(--line); margin-top: .4rem; padding-top: .45rem; font-size: .8rem; color: var(--muted); }
+.mail-attach > span { display: inline-flex; gap: .3rem; align-items: center; }
+.hs { display: flex; gap: .55rem; align-items: flex-start; text-align: left; background: none; border: 2px solid transparent; border-radius: 9px; padding: .35rem .45rem; cursor: pointer; font-size: .86rem; line-height: 1.45; width: 100%; transition: background .2s, border-color .2s; }
+.hs:hover { background: var(--cream); }
+.hs.active { border-color: var(--gold); background: var(--gold-s); }
+.hs-subject { font-weight: 600; margin-top: .2rem; }
+.hs-dot { width: 1.35rem; height: 1.35rem; border-radius: 50%; background: var(--maroon); color: #fff; font-size: .7rem; font-weight: 700; display: grid; place-items: center; flex: none; animation: pulse 2s infinite; }
+.hs.seen .hs-dot { animation: none; background: var(--gold); color: var(--maroon-3); }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(122, 31, 46, .45); } 70% { box-shadow: 0 0 0 9px rgba(122, 31, 46, 0); } 100% { box-shadow: 0 0 0 0 rgba(122, 31, 46, 0); } }
+.attach-row { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .2rem; }
+.hs-list { list-style: none; padding: 0; margin: .6rem 0 0; display: grid; gap: .25rem; font-size: .82rem; }
+.hs-list li { display: flex; gap: .4rem; align-items: center; color: var(--muted); }
+.hs-list li span { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--sand); }
+.hs-list li.on { color: var(--maroon-2); font-weight: 600; }
+.hs-list li.on .ic { color: var(--ok); width: 14px; height: 14px; }
+
+/* S06 */
+.compose { background: #fff; border-radius: 13px; border: 1px solid var(--line); box-shadow: var(--shadow); overflow: hidden; }
+.compose-top { display: flex; align-items: center; gap: .45rem; background: var(--maroon-2); color: var(--cream); padding: .45rem .8rem; font-weight: 600; font-size: .82rem; }
+.cf { display: flex; gap: .6rem; padding: .4rem .8rem; border-bottom: 1px solid var(--line); font-size: .84rem; }
+.cf span { width: 3.6rem; color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; flex: none; padding-top: 2px; }
+.compose-body { padding: .55rem .8rem; font-size: .86rem; }
+.compose-body p { margin: 0 0 .45em; }
+.fill { border: 2px dashed rgba(92, 21, 34, .25); border-radius: 8px; padding: .35rem .6rem; color: var(--muted); font-style: italic; }
+.fill.filled { border: 2px solid var(--ok); background: var(--ok-bg); color: var(--ink); font-style: normal; animation: popIn .3s; }
+.compose-attach { display: flex; gap: .6rem; align-items: center; padding: .45rem .8rem; border-top: 1px solid var(--line); font-size: .8rem; flex-wrap: wrap; }
+.compose-attach > span:first-child { display: inline-flex; align-items: center; gap: .3rem; color: var(--muted); }
+.choice-group { margin-top: .8rem; }
+.choice-group h4 { font-size: .9rem; color: var(--maroon-2); margin-bottom: .4rem; }
+
+/* S07 */
+.sp { display: block; width: 100%; text-align: left; background: none; border: 2px solid transparent; border-radius: 8px; padding: .3rem .45rem; cursor: pointer; font-size: .86rem; line-height: 1.45; position: relative; transition: background .2s, border-color .2s; }
+.mail-meta .sp, .mail-attach .sp { width: auto; flex: 1; }
+.sp:hover { background: var(--gold-s); }
+.sp.found { border-color: var(--bad); background: var(--bad-bg); padding-left: 2rem; cursor: default; }
+.sp-mark { position: absolute; left: .35rem; top: .35rem; width: 1.2rem; height: 1.2rem; border-radius: 50%; background: var(--bad); color: #fff; font-size: .66rem; font-weight: 700; display: grid; place-items: center; }
+.sp.nope { animation: shake .35s; }
+.sp.marked { border-color: var(--maroon); background: var(--gold-s); }
+.spot.exam { display: grid; gap: .2rem; margin-bottom: .4rem; }
+.spot-side h4 { color: var(--maroon-2); margin: .7rem 0 .4rem; font-size: .9rem; }
+.spot-side .fb { margin-top: 0; }
+.found-list { padding-left: 0; list-style: none; counter-reset: f; display: grid; gap: .35rem; margin: 0; }
+.found-list li { counter-increment: f; background: var(--card); border-left: 3px solid var(--bad); padding: .4rem .6rem; border-radius: 0 8px 8px 0; display: grid; font-size: .8rem; box-shadow: var(--shadow); }
+.found-list li b::before { content: counter(f) ". "; color: var(--bad); }
+.found-list li small { color: var(--muted); }
+.found-list li.empty { border-left-color: var(--sand); color: var(--muted); box-shadow: none; background: transparent; }
+
+/* S08 */
+.practice { display: grid; grid-template-columns: 12rem 1fr; gap: .9rem; align-items: start; }
+.vacancy { background: var(--maroon-2); color: var(--cream); border-radius: var(--r-sm); padding: .8rem; }
+.vacancy small { color: var(--gold-l); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
+.vacancy h4 { font-size: 1.05rem; color: var(--gold-s); margin: .15rem 0 0; }
+.vacancy > p { color: rgba(251, 245, 236, .7); margin-bottom: .4rem; font-size: .84rem; }
+.chk-h { display: flex; gap: .35rem; align-items: center; margin: .6rem 0 .3rem; font-weight: 700; font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--gold-l); }
+.chk { display: flex; gap: .5rem; align-items: center; padding: .2rem 0; font-size: .82rem; cursor: pointer; }
+.chk input { width: 16px; height: 16px; accent-color: var(--gold); }
+.pform { display: grid; gap: .5rem; }
+.pform label, .saran { display: grid; gap: .2rem; font-weight: 600; font-size: .8rem; color: var(--maroon-2); }
+.pform input, .pform textarea, .saran textarea, .search input, .mrow select { border: 2px solid var(--line); border-radius: 9px; padding: .4rem .6rem; background: #fff; font-weight: 400; font-size: .88rem; color: var(--ink); resize: vertical; }
+.pform input:focus, .pform textarea:focus, .saran textarea:focus, .search input:focus, .mrow select:focus { outline: none; border-color: var(--maroon); }
+.pform-foot { display: flex; justify-content: space-between; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.pcompare { margin-top: .9rem; display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; animation: popIn .3s; }
+.pc-col h4 { display: flex; gap: .35rem; align-items: center; color: var(--maroon-2); font-size: .88rem; }
+.pc-mail { background: #fff; border: 1px solid var(--line); border-radius: var(--r-sm); padding: .65rem; font-size: .84rem; }
+.pc-col.model .pc-mail { border: 2px solid var(--gold); background: #fffbf1; }
+.pc-mail p { margin: 0 0 .5em; word-wrap: break-word; }
+.pc-note { grid-column: 1 / -1; display: flex; gap: .4rem; align-items: center; background: var(--info-bg); padding: .5rem .7rem; border-radius: var(--r-sm); margin: 0; font-size: .84rem; }
+
+/* S09 */
+.cc-wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: .9rem; align-items: center; }
+.cc-diagram { background: var(--card); border-radius: var(--r-sm); padding: .6rem; display: grid; justify-items: center; gap: .5rem; border: 1px solid var(--line); }
+.cc-diagram svg { width: 100%; }
+.ln { fill: none; stroke: var(--sand); stroke-width: 3; stroke-dasharray: 6 8; }
+.node circle { fill: var(--maroon); }
+.node rect { fill: #fff; stroke: var(--maroon); stroke-width: 2; }
+.node text { text-anchor: middle; font-size: 15px; font-weight: 700; fill: var(--maroon-2); font-family: inherit; }
+.node.sender text { fill: var(--cream); font-size: 14px; }
+.node.sender text.sm { font-size: 11px; font-weight: 500; }
+.node.cc rect { stroke: var(--gold); }
+.node.bcc rect { stroke: #9a8a8c; stroke-dasharray: 5 4; }
+.play .ln { animation: dash 1.4s linear forwards; }
+.play .ln.to { stroke: var(--maroon); } .play .ln.cc { stroke: var(--gold); } .play .ln.bcc { stroke: #b9a8aa; animation-delay: .3s; }
+.play .node.bcc { animation: hide 1.6s .9s forwards; }
+@keyframes dash { from { stroke-dashoffset: 120; } to { stroke-dashoffset: 0; } }
+@keyframes hide { to { opacity: .35; } }
+.cc-cards { display: grid; gap: .5rem; }
+.cc-card { background: var(--gold-s); border-radius: var(--r-sm); padding: .6rem .7rem; font-size: .86rem; }
+.cc-card p { margin: .25rem 0 0; font-size: .82rem; }
+.tag { display: inline-flex; align-items: center; padding: .1em .55em; border-radius: 999px; font-size: .7rem; font-weight: 800; margin-right: .4rem; }
+.tag.cc { background: var(--gold); color: var(--maroon-3); } .tag.bcc { background: #8a7a7c; color: #fff; }
+.cc-seen { background: var(--ok-bg); border-radius: var(--r-sm); padding: .5rem .7rem; font-size: .82rem; animation: popIn .3s; }
+.cc-seen .ic { display: inline; vertical-align: -3px; }
+.time-wrap { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; align-items: center; margin-top: .9rem; padding-top: .8rem; border-top: 1px dashed var(--line); }
+.clock { display: grid; justify-items: center; gap: .3rem; }
+.clock svg { width: 100%; max-width: 10rem; }
+.c-bg { fill: #fff; stroke: var(--maroon); stroke-width: 3; }
+.c-work { fill: none; stroke: var(--maroon); stroke-width: 9; stroke-linecap: round; opacity: .22; }
+.tick { stroke: var(--maroon-2); stroke-width: 2; opacity: .5; }
+.c-num { font-size: 13px; text-anchor: middle; fill: var(--maroon-2); font-weight: 700; font-family: inherit; }
+.hand { stroke-linecap: round; transition: transform .3s; }
+.h-hour { stroke: var(--maroon); stroke-width: 5; }
+.h-min { stroke: var(--gold); stroke-width: 3; }
+.c-pin { fill: var(--maroon-2); }
+.clock-dig { font-weight: 800; font-size: 1.1rem; color: var(--maroon); background: var(--gold-s); padding: .1em .6em; border-radius: 8px; }
+.clock-dig.big { font-size: 2rem; }
+.time-ctl h4 { display: flex; gap: .4rem; align-items: center; color: var(--maroon-2); font-size: .95rem; }
+.range { display: grid; gap: .15rem; }
+.range input { accent-color: var(--maroon); width: 100%; }
+.range-scale { display: flex; justify-content: space-between; font-size: .66rem; color: var(--muted); }
+.range-scale i { font-style: normal; }
+.days { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; margin-top: .5rem; }
+.days span { padding: .15em .55em; border-radius: 6px; background: var(--ok-bg); color: var(--ok); font-weight: 600; font-size: .74rem; }
+.days span.off { background: var(--bad-bg); color: var(--bad); }
+.days small { color: var(--muted); margin-left: .3rem; font-size: .74rem; }
+
+/* S10 */
+.sc-chat { display: flex; gap: .6rem; align-items: flex-start; }
+.sc-av { width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--gold-s); color: var(--maroon); font-weight: 800; display: grid; place-items: center; flex: none; font-size: .8rem; }
+.bubble { background: var(--card); border: 1px solid var(--line); border-radius: 4px 14px 14px 14px; padding: .55rem .8rem; max-width: 34rem; }
+.bubble p { margin: .15rem 0 0; font-size: .86rem; }
+.dayline { display: flex; flex-wrap: wrap; gap: .3rem; margin: 1.1rem 0 .7rem; align-items: center; }
+.dayline span { position: relative; padding: .3em .55em; border-radius: 8px; background: var(--sand); font-size: .72rem; font-weight: 600; color: var(--maroon-2); }
+.dayline span.win { background: var(--gold-s); box-shadow: inset 0 0 0 2px var(--gold); }
+.dayline span.today { background: var(--maroon); color: #fff; }
+.dayline em { position: absolute; left: 50%; top: -1.1rem; transform: translateX(-50%); font-style: normal; font-size: .6rem; white-space: nowrap; color: var(--maroon); }
+.dayline small { display: flex; gap: .35rem; align-items: center; color: var(--muted); width: 100%; font-size: .76rem; }
+.branch { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+.bcard { display: flex; gap: .5rem; align-items: flex-start; text-align: left; padding: .65rem; border-radius: var(--r-sm); border: 2px solid var(--line); background: var(--card); cursor: pointer; font-size: .86rem; transition: border-color .2s, transform .2s; }
+.bcard:hover:not(:disabled) { border-color: var(--maroon); transform: translateY(-2px); }
+.bcard:disabled { cursor: default; opacity: .75; }
+.bk { width: 1.7rem; height: 1.7rem; border-radius: 7px; background: var(--maroon); color: var(--gold-s); display: grid; place-items: center; font-weight: 800; flex: none; font-size: .8rem; }
+.bcard.ok { border-color: var(--ok); background: var(--ok-bg); opacity: 1; }
+.bcard.no { border-color: var(--bad); background: var(--bad-bg); }
+.followup { margin-top: .6rem; }
+
+/* S11 */
+.steps { display: flex; gap: .3rem; margin-bottom: .6rem; }
+.step { flex: 1; height: 6px; border-radius: 6px; background: var(--sand); border: 0; padding: 0; cursor: pointer; }
+.step:disabled { cursor: default; }
+.step.past { background: var(--gold); } .step.cur { background: var(--maroon); }
+.vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: .6rem; align-items: stretch; }
+.vs-or { align-self: center; font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+.vs-card { display: flex; flex-direction: column; gap: .4rem; text-align: left; padding: .8rem; border-radius: var(--r-sm); border: 2px solid var(--line); background: var(--card); cursor: pointer; font-size: .92rem; font-weight: 500; transition: border-color .2s, transform .2s; }
+.vs-card .ic { color: var(--maroon); }
+.vs-card:hover:not(:disabled) { border-color: var(--maroon); transform: translateY(-2px); }
+.vs-card:disabled { cursor: default; }
+.vs-card.ok { border-color: var(--ok); background: var(--ok-bg); }
+.vs-card.no { border-color: var(--bad); background: var(--bad-bg); opacity: .8; }
+.vs-next { margin-top: .6rem; }
+
+/* ---------- Latihan & evaluasi ---------- */
+.quiz { height: 100%; display: grid; grid-template-columns: 15rem 1fr; }
+.quiz-side { background: var(--card); border-right: 1px solid var(--line); padding: 1rem 1.1rem; overflow: auto; display: flex; flex-direction: column; gap: .6rem; }
+.quiz-side h1 { font-size: 1.4rem; color: var(--maroon-2); margin: 0; }
+.quiz-side p { margin: 0; }
+.score-box { display: flex; align-items: center; gap: .6rem; background: var(--gold-s); border-radius: var(--r-sm); padding: .55rem .7rem; }
+.score-box b { font-size: 1.7rem; color: var(--maroon); line-height: 1; }
+.score-box span { font-size: .76rem; color: var(--muted); line-height: 1.3; }
+.qgrid, .ev-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: .3rem; }
+.ev-nav { grid-template-columns: repeat(8, 2.2rem); margin-bottom: .8rem; }
+.qn { height: 2rem; border-radius: 8px; border: 1px solid var(--line); background: #fff; font-size: .78rem; font-weight: 700; cursor: pointer; color: var(--maroon-2); }
+.qn.cur { border: 2px solid var(--maroon); }
+.qn.ok { background: var(--ok-bg); border-color: var(--ok); color: var(--ok); }
+.qn.no { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+.qn.filled { background: var(--gold-s); border-color: var(--gold); }
+.quiz-main { overflow: auto; padding: 1.1rem 1.4rem; }
+.quiz-foot { display: flex; justify-content: space-between; gap: .5rem; margin-top: 1rem; flex-wrap: wrap; }
+.olist { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; }
+.olist li { display: flex; align-items: center; gap: .6rem; background: var(--card); border: 2px solid var(--line); border-radius: 10px; padding: .4rem .5rem; font-size: .88rem; animation: popIn .2s; }
+.olist li.ok { border-color: var(--ok); background: var(--ok-bg); }
+.olist li.no { border-color: var(--bad); background: var(--bad-bg); }
+.o-n { width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--maroon); color: var(--gold-s); display: grid; place-items: center; font-weight: 700; font-size: .74rem; flex: none; }
+.o-t { flex: 1; }
+.o-btn { display: flex; gap: .2rem; }
+.o-btn button { width: 1.9rem; height: 1.9rem; border-radius: 7px; border: 1px solid var(--line); background: #fff; display: grid; place-items: center; cursor: pointer; color: var(--maroon); }
+.o-btn button:hover:not(:disabled) { background: var(--gold-s); }
+.o-btn button:disabled { opacity: .3; cursor: default; }
+.mlist { display: grid; gap: .45rem; }
+.mrow { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; align-items: center; background: var(--card); border: 2px solid var(--line); border-radius: 10px; padding: .45rem .6rem; font-size: .88rem; }
+.mrow.ok { border-color: var(--ok); background: var(--ok-bg); }
+.mrow.no { border-color: var(--bad); background: var(--bad-bg); }
+.slist { display: grid; gap: .35rem; }
+.srow2 { display: flex; align-items: center; gap: .6rem; justify-content: space-between; background: var(--card); border: 2px solid var(--line); border-radius: 10px; padding: .4rem .55rem; font-size: .88rem; }
+.srow2.ok { border-color: var(--ok); background: var(--ok-bg); }
+.srow2.no { border-color: var(--bad); background: var(--bad-bg); }
+.seg2 { display: inline-flex; background: var(--sand); border-radius: 999px; padding: 3px; flex: none; }
+.seg2 button { border: 0; background: none; padding: .3em .8em; border-radius: 999px; font-size: .76rem; font-weight: 600; cursor: pointer; }
+.seg2 button.on { background: var(--maroon); color: var(--cream); }
+.hour-q { display: grid; justify-items: center; gap: .6rem; max-width: 26rem; }
+.hour-q .range { width: 100%; }
+.ev-intro { max-width: 40rem; }
+.ev-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-bottom: .9rem; }
+.ev-stats div { background: var(--gold-s); border-radius: var(--r-sm); padding: .6rem; display: grid; gap: .1rem; }
+.ev-stats b { font-size: 1.6rem; color: var(--maroon); line-height: 1; }
+.ev-stats b .ic { width: 1.6rem; height: 1.6rem; }
+.ev-stats span { font-size: .76rem; color: var(--muted); }
+.ev-result { display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; align-items: center; max-width: 42rem; margin-top: 1rem; }
+.ev-result h3 { font-size: 1.3rem; color: var(--maroon-2); margin-top: .5rem; }
+.ev-result.fail .ring { background: radial-gradient(closest-side, var(--card) 78%, transparent 79% 100%), conic-gradient(var(--bad) calc(var(--p) * 1%), var(--sand) 0); }
+.badge { display: inline-flex; align-items: center; gap: .35rem; padding: .25em .75em; border-radius: 999px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.badge.ok { background: var(--ok-bg); color: var(--ok); } .badge.no { background: var(--bad-bg); color: var(--bad); }
+.lockbox { display: grid; justify-items: center; text-align: center; gap: .4rem; padding: 2rem 1rem; }
+.lockbox > .ic { width: 2.6rem; height: 2.6rem; color: var(--maroon); }
+.lockbox h3 { color: var(--maroon-2); margin: 0; }
+.rec-links { display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; margin-top: .4rem; }
+.rec-link { display: inline-flex; align-items: center; gap: .35rem; background: var(--card); border: 1px solid var(--line); padding: .35em .8em; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: .8rem; color: var(--maroon); }
+.rec-link:hover { border-color: var(--maroon); }
+
+/* S13 */
+.infog { background: var(--maroon-2); color: var(--cream); border-radius: var(--r); padding: .9rem; }
+.ig-head { display: flex; gap: .6rem; align-items: center; margin-bottom: .7rem; }
+.ig-head b { display: block; letter-spacing: .08em; font-size: .9rem; }
+.ig-head small { color: var(--gold-l); font-size: .76rem; }
+.ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+.ig { border-radius: var(--r-sm); padding: .65rem .75rem; color: var(--ink); background: var(--cream); font-size: .82rem; }
+.ig:nth-child(2n) { background: var(--gold-s); }
+.ig h4 { display: flex; align-items: center; gap: .4rem; font-size: .86rem; color: var(--maroon); margin-bottom: .3rem; }
+.ig p { margin: 0 0 .25em; }
+.ig ol { margin: 0; padding-left: 1.1em; }
+.ig-big { font-size: 1.2rem !important; font-weight: 800; color: var(--maroon-2); }
+.ticks { list-style: none; padding: 0; margin: 0; display: grid; gap: .2rem; }
+.ticks li { position: relative; padding-left: 1.3rem; }
+.ticks li::before { content: ""; position: absolute; left: 0; top: .3em; width: .85rem; height: .85rem; border-radius: 50%; background: var(--maroon) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/9px no-repeat; }
+.feedback { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: .8rem 1rem; }
+.feedback h3 { color: var(--maroon-2); font-size: 1rem; }
+.stars { display: flex; gap: .4rem; margin-bottom: .5rem; }
+.stars label { cursor: pointer; display: grid; justify-items: center; }
+.stars input { position: absolute; opacity: 0; pointer-events: none; }
+.stars span .ic { width: 1.9rem; height: 1.9rem; color: var(--gold); transition: transform .15s; }
+.stars em { font-style: normal; font-size: .68rem; color: var(--muted); }
+.stars label:hover span .ic { transform: scale(1.12); }
+.stars:has(input:checked) label span .ic { fill: var(--gold-l); }
+.stars label:has(input:checked) ~ label span .ic { fill: none; }
+.saran { margin-bottom: .5rem; }
+.thanks { text-align: center; }
+.thanks > .ic { width: 2.6rem; height: 2.6rem; padding: .6rem; border-radius: 50%; background: var(--maroon); color: #fff; margin: 0 auto .4rem; stroke-width: 3; }
+
+/* ---------- Halaman panduan ---------- */
+.page { padding: 1.1rem 1.6rem 1.4rem; max-width: 64rem; margin: 0 auto; }
+.page-h h1 { font-size: 1.6rem; color: var(--maroon-2); font-weight: 800; }
+.goal-main { background: var(--maroon-2); color: var(--cream); border-radius: var(--r); padding: .9rem 1.1rem; margin-bottom: .9rem; }
+.goal-main p { margin: 0 0 .3rem; font-size: 1rem; }
+.goal-main b { color: var(--gold-l); }
+.goal-main small { color: var(--gold-s); font-size: .78rem; }
+.tbl-wrap { overflow-x: auto; border-radius: var(--r-sm); background: var(--card); box-shadow: var(--shadow); }
+.tbl { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.tbl th { background: var(--maroon); color: var(--cream); text-align: left; padding: .5rem .7rem; font-weight: 600; font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; }
+.tbl td { padding: .45rem .7rem; border-top: 1px solid var(--line); vertical-align: top; }
+.tbl tr:nth-child(even) td { background: rgba(243, 230, 208, .4); }
+.tbl a { color: var(--maroon); font-weight: 700; }
+.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+.how-item { display: flex; gap: .6rem; background: var(--card); padding: .7rem; border-radius: var(--r-sm); box-shadow: var(--shadow); font-size: .86rem; }
+.how-item p { margin: .15rem 0 0; color: var(--muted); font-size: .8rem; }
+.how-ic { width: 2.2rem; height: 2.2rem; border-radius: 10px; background: var(--gold-s); color: var(--maroon); display: grid; place-items: center; flex: none; border: 1.5px solid currentColor; box-shadow: 2px 2px 0 currentColor; }
+.flow { display: grid; gap: .3rem; }
+.frow { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+.frow.split { gap: 1rem; margin-top: .2rem; }
+.fgroup { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; border: 2px dashed rgba(201, 149, 46, .6); border-radius: 12px; padding: 1rem .5rem .5rem; position: relative; }
+.fg-l { position: absolute; top: -.7rem; left: .6rem; background: var(--gold); color: var(--maroon-3); font-size: .68rem; font-weight: 700; padding: .1em .6em; border-radius: 999px; }
+.fnode { display: inline-flex; align-items: center; gap: .4rem; background: var(--card); padding: .35rem .6rem .35rem .35rem; border-radius: 10px; text-decoration: none; box-shadow: var(--shadow); border: 2px solid transparent; font-size: .76rem; max-width: 11.5rem; }
+.fnode:hover { border-color: var(--maroon); }
+.fnode b { font-weight: 600; line-height: 1.2; }
+.fnode.ok .fcode { background: var(--ok); }
+.fcode { background: var(--maroon); color: var(--gold-s); border-radius: 7px; padding: .2em .45em; font-weight: 800; font-size: .72rem; flex: none; }
+.fnode.dark { background: var(--maroon-2); color: var(--cream); }
+.fnode.dark .fcode { background: var(--gold); color: var(--maroon-3); }
+.farrow { width: 1.2rem; height: 2px; background: var(--gold); position: relative; flex: none; }
+.farrow::after { content: ""; position: absolute; right: -2px; top: -4px; border: 5px solid transparent; border-left-color: var(--gold); border-right: 0; }
+.fterm { background: var(--gold); color: var(--maroon-3); font-weight: 700; padding: .3em .9em; border-radius: 999px; font-size: .78rem; }
+.fdecide { background: var(--gold-s); border: 2px solid var(--gold); color: var(--maroon-2); font-weight: 700; font-size: .72rem; padding: .35em .7em; border-radius: 4px; transform: skewX(-12deg); }
+.fbranch { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; }
+.fb-l { font-weight: 700; font-size: .72rem; padding: .15em .6em; border-radius: 999px; }
+.fbranch.ok .fb-l { background: var(--ok-bg); color: var(--ok); }
+.fbranch.no .fb-l { background: var(--bad-bg); color: var(--bad); }
+.cmap { display: grid; justify-items: center; gap: .8rem; }
+.cm-root { display: inline-flex; gap: .5rem; align-items: center; background: var(--maroon-2); color: var(--cream); padding: .55rem 1.1rem; border-radius: 14px; text-decoration: none; box-shadow: var(--shadow); font-size: 1.05rem; }
+.cm-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; width: 100%; }
+.cm-col { background: var(--card); border-radius: var(--r-sm); padding: .6rem; box-shadow: var(--shadow); }
+.cm-m { display: flex; gap: .5rem; align-items: center; text-decoration: none; background: var(--gold-s); padding: .45rem .6rem; border-radius: 10px; margin-bottom: .45rem; }
+.cm-m span { font-weight: 800; color: var(--gold); }
+.cm-m b { font-size: .84rem; color: var(--maroon-2); line-height: 1.2; }
+.cm-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .3rem; }
+.cm-t { display: flex; justify-content: space-between; gap: .5rem; align-items: center; padding: .35rem .5rem; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; font-size: .8rem; }
+.cm-t:hover { border-color: var(--maroon); }
+.cm-t small { font-weight: 700; color: var(--gold); font-size: .68rem; }
+.cm-t.done { background: var(--ok-bg); border-color: transparent; }
+.cm-end { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+.cm-end a { display: inline-flex; gap: .35rem; align-items: center; background: var(--maroon); color: var(--cream); padding: .4rem .8rem; border-radius: 999px; text-decoration: none; font-size: .82rem; font-weight: 600; --icf: rgba(226, 176, 74, .55); }
+.search { display: flex; align-items: center; position: relative; margin-bottom: .7rem; }
+.search .ic { position: absolute; left: .7rem; color: var(--muted); }
+.search input { width: 100%; padding-left: 2.2rem; }
+.gloss { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin: 0; }
+.g-item { background: var(--card); border-radius: var(--r-sm); padding: .6rem .75rem; box-shadow: var(--shadow); }
+.g-item[hidden] { display: none; }
+.g-item dt { font-weight: 700; color: var(--maroon); font-size: .9rem; }
+.g-item dd { margin: .15rem 0 0; font-size: .82rem; }
+.g-item dd a { display: inline-flex; gap: .2rem; align-items: center; color: var(--gold); font-weight: 700; font-size: .76rem; text-decoration: none; }
+
+/* ---------- Bilah bawah: titik scene ---------- */
+.dots { display: flex; align-items: center; gap: .35rem; min-width: 0; }
+.dots-l { font-size: .74rem; font-weight: 700; color: var(--muted); margin-right: .2rem; white-space: nowrap; }
+.dot-i { width: .7rem; height: .7rem; border-radius: 50%; background: var(--sand); border: 2px solid transparent; }
+.dot-i.ok { background: var(--gold); }
+.dot-i.cur { border-color: var(--maroon); background: var(--maroon); }
+
+/* ---------- Tirai, toast, konfeti ---------- */
+.curtain { position: absolute; inset: 0; z-index: 40; pointer-events: none; display: grid; place-items: center; background: linear-gradient(150deg, var(--maroon), var(--maroon-3)); transform: scaleY(0); transform-origin: bottom; transition: transform .42s cubic-bezier(.7, 0, .3, 1); }
+.curtain.cover { transform: scaleY(1); pointer-events: all; }
+.curtain.leave { transform: scaleY(0); transform-origin: top; transition-duration: .5s; }
+.curtain-in { display: grid; justify-items: center; gap: .4rem; text-align: center; padding: 0 1rem; }
+.cur-logo { width: 3.4rem; height: 3.4rem; display: block; }
+.cur-code { font-weight: 800; font-size: 3.6rem; color: var(--gold-l); line-height: 1; }
+.cur-title { color: var(--cream); font-weight: 600; font-size: 1.05rem; }
+.cur-logo, .cur-code, .cur-title { opacity: 0; transform: translateY(14px); transition: opacity .3s, transform .4s var(--ease); }
+.curtain.cover:not(.leave) .cur-logo, .curtain.cover:not(.leave) .cur-code, .curtain.cover:not(.leave) .cur-title { opacity: 1; transform: none; transition-delay: .15s; }
+.toast { position: absolute; left: 50%; bottom: 4.4rem; transform: translate(-50%, 16px); opacity: 0; visibility: hidden; background: var(--maroon-2); color: var(--cream); padding: .55rem 1.1rem; border-radius: 999px; font-size: .84rem; box-shadow: var(--shadow); transition: all .3s; z-index: 50; max-width: calc(100% - 32px); text-align: center; }
+.toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+.confetti { position: absolute; left: 50%; bottom: 35%; width: 0; height: 0; pointer-events: none; z-index: 45; }
+.confetti i { position: absolute; left: 0; top: 0; border-radius: 2px; opacity: 0; animation: cf 1.7s cubic-bezier(.15, .6, .4, 1) forwards; }
+@keyframes cf { 0% { opacity: 1; transform: translate(0, 0) rotate(0); } 55% { opacity: 1; transform: translate(var(--dx), var(--dy)) rotate(var(--r)); } 100% { opacity: 0; transform: translate(calc(var(--dx) * 1.15), calc(var(--dy) + 300px)) rotate(calc(var(--r) * 1.6)); } }
+
+/* Animasi masuk ringan */
+.enter > * { animation: rise .5s var(--ease) both; }
+.enter > *:nth-child(2) { animation-delay: .06s; } .enter > *:nth-child(3) { animation-delay: .12s; } .enter > *:nth-child(4) { animation-delay: .18s; } .enter > *:nth-child(n+5) { animation-delay: .24s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+body.settled .enter > * { animation: none; opacity: 1; transform: none; }
+.mailcard, .chip-f, .swoosh path, .hs-dot { will-change: transform; }
+
+/* ---------- Layar kecil: tampil penuh dan bisa di-scroll ---------- */
+@media (max-width: 860px), (max-height: 520px) and (max-width: 1000px) {
+  html { font-size: 15px; }
+  body { display: block; overflow: auto; background: var(--cream); }
+  .stage { width: 100%; aspect-ratio: auto; min-height: 100vh; min-height: 100dvh; border-radius: 0; box-shadow: none; overflow: visible; }
+  .stage-body { overflow: visible; }
+  .bar-top { position: sticky; top: 0; z-index: 20; padding: 0 .8rem; }
+  .bar-bottom { position: sticky; bottom: 0; z-index: 20; padding: 0 .8rem; }
+  .bar-title, .prog-bar, .dots-l { display: none; }
+  .brand-text { font-size: .85rem; }
+  .cover { grid-template-columns: 1fr; padding: 2rem 1.2rem 2.5rem; height: auto; min-height: calc(100dvh - 3.4rem); }
+  .cover-title { font-size: 3.2rem; }
+  .cover-art { display: none; }
+  .menu { grid-template-columns: 1fr; height: auto; padding: .8rem; }
+  .menu-side { flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .menu-side .ring { width: 5.5rem; height: 5.5rem; }
+  .menu-links { grid-template-columns: 1fr 1fr; width: 100%; }
+  .menu-cols, .menu-row.two { grid-template-columns: 1fr; }
+  .scene, .scene.wide, .quiz { grid-template-columns: 1fr; height: auto; }
+  .scene-info, .quiz-side { border-right: 0; border-bottom: 1px solid var(--line); overflow: visible; }
+  .scene-act, .quiz-main { overflow: visible; padding: 1rem; }
+  .s02, .dnd, .hs-wrap, .spot-wrap, .practice, .cc-wrap, .time-wrap, .ibx-compare, .salam-grid, .pcompare, .branch, .ig-grid, .how, .gloss, .cm-cols, .ev-result, .ev-stats { grid-template-columns: 1fr; }
+  .vs { grid-template-columns: 1fr; }
+  .vscreen { aspect-ratio: 4 / 5; }
+  .imsg .messy, .imsg .tidy { white-space: normal; }
+  .imsg { min-height: 3em; }
+  .ev-nav { grid-template-columns: repeat(8, 1fr); }
+  .mrow { grid-template-columns: 1fr; }
+  .srow2 { flex-direction: column; align-items: flex-start; }
+  .page { padding: 1rem; }
+  .toast { position: fixed; bottom: 4.6rem; }
+  .curtain { position: fixed; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .curtain { display: none; }
+}
+
+/* Cetak rangkuman */
+@media print {
+  body { background: #fff; display: block; overflow: visible; }
+  body.print-infog .bar, body.print-infog .scene-info, body.print-infog .feedback, body.print-infog .row-btns { display: none !important; }
+  body.print-infog .stage { width: 100%; aspect-ratio: auto; box-shadow: none; }
+  body.print-infog .scene { display: block; }
+  body.print-infog .infog { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+body.settled .swoosh path { animation: none; stroke-dashoffset: 0; }
+
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <header class="bar bar-top">
+      <a class="brand" href="#/" aria-label="Smart Emailing, ke sampul">
+        <span class="brand-mark" id="brandMark"></span>
+        <span class="brand-text">Smart<b>Emailing</b></span>
+      </a>
+      <div class="bar-title" id="barTitle"></div>
+      <div class="bar-tools">
+        <div class="prog" id="progBox" title="Progres materi">
+          <span class="prog-bar"><i id="progFill"></i></span>
+          <b id="progText">0%</b>
+        </div>
+        <button class="icon-btn" id="soundBtn" type="button" aria-label="Efek suara"></button>
+        <a class="icon-btn" id="menuBtn" href="#/menu" aria-label="Menu materi"></a>
+      </div>
+    </header>
+
+    <main class="stage-body" id="app" tabindex="-1"></main>
+
+    <footer class="bar bar-bottom" id="bottomBar"></footer>
+
+    <div class="curtain" id="curtain" aria-hidden="true">
+      <div class="curtain-in"><span class="cur-code"></span><span class="cur-title"></span></div>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+'use strict';
+/* =========================================================================
+   SMART EMAILING — modul pelatihan interaktif (Kelompok 7)
+   Tampilan modul 16:9: sampul → menu → scene S01–S13, latihan soal,
+   evaluasi tanpa pilihan ganda. Semua progres tersimpan di browser.
+   ========================================================================= */
+
+/* ---------- Utilitas ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const app = $('#app');
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let cleanups = [];
+const onLeave = fn => cleanups.push(fn);
+const later = (fn, ms) => { const id = setTimeout(fn, ms); onLeave(() => clearTimeout(id)); return id; };
+
+/* ---------- Ikon (garis + bidang warna bergeser, gaya cap) ---------- */
+const P = {
+  mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+  clip: '<path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>',
+  send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  file: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+  briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  megaphone: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+  check: '<polyline points="20 6 9 17 4 12"/>',
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+  eyeoff: '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.53 13.53 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/>',
+  star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  vol: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
+  mute: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/>',
+  play: '<polygon points="6 3 20 12 6 21 6 3"/>',
+  pause: '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',
+  right: '<path d="M5 12h14M12 5l7 7-7 7"/>',
+  left: '<path d="M19 12H5M12 19l-7-7 7-7"/>',
+  up: '<polyline points="18 15 12 9 6 15"/>',
+  down: '<polyline points="6 9 12 15 18 9"/>',
+  target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+  map: '<polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>',
+  help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+  branch: '<line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+  chat: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+  pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  inbox: '<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+  grip: '<circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/>',
+  pointer: '<path d="m9 9 5 12 1.8-5.2L21 14Z"/><path d="M7.2 2.2 8 5.1"/><path d="m5.1 8-2.9-.8"/><path d="M14 4.1 12 6"/><path d="m6 12-1.9 2"/>',
+  list: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+  award: '<circle cx="12" cy="8" r="6"/><path d="M15.48 12.89 17 22l-5-3-5 3 1.52-9.11"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/>',
+  printer: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  bulb: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  type: '<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>',
+  layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
+  home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>',
+  flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+};
+const F = {
+  mail: '<rect x="2" y="4" width="20" height="16" rx="2"/>', clip: '<circle cx="12" cy="12" r="6.5"/>', send: '<path d="m22 2-7 20-4-9-9-4Z"/>',
+  clock: '<circle cx="12" cy="12" r="10"/>', users: '<circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2z"/>',
+  file: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/>', briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/>',
+  megaphone: '<path d="m3 11 18-5v12L3 14z"/>', target: '<circle cx="12" cy="12" r="10"/>',
+  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+  map: '<polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>', help: '<circle cx="12" cy="12" r="10"/>',
+  branch: '<circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>', chat: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+  pen: '<path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>', search: '<circle cx="11" cy="11" r="8"/>',
+  inbox: '<path d="M2 12h6l2 3h4l2-3h6v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>', grip: '<rect x="5.5" y="2" width="13" height="20" rx="4"/>',
+  pointer: '<path d="m9 9 5 12 1.8-5.2L21 14Z"/>', list: '<rect x="1.5" y="3" width="9" height="18" rx="2"/>', award: '<circle cx="12" cy="8" r="6"/>',
+  bulb: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5z"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/>', shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  type: '<rect x="3" y="3" width="18" height="5" rx="1.5"/>', layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/>', play: '<polygon points="6 3 20 12 6 21 6 3"/>',
+  home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>', eye: '<circle cx="12" cy="12" r="5"/>', eyeoff: '<circle cx="12" cy="12" r="5"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>', lock: '<rect x="4" y="11" width="16" height="10" rx="2"/>',
+  flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>', printer: '<rect x="6" y="14" width="12" height="8"/>',
+};
+const icon = (n, cls = '') => `<svg class="ic ${F[n] ? 'duo' : ''} ${cls}" viewBox="-1 -1 26 26" aria-hidden="true">${F[n] ? `<g class="f">${F[n]}</g>` : ''}<g class="s">${P[n] || ''}</g></svg>`;
+
+/* Logo: amplop yang tutupnya membentuk centang + kilau */
+const LOGO = `<svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#7a1f2e"/><rect x="8" y="14" width="31" height="22" rx="4.5" fill="#fbf5ec"/><path class="logo-ck" d="M12 18.5 21.5 26 35.5 15.5" fill="none" stroke="#3b1119" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path class="logo-sp" d="M38 3.5 39.8 8.2 44.5 10 39.8 11.8 38 16.5 36.2 11.8 31.5 10 36.2 8.2Z" fill="#e2b04a" stroke="#7a1f2e" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+
+/* ---------- Penyimpanan progres ---------- */
+const KEY = 'smart-emailing:v2';
+const fresh = () => ({ done: {}, act: {}, lat: null, ev: null, feedback: null, sound: true, last: null });
+let state = (() => { try { return Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return fresh(); } })();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* mode privat */ } }
+const A = id => (state.act[id] = state.act[id] || {});
+
+/* ---------- Suara ---------- */
+let actx;
+function sfx(type = 'click') {
+  if (!state.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = actx.currentTime, o = actx.createOscillator(), g = actx.createGain();
+    const c = { click: [700, 700, .05, 'sine'], ok: [740, 1180, .2, 'sine'], no: [260, 150, .24, 'triangle'] }[type];
+    o.type = c[3]; o.frequency.setValueAtTime(c[0], t); o.frequency.linearRampToValueAtTime(c[1], t + c[2]);
+    g.gain.setValueAtTime(.07, t); g.gain.exponentialRampToValueAtTime(.0001, t + c[2] + .05);
+    o.connect(g).connect(actx.destination); o.start(t); o.stop(t + c[2] + .08);
+  } catch (e) { /* tidak ada audio */ }
+}
+function speak(text, btn) {
+  if (!('speechSynthesis' in window)) { toast('Browser ini belum bisa membacakan narasi.'); return; }
+  if (speechSynthesis.speaking) { speechSynthesis.cancel(); btn && btn.classList.remove('on'); return; }
+  const u = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
+  u.lang = 'id-ID';
+  const v = speechSynthesis.getVoices().find(x => (x.lang || '').toLowerCase().startsWith('id'));
+  if (v) u.voice = v;
+  u.onend = u.onerror = () => btn && btn.classList.remove('on');
+  btn && btn.classList.add('on');
+  speechSynthesis.speak(u);
+}
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+function celebrate() {
+  if (reduced) return;
+  const box = document.createElement('div'); box.className = 'confetti';
+  const colors = ['#7a1f2e', '#e2b04a', '#f4d9cf', '#c4553f', '#fbf5ec', '#3b1119'];
+  for (let i = 0; i < 44; i++) {
+    const s = document.createElement('i');
+    s.style.cssText = `--dx:${((Math.random() - .5) * 520).toFixed(0)}px;--dy:${-(160 + Math.random() * 240).toFixed(0)}px;--r:${(Math.random() * 720 - 360).toFixed(0)}deg;background:${colors[i % colors.length]};animation-delay:${(Math.random() * 140).toFixed(0)}ms;width:${(6 + Math.random() * 6).toFixed(0)}px;height:${(10 + Math.random() * 8).toFixed(0)}px`;
+    box.appendChild(s);
+  }
+  $('#stage').appendChild(box); setTimeout(() => box.remove(), 2000);
+}
+
+/* =========================================================================
+   DATA MATERI
+   ========================================================================= */
+const NAMA = 'Syarif Udin', NAMAF = 'SyarifUdin';
+const ORDER = ['S01', 'S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08', 'S09', 'S10', 'S11', 'S12', 'S13'];
+const MATERI_SCENES = ['S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08', 'S09', 'S10', 'S11'];
+const KKM = 75;
+
+const MATERI = [
+  { id: 'intro', no: '00', short: 'Pembuka', title: 'Pembuka', icon: 'play', scenes: ['S01'] },
+  { id: 'm1', no: '01', short: 'Materi 1', title: 'Dasar Komunikasi lewat Email', icon: 'mail', scenes: ['S02', 'S03', 'S04'],
+    desc: 'Kegunaan email di dunia kerja, bagian-bagian email, subject, serta salam pembuka dan penutup.' },
+  { id: 'm2', no: '02', short: 'Materi 2', title: 'Menulis Email Lamaran Kerja', icon: 'briefcase', scenes: ['S05', 'S06', 'S07', 'S08'],
+    desc: 'Susunan email lamaran, cara memperkenalkan diri, melampirkan CV, dan kesalahan yang sering terjadi.' },
+  { id: 'm3', no: '03', short: 'Materi 3', title: 'Etika Berkirim Email', icon: 'send', scenes: ['S09', 'S10', 'S11'],
+    desc: 'Kapan pakai CC dan BCC, jam yang pas untuk mengirim, cara follow-up ke HR, dan bahasa yang sopan.' },
+  { id: 'akhir', no: '04', short: 'Penutup', title: 'Evaluasi & Penutup', icon: 'award', scenes: ['S12', 'S13'] },
+];
+const materiOf = id => MATERI.find(m => m.scenes.includes(id));
+
+const SCENES = {
+  S01: { title: 'Selamat Datang', type: 'Video pembuka', wide: true,
+    tujuan: 'Mengenal pelatihan ini: tujuannya apa dan materinya apa saja.',
+    narasi: 'Halo, selamat datang di pelatihan Smart Emailing. Pernah kirim lamaran kerja, tapi tak kunjung dibalas? Bisa jadi masalahnya ada di email yang kamu kirim. Di sini kamu akan belajar menulis email lamaran yang rapi dan berkomunikasi dengan HR secara profesional. Materinya ada tiga: dasar komunikasi lewat email, menulis email lamaran, dan etika berkirim email. Setelah itu, kamu bisa berlatih soal, lalu mengerjakan evaluasi. Yuk, kita mulai!' },
+  S02: { title: 'Kegunaan Email di Dunia Kerja', type: 'Klik informasi',
+    tujuan: 'Kamu bisa menjelaskan kegunaan email di dunia kerja dan alasan komunikasi lewat email perlu dijaga tetap profesional.',
+    uraian: [{ h: 'Kenapa Email Masih Penting?', p: [
+      'Di dunia kerja, email masih jadi salah satu jalur komunikasi resmi. Lewat email, orang menyampaikan informasi, mengirim dokumen, melamar pekerjaan, berkoordinasi dengan rekan kerja, sampai berhubungan dengan klien.',
+      'Dibanding aplikasi chat, email terasa lebih formal, tersimpan rapi, dan bisa dijadikan bukti komunikasi. Karena itu, kemampuan menulis email yang baik jadi bekal penting untuk fresh graduate dan pencari kerja.'] }],
+    narasi: 'Email masih jadi jalur komunikasi resmi di dunia kerja. Klik keempat ikon di layar laptop untuk melihat kegunaannya. Dibanding chat, email lebih formal, tersimpan rapi, dan bisa jadi bukti komunikasi. Itu sebabnya menulis email dengan baik adalah keterampilan penting buat fresh graduate.' },
+  S03: { title: 'Bagian-Bagian Email', type: 'Seret & letakkan',
+    tujuan: 'Kamu bisa mengenali bagian-bagian email profesional.',
+    uraian: [{ h: 'Lima Bagian Email Profesional', p: [
+      'Email profesional punya lima bagian: <b>subject</b> (judul email), <b>salam pembuka</b>, <b>isi email</b>, <b>salam penutup</b>, dan <b>tanda tangan</b>.',
+      'Tiap bagian punya tugasnya sendiri. Subject menjelaskan isi email secara singkat, sedangkan isi email memuat pesan utama yang ditulis jelas dan ringkas.'] }],
+    narasi: 'Email profesional terdiri atas lima bagian. Subject menjelaskan isi email secara singkat. Salam pembuka menunjukkan rasa hormat. Isi email memuat pesan utama dengan jelas dan ringkas. Salam penutup mengakhiri email dengan sopan, lalu ditutup dengan tanda tangan. Sekarang, coba pasang kartu-kartu ini di tempat yang benar.' },
+  S04: { title: 'Subject, Salam Pembuka, dan Penutup', type: 'Studi kasus + kuis',
+    tujuan: 'Kamu bisa menulis subject yang efektif serta memakai salam pembuka dan penutup yang sesuai.',
+    uraian: [
+      { h: 'Menulis Subject yang Efektif', p: [
+        'Subject adalah hal pertama yang dilihat penerima. Subject yang baik itu singkat, jelas, spesifik, dan langsung menggambarkan tujuan email.',
+        `Contoh yang tepat: <q>Application for Graphic Designer Position – ${NAMA}</q>. Contoh yang kurang tepat: <q>Lamaran</q>, <q>Halo Kak</q>, atau <q>Penting</q>.`,
+        'Subject yang jelas membuat emailmu lebih mungkin dibuka oleh HR atau perekrut.'] },
+      { h: 'Membuka dan Menutup Email dengan Sopan', p: [
+        'Salam pembuka menunjukkan rasa hormat kepada penerima, misalnya <q>Yth. Tim Rekrutmen PT ABC,</q> atau <q>Dear Hiring Manager,</q>.',
+        'Salam penutup mengakhiri email dengan sopan, misalnya <q>Hormat saya,</q> atau <q>Best regards,</q> lalu diikuti nama pengirim. Salam yang tepat menunjukkan bahwa kamu paham etika berkomunikasi.'] }],
+    narasi: 'Subject adalah hal pertama yang dilihat HR. Subject yang baik itu singkat, jelas, spesifik, dan sesuai tujuan email. Coba bandingkan dua kotak masuk ini. Untuk salam pembuka, kamu bisa memakai "Yth. Tim Rekrutmen PT ABC," atau "Dear Hiring Manager,". Untuk penutup, pakai "Hormat saya," atau "Best regards," lalu tulis namamu.' },
+  S05: { title: 'Susunan Email Lamaran Kerja', type: 'Klik bagian email',
+    tujuan: 'Kamu bisa menjelaskan fungsi email lamaran dan menyusunnya sesuai format yang profesional.',
+    uraian: [
+      { h: 'Apa Itu Email Lamaran Kerja?', p: [
+        'Email lamaran adalah email yang kamu kirim ke perusahaan untuk memperkenalkan diri, menyampaikan minat pada posisi tertentu, sekaligus mengirim dokumen pendukung seperti CV dan portofolio.',
+        'Email ini adalah kesan pertama. Dari sinilah perekrut mulai menilai kamu sebagai kandidat.'] },
+      { h: 'Urutan Email Lamaran', p: [
+        'Susun email lamaran dengan urutan berikut:',
+        '<ol class="ol"><li>subject yang jelas</li><li>salam pembuka</li><li>perkenalan diri singkat</li><li>tujuan mengirim email</li><li>keterangan lampiran CV dan portofolio</li><li>salam penutup</li></ol>',
+        'Tulis isinya singkat, padat, dan relevan supaya mudah dibaca perekrut.'] }],
+    narasi: 'Email lamaran adalah caramu memperkenalkan diri, menunjukkan minat pada posisi tertentu, dan mengirim CV serta portofolio. Email inilah kesan pertamamu di mata perekrut. Urutannya: subject yang jelas, salam pembuka, perkenalan singkat, tujuan email, keterangan lampiran, lalu salam penutup. Klik tiap bagian untuk melihat fungsinya.' },
+  S06: { title: 'Memperkenalkan Diri dan Mengirim CV', type: 'Simulasi',
+    tujuan: 'Kamu bisa memperkenalkan diri secara profesional dan mengirim CV serta portofolio dengan benar.',
+    uraian: [
+      { h: 'Memperkenalkan Diri ke HR', p: [
+        'Saat memperkenalkan diri, cukup sebutkan nama, latar belakang pendidikan, dan posisi yang kamu lamar. Sampaikan dengan singkat dan relevan.',
+        'Tidak perlu bercerita soal hal pribadi yang tidak ada hubungannya dengan pekerjaan. Fokuslah pada kemampuan atau pengalaman yang mendukung posisi tersebut.'] },
+      { h: 'Melampirkan Dokumen Pendukung', p: [
+        `Lampirkan CV dan portofolio dalam format yang sesuai, misalnya PDF. Beri nama file yang rapi dan mudah dikenali, seperti <code>CV_${NAMAF}.pdf</code> atau <code>Portfolio_${NAMAF}.pdf</code>.`,
+        'Sebelum menekan tombol kirim, pastikan semua lampiran sudah terunggah dan bisa dibuka.'] }],
+    narasi: `Saat memperkenalkan diri, cukup sebutkan nama, latar belakang pendidikan, dan posisi yang dilamar. Fokus pada kemampuan yang mendukung posisi itu, dan tinggalkan cerita pribadi yang tidak berkaitan. Untuk lampiran, pakai format PDF dengan nama file yang rapi, misalnya CV_${NAMAF}.pdf dan Portfolio_${NAMAF}.pdf. Sebelum mengirim, pastikan semua lampiran sudah terunggah dan bisa dibuka.` },
+  S07: { title: 'Kesalahan yang Sering Terjadi', type: 'Temukan kesalahan', uraianAfter: true,
+    tujuan: 'Kamu bisa menemukan kesalahan yang sering muncul di email lamaran.',
+    uraian: [{ h: 'Hindari Kesalahan Ini', p: [
+      'Kesalahan yang sering dilakukan fresh graduate antara lain: alamat email yang tidak profesional, subject yang tidak jelas, salah menulis nama perusahaan, bahasa yang tidak formal, isi email yang terlalu panjang, dan lupa melampirkan CV atau portofolio.',
+      'Kesalahan-kesalahan kecil seperti ini bisa membuat lamaranmu tidak diproses lebih lanjut.'] }],
+    narasi: 'Sekarang, anggap dirimu seorang perekrut. Ada beberapa kesalahan di email ini. Klik bagian yang menurutmu salah.' },
+  S08: { title: 'Praktik Menulis Email Lamaran', type: 'Praktik',
+    tujuan: 'Kamu bisa membuat email lamaran untuk keperluan mencari kerja.',
+    uraian: [{ h: 'Cara Mengerjakan', p: [
+      'Isi setiap bagian email, lalu cek lagi tulisanmu dengan daftar periksa di samping.',
+      'Praktik ini tidak dinilai otomatis. Setelah emailmu dikirim, bandingkan dengan contoh jawaban yang muncul.'] }],
+    narasi: 'Saatnya praktik. Tulis email lamaran untuk lowongan di samping, dan terapkan susunan serta format yang sudah kamu pelajari.' },
+  S09: { title: 'CC, BCC, dan Waktu Mengirim', type: 'Penjelasan visual + kuis',
+    tujuan: 'Kamu bisa menjelaskan kegunaan CC dan BCC serta memilih waktu yang tepat untuk mengirim email.',
+    uraian: [
+      { h: 'Memakai CC dan BCC dengan Tepat', p: [
+        '<b>CC</b> (<i>Carbon Copy</i>) dipakai untuk mengirim salinan email kepada orang lain yang perlu tahu isinya.',
+        '<b>BCC</b> (<i>Blind Carbon Copy</i>) juga mengirim salinan, tetapi alamat penerimanya tidak terlihat oleh penerima lain.',
+        'Pilih CC atau BCC sesuai kebutuhan, dan jaga privasi para penerima.'] },
+      { h: 'Kapan Sebaiknya Mengirim Email?', p: [
+        'Waktu kirim ikut menentukan apakah emailmu cepat dibaca. Kirim email profesional di jam kerja, sekitar pukul 08.00–17.00.',
+        'Hindari mengirim larut malam, saat hari libur, atau di waktu yang kurang pas, kecuali memang ada keperluan yang mendesak.'] }],
+    narasi: 'CC atau Carbon Copy dipakai untuk mengirim salinan ke orang lain yang perlu tahu isi email. BCC atau Blind Carbon Copy juga mengirim salinan, tetapi alamat penerimanya disembunyikan, jadi privasi tetap terjaga. Untuk waktu, kirimlah email di jam kerja, sekitar pukul delapan pagi sampai lima sore. Hindari larut malam atau hari libur, kecuali memang mendesak.' },
+  S10: { title: 'Follow-up ke HR', type: 'Pilih langkahmu',
+    tujuan: 'Kamu bisa menulis email follow-up ke HR dengan sopan dan profesional.',
+    uraian: [{ h: 'Menanyakan Kabar Lamaran', p: [
+      'Follow-up adalah email untuk menanyakan perkembangan proses rekrutmen setelah beberapa waktu. Tulislah dengan sopan, singkat, dan tidak terkesan memaksa.',
+      'Biasanya follow-up dikirim sekitar <b>5–7 hari kerja</b> setelah lamaran terkirim, kalau belum ada kabar dari perusahaan.'] }],
+    narasi: 'Follow-up dipakai untuk menanyakan perkembangan proses rekrutmen. Sampaikan dengan sopan, singkat, dan jangan terkesan memaksa. Biasanya follow-up dikirim sekitar lima sampai tujuh hari kerja setelah lamaran terkirim, kalau belum ada kabar. Sekarang, bantu Syarif memilih langkah yang tepat.' },
+  S11: { title: 'Bahasa yang Formal dan Sopan', type: 'Pilih kalimat',
+    tujuan: 'Kamu bisa memakai bahasa yang formal dan profesional di email.',
+    uraian: [{ h: 'Menulis dengan Bahasa yang Profesional', p: [
+      'Bahasa di email profesional harus jelas, sopan, dan mudah dipahami. Hindari bahasa gaul, singkatan tidak resmi, emoji, dan huruf kapital yang berlebihan.',
+      'Gunakan kalimat efektif dan perhatikan ejaan serta tata bahasanya, supaya pesanmu tersampaikan dengan baik dan kamu terlihat profesional.'] }],
+    narasi: 'Bahasa di email profesional harus jelas, sopan, dan mudah dipahami. Hindari bahasa gaul, singkatan tidak resmi, emoji, dan huruf kapital berlebihan. Perhatikan juga ejaan dan tata bahasanya. Pilih kalimat yang paling pas di setiap kasus.' },
+  S12: { title: 'Evaluasi', type: 'Evaluasi akhir', wide: true,
+    tujuan: 'Kamu bisa menerapkan seluruh materi untuk menyusun email lamaran yang efektif dan sopan.',
+    narasi: 'Kamu sudah menyelesaikan semua materi. Sekarang saatnya evaluasi. Kerjakan dengan teliti. Nilaimu baru muncul setelah semua jawaban dikirim.' },
+  S13: { title: 'Penutup', type: 'Rangkuman + masukan', wide: true,
+    tujuan: 'Mengingat kembali seluruh materi dan memberi masukan untuk pelatihan ini.',
+    narasi: 'Selamat, kamu sudah menyelesaikan pelatihan Smart Emailing! Ingat lima hal ini: subject yang jelas, susunan yang rapi, bahasa yang sopan, lampiran yang lengkap, dan waktu kirim yang tepat. Simpan rangkuman ini sebagai pegangan. Sebelum pergi, isi masukan singkat supaya pelatihan ini bisa terus diperbaiki. Semoga sukses mendapatkan pekerjaan impianmu!' },
+};
+
+/* ---------- Status kunci ---------- */
+const materiDone = () => MATERI_SCENES.every(id => state.done[id]);
+const evalPassed = () => !!(state.ev && state.ev.done && state.ev.score >= KKM);
+const locked = id => (id === 'S12' && !materiDone()) || (id === 'S13' && !evalPassed());
+const doneCount = () => ORDER.filter(id => state.done[id]).length;
+const pct = () => Math.round(doneCount() / ORDER.length * 100);
+const nextOf = id => ({ S11: '#/latihan', S12: evalPassed() ? '#/scene/S13' : null, S13: null }[id] !== undefined
+  ? { S11: '#/latihan', S12: evalPassed() ? '#/scene/S13' : null, S13: null }[id]
+  : '#/scene/' + ORDER[ORDER.indexOf(id) + 1]);
+const prevOf = id => id === 'S12' ? '#/latihan' : (ORDER.indexOf(id) > 0 ? '#/scene/' + ORDER[ORDER.indexOf(id) - 1] : '#/menu');
+const resumeHref = () => { const id = MATERI_SCENES.concat('S01').find(x => !state.done[x]); return id ? '#/scene/' + (state.done.S01 ? id : 'S01') : (evalPassed() ? '#/scene/S13' : '#/scene/S12'); };
+
+/* =========================================================================
+   KOMPONEN BERSAMA
+   ========================================================================= */
+function showFb(fb, ok, msg) {
+  fb.hidden = false;
+  fb.className = 'fb ' + (ok === true ? 'fb-ok' : ok === false ? 'fb-no' : 'fb-info');
+  fb.innerHTML = `${icon(ok === true ? 'check' : ok === false ? 'x' : 'bulb')}<span>${msg}</span>`;
+}
+const actHead = (ic, label, counter = '') => `<div class="act-head"><span class="act-tag">${icon(ic)} ${label}</span>${counter ? `<span class="counter">${counter}</span>` : ''}</div>`;
+
+/* Pilihan ganda dengan umpan balik; riwayat pilihan disimpan supaya tidak mengulang */
+function mcq(el, { q, opts, onDone, store, key }) {
+  el.innerHTML = `${q ? `<p class="q">${q}</p>` : ''}
+    <div class="opts">${opts.map((o, i) => `<button type="button" class="opt" data-i="${i}"><span class="opt-l">${'ABCD'[i]}</span><span class="opt-t">${o.t}</span></button>`).join('')}</div>
+    <div class="fb" hidden></div>`;
+  const fb = $('.fb', el), rec = store ? (store[key] = store[key] || []) : [];
+  const pick = (i, silent) => {
+    const o = opts[i], b = $(`.opt[data-i="${i}"]`, el);
+    showFb(fb, !!o.ok, o.fb);
+    if (o.ok) { b.classList.add('ok'); $$('.opt', el).forEach(x => (x.disabled = true)); silent || sfx('ok'); onDone && onDone(silent); }
+    else { b.classList.add('no'); b.disabled = true; silent || sfx('no'); }
+  };
+  rec.forEach(i => pick(i, true));
+  el.onclick = e => {
+    const b = e.target.closest('.opt'); if (!b || b.disabled) return;
+    rec.push(+b.dataset.i); save(); pick(+b.dataset.i, false);
+  };
+}
+
+/* =========================================================================
+   LAYAR: SAMPUL
+   ========================================================================= */
+function viewCover() {
+  const started = doneCount() > 0;
+  return `<section class="cover">
+    <div class="cover-text enter">
+      <div class="pill-tag"><span class="dot"></span>Pelatihan Kelompok 7 · untuk fresh graduate</div>
+      <h1 class="cover-title">Smart<br><span>Emailing<svg class="swoosh" viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true"><path d="M5 18 C 80 5, 170 3, 295 13"/></svg></span></h1>
+      <p class="cover-hook"><span class="q-mark">“</span>Lamaran tak kunjung dibalas? Bisa jadi masalahnya ada di <mark>emailnya.</mark></p>
+      <p class="cover-sub">Belajar menulis email lamaran yang rapi, sopan, dan siap dibaca HR, lewat simulasi dan latihan langsung.</p>
+      <div class="cover-cta">
+        <a class="btn btn-primary btn-lg" href="${started ? resumeHref() : '#/scene/S01'}">${started ? 'Lanjutkan belajar' : 'Mulai belajar'} ${icon('right')}</a>
+        <a class="btn btn-ghost btn-lg" href="#/menu">${icon('grid')} Lihat materi</a>
+      </div>
+      <div class="cover-links"><a href="#/petunjuk">Petunjuk</a><span>·</span><a href="#/tujuan">Tujuan</a><span>·</span><a href="#/alur">Alur belajar</a></div>
+    </div>
+    <div class="cover-art" aria-hidden="true">
+      <div class="mailcard">
+        <div class="mc-top"><i></i><i></i><i></i></div>
+        <div class="mc-row"><small>Subject</small>Application for Graphic Designer Position – ${NAMA}</div>
+        <div class="mc-line w70"></div><div class="mc-line"></div><div class="mc-line w85"></div>
+        <div class="mc-attach">${icon('clip')} CV_${NAMAF}.pdf</div>
+      </div>
+      <span class="chip-f c1">${icon('check')} Subject jelas</span>
+      <span class="chip-f c2">${icon('clock')} 08.00–17.00</span>
+      <span class="chip-f c3">${icon('send')} Siap dikirim</span>
+    </div>
+  </section>`;
+}
+
+/* =========================================================================
+   LAYAR: MENU MATERI
+   ========================================================================= */
+function viewMenu() {
+  const lat = state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
+  const tile = id => {
+    const s = SCENES[id], lk = locked(id);
+    return `<a class="tile ${state.done[id] ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}">
+      <span class="tile-code">${state.done[id] ? icon('check') : lk ? icon('lock') : id}</span>
+      <span class="tile-t"><b>${s.title}</b><small>${s.type}</small></span></a>`;
+  };
+  return `<section class="menu enter">
+    <aside class="menu-side">
+      <div class="ring" style="--p:${pct()}"><b>${pct()}%</b><small>${doneCount()}/13 scene</small></div>
+      <a class="btn btn-primary" href="${resumeHref()}">${doneCount() ? 'Lanjutkan' : 'Mulai'} ${icon('right')}</a>
+      <nav class="menu-links">
+        <a href="#/tujuan">${icon('target')} Tujuan belajar</a>
+        <a href="#/petunjuk">${icon('help')} Petunjuk</a>
+        <a href="#/alur">${icon('branch')} Alur belajar</a>
+        <a href="#/peta">${icon('map')} Peta konsep</a>
+        <a href="#/glosarium">${icon('book')} Glosarium</a>
+      </nav>
+    </aside>
+    <div class="menu-main">
+      <div class="menu-row">${tile('S01')}</div>
+      <div class="menu-cols">
+        ${MATERI.filter(m => /^m\d$/.test(m.id)).map(m => `<div class="mcol">
+          <div class="mcol-h"><span class="mcol-ic">${icon(m.icon)}</span><div><small>${m.short}</small><b>${m.title}</b></div></div>
+          ${m.scenes.map(tile).join('')}
+        </div>`).join('')}
+      </div>
+      <div class="menu-row two">
+        <a class="tile big" href="#/latihan"><span class="tile-code">${icon('pen')}</span><span class="tile-t"><b>Latihan Soal</b><small>${LATIHAN.length} soal · ${lat} sudah dijawab benar</small></span></a>
+        ${tile('S12')}${tile('S13')}
+      </div>
+    </div>
+  </section>`;
+}
+
+/* =========================================================================
+   LAYAR: SCENE
+   ========================================================================= */
+function viewScene(id) {
+  const s = SCENES[id], m = materiOf(id);
+  const showUraian = s.uraian && !(s.uraianAfter && !state.done[id]);
+  return `<section class="scene ${s.wide ? 'wide' : ''}">
+    <aside class="scene-info enter">
+      <div class="eyebrow"><span class="scode">${id}</span>${m.short} · ${s.type}</div>
+      <h1>${s.title}</h1>
+      <p class="tujuan">${icon('target')}<span>${s.tujuan}</span></p>
+      ${s.uraian ? `<div class="uraian" id="uraian">${showUraian ? uraianHTML(s) : `<p class="muted locked-note">${icon('eyeoff')} Rangkuman kesalahan baru muncul setelah kamu menemukan semuanya, supaya jawabannya tidak bocor.</p>`}</div>` : ''}
+      ${s.narasi && id !== 'S01' ? `<div class="narasi"><div class="narasi-h">${icon('chat')}<span>Narasi</span><button type="button" class="chip-btn" data-speak>${icon('vol')}<span>Dengarkan</span></button></div><p>${s.narasi}</p></div>` : ''}
+    </aside>
+    <div class="scene-act enter" id="activity"></div>
+  </section>`;
+}
+const uraianHTML = s => s.uraian.map(u => `<h3>${u.h}</h3>${u.p.map(p => p.startsWith('<ol') ? p : `<p>${p}</p>`).join('')}`).join('');
+
+function sceneBar(id) {
+  const m = materiOf(id), idx = m.scenes.indexOf(id), nx = nextOf(id);
+  const nextLabel = id === 'S11' ? 'Ke latihan soal' : id === 'S12' ? 'Ke penutup' : 'Lanjut';
+  return `<a class="btn btn-outline" href="${prevOf(id)}">${icon('left')} Kembali</a>
+    <div class="dots" aria-label="${m.short}, bagian ${idx + 1} dari ${m.scenes.length}">
+      <span class="dots-l">${m.short}</span>${m.scenes.map(x => `<a href="#/scene/${x}" class="dot-i ${x === id ? 'cur' : ''} ${state.done[x] ? 'ok' : ''}" aria-label="${x}"></a>`).join('')}
+    </div>
+    ${nx ? `<a class="btn btn-primary ${state.done[id] ? '' : 'is-locked'}" id="nextBtn" href="${nx}">${nextLabel} ${icon('right')}</a>` : id === 'S13' ? `<a class="btn btn-primary" href="#/menu">Selesai ${icon('check')}</a>` : '<span></span>'}`;
+}
+
+function mountScene(id) {
+  const btn = $('#nextBtn');
+  if (btn) btn.addEventListener('click', e => { if (btn.classList.contains('is-locked')) { e.preventDefault(); toast('Selesaikan aktivitas di halaman ini dulu, ya.'); } });
+  const sp = $('[data-speak]'); if (sp) sp.onclick = () => speak(SCENES[id].narasi, sp);
+  const done = silent => {
+    const freshDone = !state.done[id];
+    state.done[id] = true; save(); updateBar();
+    if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
+    if (freshDone && !silent) celebrate();
+    $$('.dot-i').forEach(d => { if (d.getAttribute('href') === '#/scene/' + id) d.classList.add('ok'); });
+    const ur = $('#uraian'); if (ur && SCENES[id].uraianAfter) ur.innerHTML = uraianHTML(SCENES[id]);
+  };
+  ACT[id]($('#activity'), done, A(id));
+}
+
+/* =========================================================================
+   AKTIVITAS PER SCENE — setiap hasil disimpan di state.act[id]
+   ========================================================================= */
+const ACT = {};
+
+/* S01 — video pembuka (animasi kotak masuk + teks narasi) */
+ACT.S01 = (el, done, st) => {
+  const lines = SCENES.S01.narasi.match(/[^.!?]+[.!?]+/g).map(x => x.trim());
+  const skel = w => `<div class="irow"><span class="iav"></span><span class="iline" style="width:${w}%"></span><span class="itime"></span></div>`;
+  el.innerHTML = `<div class="video" id="video">
+    <div class="vscreen">
+      <div class="vinbox">
+        <div class="vinbox-top">${icon('inbox')} Kotak Masuk</div>
+        ${skel(62)}${skel(48)}
+        <div class="irow target"><span class="iav">SU</span>
+          <span class="imsg"><span class="messy"><b>syarif.keren99</b> lamaran!!! <em>halo kak aku mau ngelamar nih…</em></span>
+          <span class="tidy"><b>${NAMA}</b> Application for Graphic Designer Position – ${NAMA}</span></span>
+          <span class="ibadge">Belum dibalas</span></div>
+        ${skel(70)}${skel(40)}
+      </div>
+      <div class="vend">
+        <span class="vend-logo">${LOGO}</span>
+        <h3>Smart Emailing</h3>
+        <p>Menulis email lamaran yang rapi dan sopan, sesuai etika komunikasi di dunia kerja.</p>
+        <ol><li><span>01</span>Dasar komunikasi lewat email</li><li><span>02</span>Menulis email lamaran</li><li><span>03</span>Etika berkirim email</li></ol>
+        <div class="vpost">${icon('pen')} Lalu latihan soal & evaluasi</div>
+      </div>
+      <button type="button" class="vplay" aria-label="Putar video pembuka">${icon('play')}<span>Putar video pembuka</span></button>
+    </div>
+    <div class="vcap" aria-live="polite"></div>
+    <div class="vbar">
+      <button type="button" class="vbtn" data-v="toggle" aria-label="Putar">${icon('play')}</button>
+      <div class="vprog"><i></i></div>
+      <button type="button" class="vbtn txt" data-v="skip">Lewati</button>
+    </div>
+  </div>`;
+  const v = $('#video', el), cap = $('.vcap', el), prog = $('.vprog i', el), tbtn = $('[data-v=toggle]', el);
+  let step = 0, playing = false, t = null;
+  const dur = l => Math.max(2300, l.length * 62);
+  const show = k => { step = k; v.className = 'video ' + Array.from({ length: k }, (_, i) => 's' + (i + 1)).join(' ') + (playing ? ' playing' : ''); cap.textContent = lines[k - 1] || ''; prog.style.width = (k / lines.length * 100) + '%'; };
+  const finish = silent => { playing = false; show(lines.length); v.classList.add('ended'); tbtn.innerHTML = icon('refresh'); tbtn.setAttribute('aria-label', 'Putar ulang'); cap.textContent = 'Video selesai. Tekan Lanjut untuk masuk ke Materi 1.'; st.played = true; save(); done(silent); };
+  const tick = () => { clearTimeout(t); if (!playing) return; if (step >= lines.length) { t = later(() => finish(false), dur(lines[step - 1])); return; } t = later(() => { show(step + 1); tick(); }, step === 0 ? 200 : dur(lines[step - 1])); };
+  const play = () => { if (v.classList.contains('ended')) { v.classList.remove('ended'); step = 0; } playing = true; v.classList.add('playing'); sfx(); tbtn.innerHTML = icon('pause'); tbtn.setAttribute('aria-label', 'Jeda'); tick(); };
+  const pause = () => { playing = false; clearTimeout(t); v.classList.remove('playing'); tbtn.innerHTML = icon('play'); tbtn.setAttribute('aria-label', 'Putar'); };
+  $('.vplay', el).onclick = play;
+  tbtn.onclick = () => (playing ? pause() : play());
+  $('[data-v=skip]', el).onclick = () => { pause(); finish(false); };
+  if (st.played) finish(true);
+};
+
+/* S02 — klik 4 ikon di laptop */
+ACT.S02 = (el, done, st) => {
+  const items = [['megaphone', 'Menyampaikan informasi', 'Untuk pengumuman atau pesan resmi.'], ['file', 'Mengirim dokumen', 'Untuk mengirim CV, laporan, dan file lainnya.'], ['briefcase', 'Melamar kerja', 'Untuk memperkenalkan diri kepada perusahaan.'], ['users', 'Berkoordinasi', 'Untuk berkomunikasi dengan rekan kerja dan klien.']];
+  st.seen = st.seen || [];
+  el.innerHTML = `${actHead('pointer', 'Klik informasi', 'Dibuka <b>0</b> dari 4')}
+  <div class="s02">
+    <div class="laptop"><div class="lscreen"><div class="lbar"><i></i><i></i><i></i><span>Email di dunia kerja</span></div>
+      <div class="lgrid">${items.map(([ic, t], i) => `<button type="button" class="lico" data-i="${i}"><span class="lico-c">${icon(ic)}<span class="lico-ck">${icon('check')}</span></span><span>${t}</span></button>`).join('')}</div></div><div class="lbase"></div></div>
+    <div class="info-panel" aria-live="polite"><div class="ip-empty">${icon('pointer')}<p>Klik salah satu ikon di layar laptop.</p></div></div>
+  </div>
+  <div class="compare" hidden><b>Dibanding aplikasi chat, email itu…</b><div class="cmp-chips"><span>${icon('briefcase')} lebih formal</span><span>${icon('file')} tersimpan rapi</span><span>${icon('shield')} bisa jadi bukti komunikasi</span></div></div>`;
+  const panel = $('.info-panel', el);
+  const open = (i, silent) => {
+    const [ic, t, d] = items[i], b = $(`.lico[data-i="${i}"]`, el);
+    $$('.lico', el).forEach(x => x.classList.toggle('active', x === b)); b.classList.add('seen');
+    if (!st.seen.includes(i)) { st.seen.push(i); save(); }
+    panel.innerHTML = `<div class="ip-card"><span class="ip-ic">${icon(ic)}</span><h4>${t}</h4><p>${d}</p></div>`;
+    $('.counter b', el).textContent = st.seen.length;
+    if (st.seen.length === 4) { $('.compare', el).hidden = false; done(silent); }
+    silent || sfx();
+  };
+  st.seen.slice().forEach(i => open(i, true));
+  el.onclick = e => { const b = e.target.closest('.lico'); if (b) open(+b.dataset.i, false); };
+};
+
+/* S03 — seret & letakkan 5 bagian email */
+ACT.S03 = (el, done, st) => {
+  const parts = [['subject', 'Subject', 'Menjelaskan isi email secara singkat.'], ['greeting', 'Salam pembuka', 'Menunjukkan rasa hormat.'], ['body', 'Isi email', 'Memuat pesan utama, jelas dan ringkas.'], ['closing', 'Salam penutup', 'Mengakhiri email dengan sopan.'], ['signature', 'Tanda tangan', 'Nama pengirim, setelah salam penutup.']];
+  st.placed = st.placed || [];
+  let selected = null;
+  const build = () => {
+    const left = parts.filter(p => !st.placed.includes(p[0])).map(p => p[0]);
+    const order = st.order && st.order.length ? st.order.filter(k => left.includes(k)) : shuffle(left.slice());
+    if (!st.order) { st.order = order.slice(); save(); }
+    el.innerHTML = `${actHead('grip', 'Seret & letakkan', `Terpasang <b>${st.placed.length}</b> dari 5`)}
+    <p class="hint">Seret kartu ke slot yang pas. Di HP: ketuk kartu, lalu ketuk slotnya.</p>
+    <div class="dnd">
+      <div class="dcards">${order.map(k => `<button type="button" class="dcard" draggable="true" data-k="${k}">${icon('grip')}<span>${parts.find(p => p[0] === k)[1]}</span></button>`).join('')}</div>
+      <div class="mframe"><div class="mf-top"><i></i><i></i><i></i><span>Pesan baru</span></div>
+        ${parts.map(([k, t, d], i) => st.placed.includes(k)
+          ? `<div class="slot slot-${k} filled" data-i="${i}"><span class="slot-n">${icon('check')}</span><span class="slot-txt"><b>${t}</b><small>${d}</small></span></div>`
+          : `<div class="slot slot-${k}" data-i="${i}" tabindex="0" role="button" aria-label="Slot ${i + 1}"><span class="slot-n">${i + 1}</span><span class="ghost"><i></i><i></i><i></i></span></div>`).join('')}
+      </div>
+    </div>
+    <div class="fb" hidden></div>
+    ${st.placed.length ? `<button type="button" class="btn btn-outline btn-sm" data-reset>${icon('refresh')} Ulangi dari awal</button>` : ''}`;
+    if (st.placed.length === 5) { showFb($('.fb', el), true, 'Pas! Urutan emailmu sudah rapi dan profesional.'); }
+  };
+  const tryPlace = (k, slot) => {
+    if (!slot || slot.classList.contains('filled')) return;
+    const i = +slot.dataset.i;
+    if (parts[i][0] === k) {
+      st.placed.push(k); save(); sfx('ok'); build();
+      if (st.placed.length === 5) done(false); else showFb($('.fb', el), true, `Benar, slot ${i + 1} adalah ${parts[i][1].toLowerCase()}.`);
+    } else {
+      sfx('no'); slot.classList.remove('shake'); void slot.offsetWidth; slot.classList.add('shake');
+      $$('.dcard', el).forEach(c => c.classList.remove('sel')); selected = null;
+      showFb($('.fb', el), false, 'Belum pas. Ingat lagi, bagian mana yang pertama kali dilihat penerima?');
+    }
+  };
+  build();
+  if (st.placed.length === 5) done(true);
+  el.addEventListener('click', e => {
+    if (e.target.closest('[data-reset]')) { st.placed = []; st.order = null; save(); build(); return; }
+    const c = e.target.closest('.dcard');
+    if (c) { const on = !c.classList.contains('sel'); $$('.dcard', el).forEach(x => x.classList.remove('sel')); c.classList.toggle('sel', on); selected = on ? c.dataset.k : null; sfx(); return; }
+    const s = e.target.closest('.slot');
+    if (s && selected) tryPlace(selected, s); else if (s && !s.classList.contains('filled')) toast('Pilih kartunya dulu, lalu ketuk slotnya.');
+  });
+  el.addEventListener('keydown', e => { const s = e.target.closest('.slot'); if (s && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); s.click(); } });
+  el.addEventListener('dragstart', e => { const c = e.target.closest('.dcard'); if (c) { e.dataTransfer.setData('text/plain', c.dataset.k); c.classList.add('dragging'); } });
+  el.addEventListener('dragend', e => { const c = e.target.closest('.dcard'); c && c.classList.remove('dragging'); });
+  el.addEventListener('dragover', e => { const s = e.target.closest('.slot'); if (s && !s.classList.contains('filled')) { e.preventDefault(); s.classList.add('over'); } });
+  el.addEventListener('dragleave', e => { const s = e.target.closest('.slot'); s && s.classList.remove('over'); });
+  el.addEventListener('drop', e => { const s = e.target.closest('.slot'); if (s) { e.preventDefault(); s.classList.remove('over'); tryPlace(e.dataTransfer.getData('text/plain'), s); } });
+};
+
+/* S04 — bandingkan kotak masuk + kuis subject */
+ACT.S04 = (el, done, st) => {
+  const row = (s, g) => `<div class="cmp-row ${g ? 'good' : ''}"><span class="iav">${g ? 'SU' : ''}</span><span>${s}</span></div>`;
+  el.innerHTML = `${actHead('search', 'Studi kasus')}
+  <div class="ibx-compare">
+    <div class="ibx bad"><div class="ibx-h">${icon('x')} Kurang tepat</div>${['Lamaran', 'Halo Kak', 'Penting'].map(s => row(s)).join('')}</div>
+    <div class="ibx good"><div class="ibx-h">${icon('check')} Tepat</div>${row(`Application for Graphic Designer Position – ${NAMA}`, true)}<p class="ibx-note">Singkat, jelas, spesifik, dan sesuai tujuan email.</p></div>
+  </div>
+  <div class="salam-grid">
+    <div class="salam"><h4>Salam pembuka</h4><div class="code">Yth. Tim Rekrutmen PT ABC,</div><div class="code">Dear Hiring Manager,</div></div>
+    <div class="salam"><h4>Salam penutup</h4><div class="code">Hormat saya,<br>${NAMA}</div><div class="code">Best regards,<br>${NAMA}</div></div>
+  </div>
+  <div class="quiz-box">${actHead('help', 'Kuis')}<div class="mcq"></div></div>`;
+  mcq($('.mcq', el), { store: st, key: 'q', onDone: done, q: 'Kamu mau melamar posisi Marketing Staff. Subject mana yang paling pas?', opts: [
+    { t: 'Lamaran', fb: 'Kurang pas. Subject ini terlalu umum, HR tidak tahu posisi apa yang kamu lamar.' },
+    { t: 'Penting!!', fb: 'Kurang pas. Tidak spesifik, dan tanda serunya terkesan tidak formal.' },
+    { t: 'Application for Marketing Staff – Nama Kamu', ok: true, fb: 'Tepat! Singkat, jelas, spesifik, dan langsung menunjukkan tujuan email.' },
+    { t: 'Halo Kak', fb: 'Kurang pas. Ini sapaan santai, bukan subject, dan tidak menjelaskan isi email.' }] });
+};
+
+/* S05 — hotspot email lamaran */
+ACT.S05 = (el, done, st) => {
+  const hs = [['Subject yang jelas', 'Bagian pertama yang dilihat perekrut. Buat singkat, jelas, spesifik, dan sesuai tujuan email.'], ['Salam pembuka', 'Menunjukkan rasa hormat kepada penerima.'], ['Perkenalan diri singkat', 'Sebutkan nama dan latar belakang pendidikan secara singkat.'], ['Tujuan mengirim email', 'Sampaikan posisi yang kamu lamar.'], ['Keterangan lampiran', 'Sebutkan CV dan portofolio yang dilampirkan dalam format PDF.'], ['Salam penutup', 'Akhiri email dengan sopan, lalu tulis namamu.']];
+  st.seen = st.seen || [];
+  el.innerHTML = `${actHead('pointer', 'Klik bagian email', 'Dibuka <b>0</b> dari 6')}
+  <div class="hs-wrap">
+    <div class="mail">
+      <div class="mail-meta"><span>Kepada</span>Tim Rekrutmen PT ABC</div>
+      <button type="button" class="hs hs-subject" data-i="0"><span class="hs-dot">1</span><span><small>Subject</small>Application for Graphic Designer Position – ${NAMA}</span></button>
+      <div class="mail-body">
+        <button type="button" class="hs" data-i="1"><span class="hs-dot">2</span><span>Yth. Tim Rekrutmen PT ABC,</span></button>
+        <button type="button" class="hs" data-i="2"><span class="hs-dot">3</span><span>Saya ${NAMA}, lulusan S1 Desain Komunikasi Visual.</span></button>
+        <button type="button" class="hs" data-i="3"><span class="hs-dot">4</span><span>Melalui email ini, saya bermaksud melamar posisi Graphic Designer di PT ABC.</span></button>
+        <button type="button" class="hs" data-i="4"><span class="hs-dot">5</span><span>Bersama email ini saya lampirkan CV dan portofolio saya sebagai bahan pertimbangan.<span class="attach-row"><span class="attach">${icon('clip')} CV_${NAMAF}.pdf</span><span class="attach">${icon('clip')} Portfolio_${NAMAF}.pdf</span></span></span></button>
+        <button type="button" class="hs" data-i="5"><span class="hs-dot">6</span><span>Terima kasih atas waktu dan perhatian Bapak/Ibu.<br>Hormat saya,<br>${NAMA}</span></button>
+      </div>
+    </div>
+    <aside class="hs-card" aria-live="polite"><div class="ip-empty">${icon('pointer')}<p>Klik titik bernomor untuk melihat fungsi tiap bagian.</p></div></aside>
+  </div>`;
+  const card = $('.hs-card', el);
+  const open = (i, silent, showCard = true) => {
+    const b = $(`.hs[data-i="${i}"]`, el); b.classList.add('seen');
+    if (!st.seen.includes(i)) { st.seen.push(i); save(); }
+    if (showCard) { $$('.hs', el).forEach(x => x.classList.toggle('active', x === b)); card.innerHTML = `<div class="ip-card"><span class="hs-num">${i + 1}</span><h4>${hs[i][0]}</h4><p>${hs[i][1]}</p></div><ol class="hs-list">${hs.map(([t], j) => `<li class="${st.seen.includes(j) ? 'on' : ''}">${st.seen.includes(j) ? icon('check') : '<span></span>'}${t}</li>`).join('')}</ol>`; }
+    $('.counter b', el).textContent = st.seen.length;
+    if (st.seen.length === 6) done(silent);
+    silent || sfx();
+  };
+  st.seen.slice().forEach((i, k, arr) => open(i, true, k === arr.length - 1));
+  el.onclick = e => { const b = e.target.closest('.hs'); if (b) open(+b.dataset.i, false); };
+};
+
+/* S06 — simulasi menulis email: pilih perkenalan + nama file */
+ACT.S06 = (el, done, st) => {
+  el.innerHTML = `${actHead('pen', 'Simulasi', '<b>0</b> dari 2 tepat')}
+  <div class="compose">
+    <div class="compose-top">${icon('pen')} Tulis Email</div>
+    <div class="cf"><span>Kepada</span>Tim Rekrutmen PT ABC</div>
+    <div class="cf"><span>Subject</span>Application for Graphic Designer Position – ${NAMA}</div>
+    <div class="compose-body"><p>Yth. Tim Rekrutmen PT ABC,</p><p class="fill" id="fillIntro">[ pilih kalimat perkenalan di bawah ]</p><p>Bersama email ini saya lampirkan CV dan portofolio saya sebagai bahan pertimbangan.</p><p>Hormat saya,<br>${NAMA}</p></div>
+    <div class="compose-attach"><span>${icon('clip')} Lampiran</span><span class="fill" id="fillFile">[ pilih file lampiran ]</span></div>
+  </div>
+  <div class="choice-group"><h4>1. Kalimat perkenalan yang tepat</h4><div class="mcq" id="mIntro"></div></div>
+  <div class="choice-group"><h4>2. Nama file lampiran yang tepat</h4><div class="mcq" id="mFile"></div></div>
+  <div class="fb" id="s06fb" hidden></div>`;
+  let ok = 0;
+  const hit = silent => { ok++; $('.counter b', el).textContent = ok; if (ok === 2) { showFb($('#s06fb', el), null, 'Emailmu siap dikirim. Jangan lupa cek lagi, pastikan lampirannya sudah terunggah dan bisa dibuka.'); done(silent); } };
+  mcq($('#mIntro', el), { store: st, key: 'intro', opts: [
+    { t: `“Saya ${NAMA}, lulusan S1 Desain Komunikasi Visual, bermaksud melamar posisi Graphic Designer.”`, ok: true, fb: 'Tepat. Singkat dan relevan: ada nama, latar belakang pendidikan, dan posisi yang dilamar.' },
+    { t: '“Halo kak, aku Syarif, hobi main game, lagi nganggur nih.”', fb: 'Kurang pas. Bahasanya santai, dan isinya cerita pribadi yang tidak berhubungan dengan pekerjaan.' },
+    { t: '“Saya anak pertama dari tiga bersaudara dan tinggal bersama orang tua.”', fb: 'Kurang pas. Info keluarga tidak ada hubungannya dengan pekerjaan. Fokus ke kemampuan yang mendukung posisi.' }],
+    onDone: silent => { const f = $('#fillIntro', el); f.textContent = `Saya ${NAMA}, lulusan S1 Desain Komunikasi Visual, bermaksud melamar posisi Graphic Designer.`; f.classList.add('filled'); hit(silent); } });
+  mcq($('#mFile', el), { store: st, key: 'file', opts: [
+    { t: `CV_${NAMAF}.pdf`, ok: true, fb: 'Tepat. Formatnya PDF dan namanya rapi, mudah dikenali.' },
+    { t: 'cv baru final.docx', fb: 'Kurang pas. Nama filenya tidak rapi dan formatnya bukan PDF.' },
+    { t: 'scan0001.jpg', fb: 'Kurang pas. Nama file ini sulit dikenali dan formatnya bukan PDF.' }],
+    onDone: silent => { const f = $('#fillFile', el); f.innerHTML = `<span class="attach">${icon('file')} CV_${NAMAF}.pdf</span>`; f.classList.add('filled'); hit(silent); } });
+};
+
+/* S07 — temukan 6 kesalahan */
+ACT.S07 = (el, done, st) => {
+  const segs = {
+    from: ['Alamat email tidak profesional', 'Pakai alamat email yang memuat nama aslimu, bukan julukan.'],
+    subject: ['Subject tidak jelas', `Subject yang baik itu spesifik, misalnya “Application for Graphic Designer Position – ${NAMA}”.`],
+    company: ['Nama perusahaan salah tulis', 'Email ini untuk PT ABC, tapi di salam pembuka tertulis “PT ABD”.'],
+    informal: ['Bahasa tidak formal', 'Hindari bahasa gaul, singkatan tidak resmi, dan emoji.'],
+    long: ['Isi terlalu panjang', 'Isi email cukup singkat, padat, dan relevan. Cerita pribadi yang tidak berkaitan sebaiknya dibuang.'],
+    attach: ['CV/portofolio tidak dilampirkan', 'Lampirkan CV dan portofolio, lalu pastikan sudah terunggah sebelum mengirim.'],
+  };
+  st.found = st.found || [];
+  el.innerHTML = `${actHead('search', 'Temukan kesalahan', 'Ditemukan <b>0</b> dari 6')}
+  <div class="spot-wrap">
+    <div class="mail spot">
+      <div class="mail-meta"><span>Dari</span><button type="button" class="sp" data-e="from">syarif.kerenabis99@email.com</button></div>
+      <div class="mail-meta"><span>Kepada</span><button type="button" class="sp" data-ok>Tim Rekrutmen PT ABC</button></div>
+      <div class="mail-meta"><span>Subject</span><button type="button" class="sp" data-e="subject">Lamaran</button></div>
+      <div class="mail-body">
+        <button type="button" class="sp" data-e="company">Yth. Tim Rekrutmen PT ABD,</button>
+        <button type="button" class="sp" data-e="informal">Halo kak, aku Syarif nih, mau ngelamar jadi graphic designer yaa 😁</button>
+        <button type="button" class="sp" data-e="long">Jadi gini, dari kecil aku memang suka gambar, terus pas sekolah sering ikut lomba, terus kuliah ambil desain, terus sempat bingung mau kerja di mana, terus temanku bilang coba saja daftar ke sini, jadi ya sudah aku coba kirim, soalnya aku juga lagi butuh kerjaan dan kantornya dekat rumah…</button>
+        <button type="button" class="sp" data-ok>Terima kasih atas waktu dan perhatian Bapak/Ibu.</button>
+        <button type="button" class="sp" data-ok>Hormat saya,<br>${NAMA}</button>
+      </div>
+      <div class="mail-attach"><span>${icon('clip')} Lampiran</span><button type="button" class="sp" data-e="attach">(tidak ada lampiran)</button></div>
+    </div>
+    <aside class="spot-side"><div class="fb" hidden></div><h4>Temuanmu</h4><ol class="found-list"><li class="empty">Belum ada yang ditemukan.</li></ol></aside>
+  </div>`;
+  const fb = $('.fb', el), list = $('.found-list', el);
+  const mark = (k, silent) => {
+    const b = $(`.sp[data-e="${k}"]`, el);
+    if (!st.found.includes(k)) { st.found.push(k); save(); }
+    const n = st.found.indexOf(k) + 1;
+    b.classList.add('found'); b.insertAdjacentHTML('afterbegin', `<span class="sp-mark">${n}</span>`);
+    if (n === 1) list.innerHTML = '';
+    list.insertAdjacentHTML('beforeend', `<li><b>${segs[k][0]}</b><small>${segs[k][1]}</small></li>`);
+    $('.counter b', el).textContent = st.found.length;
+    if (!silent) { sfx('ok'); showFb(fb, true, `<b>${segs[k][0]}.</b> ${segs[k][1]}`); }
+    if (st.found.length === 6) { showFb(fb, true, 'Semua kesalahan sudah ketemu! Kesalahan seperti ini bisa membuat lamaran tidak diproses lebih lanjut.'); done(silent); }
+  };
+  st.found.slice().forEach(k => mark(k, true));
+  el.onclick = e => {
+    const b = e.target.closest('.sp'); if (!b) return;
+    if (b.hasAttribute('data-ok')) { showFb(fb, null, 'Bagian ini sudah benar.'); sfx(); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); return; }
+    if (!st.found.includes(b.dataset.e)) mark(b.dataset.e, false);
+  };
+};
+
+/* S08 — praktik menulis email (draf & hasil disimpan) */
+ACT.S08 = (el, done, st) => {
+  const d = st.draft || {};
+  const checks = ['Subject jelas', 'Salam sudah sesuai', 'Perkenalan singkat', 'Lampiran disebutkan', 'Bahasa formal'];
+  el.innerHTML = `${actHead('pen', 'Praktik')}
+  <div class="practice">
+    <aside class="vacancy"><small>Lowongan</small><h4>Graphic Designer</h4><p>PT ABC</p>
+      <div class="chk-h">${icon('list')} Daftar periksa</div>
+      ${checks.map((c, i) => `<label class="chk"><input type="checkbox" data-c="${i}" ${d.c && d.c[i] ? 'checked' : ''}><span>${c}</span></label>`).join('')}
+    </aside>
+    <form class="pform" id="pform">
+      <label>Subject<input name="subject" value="${esc(d.subject || '')}" placeholder="Tulis subject email…"></label>
+      <label>Salam pembuka<input name="greeting" value="${esc(d.greeting || '')}" placeholder="Tulis salam pembuka…"></label>
+      <label>Isi email<textarea name="body" rows="4" placeholder="Perkenalan singkat, tujuan email, dan keterangan lampiran…">${esc(d.body || '')}</textarea></label>
+      <label>Salam penutup<input name="closing" value="${esc(d.closing || '')}" placeholder="Salam penutup dan nama…"></label>
+      <div class="pform-foot"><span class="muted small" id="pHint"></span><button class="btn btn-primary" type="submit" id="pSend" disabled>${icon('send')} Kirim</button></div>
+    </form>
+  </div>
+  <div class="pcompare" hidden></div>`;
+  const form = $('#pform', el), send = $('#pSend', el), box = $('.pcompare', el);
+  const read = () => ({ subject: form.subject.value.trim(), greeting: form.greeting.value.trim(), body: form.body.value.trim(), closing: form.closing.value.trim(), c: $$('[data-c]', el).map(x => x.checked) });
+  const check = () => {
+    const v = read(); st.draft = v; save();
+    const filled = v.subject && v.greeting && v.body && v.closing, allc = v.c.every(Boolean);
+    send.disabled = !(filled && allc);
+    $('#pHint', el).textContent = !filled ? 'Isi semua bagian emailnya dulu.' : !allc ? 'Centang daftar periksa setelah kamu mengecek emailmu.' : 'Siap dikirim.';
+  };
+  const showCompare = v => {
+    box.hidden = false;
+    box.innerHTML = `<div class="pc-col"><h4>${icon('pen')} Emailmu</h4><div class="pc-mail"><p><small>Subject</small>${esc(v.subject)}</p><p>${esc(v.greeting)}</p><p>${esc(v.body).replace(/\n/g, '<br>')}</p><p>${esc(v.closing)}</p></div></div>
+      <div class="pc-col model"><h4>${icon('check')} Contoh jawaban</h4><div class="pc-mail"><p><small>Subject</small>Application for Graphic Designer Position – ${NAMA}</p><p>Yth. Tim Rekrutmen PT ABC,</p><p>Saya ${NAMA}, lulusan S1 Desain Komunikasi Visual, bermaksud melamar posisi Graphic Designer di PT ABC. Bersama email ini saya lampirkan CV dan portofolio saya (CV_${NAMAF}.pdf dan Portfolio_${NAMAF}.pdf) sebagai bahan pertimbangan. Terima kasih atas waktu dan perhatian Bapak/Ibu.</p><p>Hormat saya,<br>${NAMA}</p></div></div>
+      <p class="pc-note">${icon('bulb')} Bandingkan emailmu dengan contoh di atas memakai daftar periksa. Kamu boleh memperbaiki lalu mengirim ulang.</p>`;
+  };
+  el.addEventListener('input', check); check();
+  if (st.sent) { showCompare(st.sent); done(true); }
+  form.onsubmit = e => { e.preventDefault(); const v = read(); st.sent = v; save(); sfx('ok'); showCompare(v); box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); done(false); };
+};
+
+/* S09 — CC/BCC + jam (angka 12 di atas) + 2 kuis */
+ACT.S09 = (el, done, st) => {
+  const R = 84;
+  const pt = (h, r) => { const a = (h % 12) / 12 * 2 * Math.PI - Math.PI / 2; return [100 + r * Math.cos(a), 100 + r * Math.sin(a)]; };
+  /* Busur jam kerja 08.00 → 17.00 (searah jarum jam melewati angka 12) */
+  const [x1, y1] = pt(8, R), [x2, y2] = pt(17, R);
+  el.innerHTML = `${actHead('users', 'Penjelasan visual')}
+  <div class="cc-wrap">
+    <div class="cc-diagram" id="ccd">
+      <svg viewBox="0 0 520 300" role="img" aria-label="Satu email dikirim ke penerima utama, CC, dan BCC">
+        <path class="ln to" d="M110 150 C 250 150, 260 45, 380 45"/><path class="ln cc" d="M110 150 C 250 150, 260 110, 380 110"/><path class="ln cc" d="M110 150 C 250 150, 260 165, 380 165"/><path class="ln bcc" d="M110 150 C 250 150, 260 220, 380 220"/><path class="ln bcc" d="M110 150 C 250 150, 260 275, 380 275"/>
+        <g class="node sender"><circle cx="70" cy="150" r="40"/><text x="70" y="146">Email</text><text x="70" y="164" class="sm">kamu</text></g>
+        <g class="node to"><rect x="380" y="25" width="130" height="40" rx="20"/><text x="445" y="50">Kepada</text></g>
+        <g class="node cc"><rect x="380" y="90" width="130" height="40" rx="20"/><text x="445" y="115">CC</text></g>
+        <g class="node cc"><rect x="380" y="145" width="130" height="40" rx="20"/><text x="445" y="170">CC</text></g>
+        <g class="node bcc"><rect x="380" y="200" width="130" height="40" rx="20"/><text x="445" y="225">BCC</text></g>
+        <g class="node bcc"><rect x="380" y="255" width="130" height="40" rx="20"/><text x="445" y="280">BCC</text></g>
+      </svg>
+      <button type="button" class="btn btn-primary btn-sm" id="ccPlay">${icon('play')} Putar animasi</button>
+    </div>
+    <div class="cc-cards">
+      <div class="cc-card"><span class="tag cc">CC</span><b>Carbon Copy</b><p>Salinan untuk orang lain yang perlu tahu isi email.</p></div>
+      <div class="cc-card"><span class="tag bcc">BCC</span><b>Blind Carbon Copy</b><p>Salinan yang alamat penerimanya disembunyikan, jadi privasi tetap terjaga.</p></div>
+      <div class="cc-seen" ${st.cc ? '' : 'hidden'}>${icon('eye')} Semua penerima bisa melihat <b>Kepada</b> dan <b>CC</b>. Penerima <b>BCC</b> tidak terlihat.</div>
+    </div>
+  </div>
+  <div class="time-wrap">
+    <div class="clock">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="92" class="c-bg"/>
+        <path d="M ${x1} ${y1} A ${R} ${R} 0 1 1 ${x2} ${y2}" class="c-work"/>
+        ${Array.from({ length: 12 }, (_, i) => { const h = i + 1, [x, y] = pt(h, 66); const [a1, b1] = pt(h, 76), [a2, b2] = pt(h, 84); return `<line x1="${a1}" y1="${b1}" x2="${a2}" y2="${b2}" class="tick"/><text x="${x}" y="${y + 4.5}" class="c-num">${h}</text>`; }).join('')}
+        <line x1="100" y1="100" x2="100" y2="52" class="hand h-hour" id="hHour"/>
+        <line x1="100" y1="100" x2="100" y2="34" class="hand h-min"/>
+        <circle cx="100" cy="100" r="5" class="c-pin"/>
+      </svg>
+      <div class="clock-dig" id="hourTxt">10.00</div>
+    </div>
+    <div class="time-ctl">
+      <h4>${icon('clock')} Kapan sebaiknya mengirim email?</h4>
+      <p class="muted small">Garis merah di jam menandai jam kerja, pukul 08.00–17.00. Geser untuk mencoba jam kirim yang lain.</p>
+      <label class="range"><input type="range" min="0" max="23" value="${st.hour ?? 10}" id="hour" aria-label="Jam kirim"><span class="range-scale"><i>00</i><i>06</i><i>12</i><i>18</i><i>23</i></span></label>
+      <div class="fb" id="hourFb" hidden></div>
+      <div class="days">${['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'].map((d, i) => `<span class="${i > 4 ? 'off' : ''}">${d}</span>`).join('')}<small>Sabtu–Minggu libur</small></div>
+    </div>
+  </div>
+  <div class="quiz-box">${actHead('help', 'Kuis 1')}<div class="mcq" id="q1"></div></div>
+  <div class="quiz-box">${actHead('help', 'Kuis 2')}<div class="mcq" id="q2"></div></div>`;
+  $('#ccPlay', el).onclick = () => { const d = $('#ccd', el); d.classList.remove('play'); void d.offsetWidth; d.classList.add('play'); $('.cc-seen', el).hidden = false; st.cc = true; save(); sfx(); };
+  const hour = $('#hour', el);
+  const upd = () => {
+    const h = +hour.value; st.hour = h; save();
+    $('#hourTxt', el).textContent = String(h).padStart(2, '0') + '.00';
+    $('#hHour', el).setAttribute('transform', `rotate(${(h % 12) / 12 * 360} 100 100)`);
+    const ok = h >= 8 && h <= 17;
+    showFb($('#hourFb', el), ok, ok ? 'Pas, ini masih jam kerja.' : h < 8 ? 'Terlalu pagi. Tunggu jam kerja dimulai, ya.' : 'Sudah lewat jam kerja. Hindari mengirim larut malam, kecuali ada keperluan mendesak.');
+  };
+  hour.oninput = upd; upd();
+  let solved = 0; const hit = silent => { if (++solved === 2) done(silent); };
+  mcq($('#q1', el), { store: st, key: 'q1', onDone: hit, q: 'Kamu mengirim pengumuman ke 20 orang yang tidak saling kenal. Fitur apa yang tepat?', opts: [
+    { t: 'CC', fb: 'Kurang pas. Kalau pakai CC, semua penerima bisa melihat alamat penerima lain.' },
+    { t: 'BCC', ok: true, fb: 'Tepat! Dengan BCC, alamat penerima lain tidak terlihat, jadi privasi tetap aman.' },
+    { t: 'Forward', fb: 'Kurang pas. Forward itu meneruskan email, bukan menyembunyikan daftar penerima.' }] });
+  mcq($('#q2', el), { store: st, key: 'q2', onDone: hit, q: 'Kapan waktu terbaik mengirim email lamaran?', opts: [
+    { t: 'Jam kerja (08.00–17.00)', ok: true, fb: 'Tepat! Email profesional sebaiknya dikirim di jam kerja.' },
+    { t: 'Tengah malam', fb: 'Kurang pas. Hindari mengirim email larut malam.' },
+    { t: 'Hari libur', fb: 'Kurang pas. Hindari hari libur, kecuali memang mendesak.' }] });
+};
+
+/* S10 — pilih langkah follow-up */
+ACT.S10 = (el, done, st) => {
+  const choices = [
+    { k: 'A', t: 'Kirim email follow-up yang sopan dan singkat.', ok: true },
+    { k: 'B', t: 'Kirim email setiap hari sampai dibalas.', fb: 'Kurang tepat. HR bisa merasa terganggu. Follow-up cukup sekali, sopan, dan tidak memaksa.' },
+    { k: 'C', t: 'Diam saja dan menunggu.', fb: 'Kurang tepat. Kamu jadi kehilangan kesempatan untuk menunjukkan minatmu.' },
+  ];
+  st.tried = st.tried || [];
+  el.innerHTML = `${actHead('branch', 'Pilih langkahmu')}
+  <div class="sc-chat"><span class="sc-av">SU</span><div class="bubble"><b>${NAMA}</b><p>Aku sudah kirim lamaran Graphic Designer ke PT ABC <b>6 hari kerja lalu</b>, tapi belum ada balasan. Sebaiknya aku ngapain, ya?</p></div></div>
+  <div class="dayline">${Array.from({ length: 8 }, (_, d) => `<span class="${d >= 5 ? 'win' : ''} ${d === 6 ? 'today' : ''}">${d === 0 ? 'Kirim' : 'H+' + d}${d === 6 ? '<em>hari ini</em>' : ''}</span>`).join('')}<small>${icon('calendar')} Waktu follow-up: sekitar 5–7 hari kerja</small></div>
+  <div class="branch">${choices.map(c => `<button type="button" class="bcard" data-k="${c.k}"><span class="bk">${c.k}</span><span>${c.t}</span></button>`).join('')}</div>
+  <div class="bresult" aria-live="polite"></div>`;
+  const res = $('.bresult', el);
+  const choose = (k, silent) => {
+    const c = choices.find(x => x.k === k), b = $(`.bcard[data-k="${k}"]`, el);
+    if (c.ok) {
+      $$('.bcard', el).forEach(x => (x.disabled = true)); b.classList.add('ok'); silent || sfx('ok');
+      res.innerHTML = `<div class="fb fb-ok">${icon('check')}<span><b>Langkah yang tepat.</b> Begini contoh email follow-up-nya:</span></div>
+      <div class="mail followup"><div class="mail-meta"><span>Subject</span><b>Follow-up Application for Graphic Designer – ${NAMA}</b></div>
+      <div class="mail-body plain"><p>Yth. Tim Rekrutmen PT ABC,</p><p>Saya ${NAMA}, pelamar posisi Graphic Designer. Pada (tanggal) saya telah mengirimkan lamaran beserta CV dan portofolio. Mohon informasi mengenai perkembangan proses seleksi.</p><p>Terima kasih atas waktu dan perhatian Bapak/Ibu.</p><p>Hormat saya,<br>${NAMA}</p></div></div>`;
+      done(silent);
+    } else {
+      b.classList.add('no'); b.disabled = true; silent || sfx('no');
+      res.innerHTML = `<div class="fb fb-no">${icon('x')}<span>${c.fb} Coba pilih langkah lain.</span></div>`;
+    }
+  };
+  st.tried.forEach(k => choose(k, true));
+  el.onclick = e => { const b = e.target.closest('.bcard'); if (!b || b.disabled) return; st.tried.push(b.dataset.k); save(); choose(b.dataset.k, false); };
+};
+
+/* S11 — 3 kasus pilih kalimat */
+ACT.S11 = (el, done, st) => {
+  const cases = [
+    { bad: 'Mohon info lanjutannya ya Kak, makasih 🙏', good: 'Mohon informasi mengenai perkembangan proses seleksi. Terima kasih.', wb: 'Kurang pas: ada bahasa gaul (“info”, “ya Kak”, “makasih”) dan emoji.', wg: 'Tepat: jelas, sopan, dan mudah dipahami.' },
+    { bad: 'Sy kirim lamaran ya, tolong dicek!!!', good: 'Saya telah mengirimkan lamaran. Mohon dapat diperiksa. Terima kasih.', wb: 'Kurang pas: ada singkatan tidak resmi (“Sy”) dan tanda seru berlebihan.', wg: 'Tepat: kalimatnya efektif, ejaannya benar.' },
+    { bad: 'SELAMAT PAGI PAK, SAYA MAU DAFTAR KERJA', good: 'Selamat pagi, Bapak/Ibu. Saya bermaksud melamar posisi Graphic Designer.', wb: 'Kurang pas: semuanya huruf kapital, dan bahasanya kurang formal.', wg: 'Tepat: sopan, formal, dan menyebut posisi yang dilamar.' },
+  ];
+  st.picks = st.picks || [];
+  st.order = st.order || cases.map(() => Math.random() < .5 ? ['good', 'bad'] : ['bad', 'good']); save();
+  let idx = Math.min(st.picks.length, 2);
+  const render = () => {
+    const c = cases[idx], picked = st.picks[idx];
+    el.innerHTML = `${actHead('type', 'Pilih kalimat', `Kasus <b>${idx + 1}</b> dari 3`)}
+    <div class="steps">${cases.map((_, i) => `<button type="button" class="step ${i < st.picks.length ? 'past' : ''} ${i === idx ? 'cur' : ''}" data-go="${i}" ${i > st.picks.length ? 'disabled' : ''} aria-label="Kasus ${i + 1}"></button>`).join('')}</div>
+    <p class="q">Kalimat mana yang paling pas untuk email profesional?</p>
+    <div class="vs">${st.order[idx].map(k => `<button type="button" class="vs-card ${picked ? (k === 'good' ? 'ok' : 'no') : ''}" data-k="${k}" ${picked ? 'disabled' : ''}>${icon('mail')}<span>“${k === 'good' ? c.good : c.bad}”</span></button>`).join('<span class="vs-or">atau</span>')}</div>
+    <div class="fb" hidden></div><div class="vs-next"></div>`;
+    if (picked) after(picked === 'good', true);
+  };
+  const after = (good, silent) => {
+    const c = cases[idx];
+    showFb($('.fb', el), good, good ? c.wg : `${c.wb} Yang lebih pas: “${c.good}”`);
+    const score = st.picks.filter(p => p === 'good').length;
+    $('.vs-next', el).innerHTML = idx < 2 ? `<button type="button" class="btn btn-primary btn-sm" data-next>Kasus berikutnya ${icon('right')}</button>` : `<div class="fb fb-info">${icon('award')}<span>Selesai! Kamu memilih <b>${score} dari 3</b> kalimat dengan tepat.</span></div>`;
+    if (st.picks.length === 3) done(silent);
+  };
+  render();
+  el.onclick = e => {
+    const go = e.target.closest('[data-go]'); if (go && !go.disabled) { idx = +go.dataset.go; render(); return; }
+    if (e.target.closest('[data-next]')) { idx = Math.min(idx + 1, 2); render(); sfx(); return; }
+    const b = e.target.closest('.vs-card'); if (!b || b.disabled) return;
+    const good = b.dataset.k === 'good';
+    st.picks[idx] = b.dataset.k; save(); sfx(good ? 'ok' : 'no');
+    $$('.vs-card', el).forEach(x => { x.disabled = true; x.classList.add(x.dataset.k === 'good' ? 'ok' : 'no'); });
+    after(good, false);
+  };
+};
+
+/* =========================================================================
+   MESIN SOAL (dipakai latihan & evaluasi)
+   Tipe: mcq, match, order, sort, spot, hour
+   ========================================================================= */
+function qInit(q, ans) {
+  if (ans !== undefined && ans !== null) return ans;
+  if (q.type === 'order') { let o; do { o = shuffle(q.items.map((_, i) => i)); } while (o.every((v, i) => v === i)); return o; }
+  if (q.type === 'match') return q.pairs.map(() => '');
+  if (q.type === 'sort') return q.items.map(() => -1);
+  if (q.type === 'spot') return q.segs.map(() => false);
+  if (q.type === 'hour') return 12;
+  return null;
+}
+function qScore(q, a) {
+  if (a === null || a === undefined) return 0;
+  switch (q.type) {
+    case 'mcq': return a === q.a ? 1 : 0;
+    case 'order': return a.filter((v, i) => v === i).length / a.length;
+    case 'match': return q.pairs.filter((p, i) => a[i] === p[1]).length / q.pairs.length;
+    case 'sort': return q.items.filter((it, i) => a[i] === it[1]).length / q.items.length;
+    case 'spot': return q.segs.filter((sg, i) => !!a[i] === !!sg[1]).length / q.segs.length;
+    case 'hour': return a >= 8 && a <= 17 ? 1 : 0;
+  }
+  return 0;
+}
+function qAnswered(q, a) {
+  if (a === null || a === undefined) return false;
+  if (q.type === 'match') return a.every(Boolean);
+  if (q.type === 'sort') return a.every(v => v >= 0);
+  return true;
+}
+/* Render satu soal. mode: 'latihan' (ada pemeriksaan & pembahasan) atau 'ujian' (tanpa umpan balik) */
+function qRender(box, q, a, { mode, checked, onChange }) {
+  const lock = mode === 'latihan' && checked;
+  let body = '';
+  if (q.type === 'mcq') body = `<div class="opts">${q.opts.map((t, i) => `<button type="button" class="opt ${a === i ? 'picked' : ''} ${lock ? (i === q.a ? 'ok' : a === i ? 'no' : '') : ''}" data-i="${i}" ${lock ? 'disabled' : ''}><span class="opt-l">${'ABCD'[i]}</span><span class="opt-t">${t}</span></button>`).join('')}</div>`;
+  if (q.type === 'order') body = `<ol class="olist">${a.map((v, pos) => `<li class="${lock ? (v === pos ? 'ok' : 'no') : ''}"><span class="o-n">${pos + 1}</span><span class="o-t">${q.items[v]}</span>${lock ? '' : `<span class="o-btn"><button type="button" data-up="${pos}" ${pos === 0 ? 'disabled' : ''} aria-label="Naikkan">${icon('up')}</button><button type="button" data-down="${pos}" ${pos === a.length - 1 ? 'disabled' : ''} aria-label="Turunkan">${icon('down')}</button></span>`}</li>`).join('')}</ol>`;
+  if (q.type === 'match') { const opts = [...new Set(q.pairs.map(p => p[1]))].sort(); body = `<div class="mlist">${q.pairs.map((p, i) => `<label class="mrow ${lock ? (a[i] === p[1] ? 'ok' : 'no') : ''}"><span>${p[0]}</span><select data-m="${i}" ${lock ? 'disabled' : ''}><option value="">— pilih —</option>${opts.map(o => `<option ${a[i] === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>`).join('')}</div>`; }
+  if (q.type === 'sort') body = `<div class="slist">${q.items.map((it, i) => `<div class="srow2 ${lock ? (a[i] === it[1] ? 'ok' : 'no') : ''}"><span class="s-t">${it[0]}</span><span class="seg2">${q.buckets.map((bk, b) => `<button type="button" data-s="${i}" data-b="${b}" class="${a[i] === b ? 'on' : ''}" ${lock ? 'disabled' : ''}>${bk}</button>`).join('')}</span></div>`).join('')}</div>`;
+  if (q.type === 'spot') body = `<div class="mail spot exam">${q.segs.map((sg, i) => `<button type="button" class="sp ${a[i] ? 'marked' : ''}" data-sp="${i}">${sg[0]}</button>`).join('')}</div><p class="muted small">Ketuk bagian yang menurutmu salah. Ketuk lagi untuk membatalkan.</p>`;
+  if (q.type === 'hour') body = `<div class="hour-q"><div class="clock-dig big">${String(a).padStart(2, '0')}.00</div><label class="range"><input type="range" min="0" max="23" value="${a}" data-hour aria-label="Jam kirim"><span class="range-scale"><i>00</i><i>06</i><i>12</i><i>18</i><i>23</i></span></label></div>`;
+  box.innerHTML = `<p class="q">${q.q}</p>${body}`;
+  const set = v => { onChange(v); };
+  box.onclick = e => {
+    const o = e.target.closest('.opt'); if (o && !o.disabled) { set(+o.dataset.i); return; }
+    const up = e.target.closest('[data-up]'); if (up) { const p = +up.dataset.up, n = a.slice(); [n[p - 1], n[p]] = [n[p], n[p - 1]]; set(n); return; }
+    const dn = e.target.closest('[data-down]'); if (dn) { const p = +dn.dataset.down, n = a.slice(); [n[p + 1], n[p]] = [n[p], n[p + 1]]; set(n); return; }
+    const s = e.target.closest('[data-s]'); if (s && !s.disabled) { const n = a.slice(); n[+s.dataset.s] = +s.dataset.b; set(n); return; }
+    const sp = e.target.closest('[data-sp]'); if (sp) { const n = a.slice(); n[+sp.dataset.sp] = !n[+sp.dataset.sp]; set(n); }
+  };
+  box.onchange = e => { const m = e.target.closest('[data-m]'); if (m) { const n = a.slice(); n[+m.dataset.m] = m.value; set(n); } };
+  box.oninput = e => { const h = e.target.closest('[data-hour]'); if (h) { $('.clock-dig', box).textContent = String(h.value).padStart(2, '0') + '.00'; onChange(+h.value, true); } };
+}
+
+/* ---------- Bank soal LATIHAN (soal baru, berbeda dari aktivitas di materi) ---------- */
+const LATIHAN = [
+  { type: 'mcq', topic: 'Kegunaan email', q: 'Dibanding aplikasi chat, apa kelebihan email di dunia kerja?', opts: ['Lebih santai dan boleh pakai emoji', 'Lebih formal, tersimpan rapi, dan bisa jadi bukti komunikasi', 'Pesannya otomatis hilang setelah dibaca', 'Hanya bisa dipakai untuk mengirim dokumen'], a: 1, why: 'Email lebih formal, tersimpan rapi, dan bisa dijadikan bukti komunikasi.' },
+  { type: 'mcq', topic: 'Bagian email', q: 'Urutan bagian email profesional yang benar adalah …', opts: ['Salam pembuka → subject → isi → tanda tangan → salam penutup', 'Isi → subject → salam penutup → salam pembuka → tanda tangan', 'Subject → salam pembuka → isi → salam penutup → tanda tangan', 'Tanda tangan → subject → isi → salam pembuka → salam penutup'], a: 2, why: 'Urutannya subject, salam pembuka, isi, salam penutup, lalu tanda tangan.' },
+  { type: 'mcq', topic: 'Subject', q: 'Subject yang baik itu …', opts: ['Panjang dan menceritakan seluruh isi email', 'Singkat, jelas, spesifik, dan sesuai tujuan email', 'Diberi kata “Penting!!” supaya cepat dibuka', 'Diisi sapaan seperti “Halo Kak”'], a: 1, why: 'Subject yang baik singkat, jelas, spesifik, dan menggambarkan tujuan email.' },
+  { type: 'mcq', topic: 'Susunan lamaran', q: 'Mana yang TIDAK perlu ada di email lamaran?', opts: ['Perkenalan diri singkat', 'Keterangan lampiran CV dan portofolio', 'Cerita tentang keluarga dan hobi', 'Salam penutup'], a: 2, why: 'Cerita pribadi yang tidak berhubungan dengan pekerjaan sebaiknya tidak ditulis.' },
+  { type: 'mcq', topic: 'Lampiran', q: 'Nama file CV yang paling rapi adalah …', opts: ['cv_fix_banget_revisi2.docx', 'IMG_2041.jpg', `CV_${NAMAF}.pdf`, 'lamaran baru.zip'], a: 2, why: 'Pakai format PDF dengan nama file yang rapi dan mudah dikenali.' },
+  { type: 'mcq', topic: 'Kesalahan umum', q: 'Mana yang termasuk kesalahan saat mengirim email lamaran?', opts: ['Menulis subject yang spesifik', 'Memakai bahasa formal', 'Menulis nama perusahaan dengan benar', 'Lupa melampirkan CV atau portofolio'], a: 3, why: 'Lupa melampirkan CV atau portofolio bisa membuat lamaran tidak diproses.' },
+  { type: 'mcq', topic: 'CC/BCC', q: 'Kamu mau mengirim undangan ke banyak rekan tanpa memperlihatkan alamat mereka satu sama lain. Fitur apa yang dipakai?', opts: ['CC', 'BCC', 'Reply all', 'Forward'], a: 1, why: 'BCC menyembunyikan alamat penerima dari penerima lain.' },
+  { type: 'mcq', topic: 'Waktu kirim', q: 'Email lamaran sebaiknya dikirim pada …', opts: ['Pukul 23.30 malam', 'Hari Minggu pagi', 'Hari kerja, sekitar pukul 08.00–17.00', 'Kapan saja, waktu tidak berpengaruh'], a: 2, why: 'Email profesional sebaiknya dikirim di jam kerja, sekitar 08.00–17.00.' },
+  { type: 'mcq', topic: 'Follow-up', q: 'Kalau belum ada kabar, kapan biasanya follow-up dikirim?', opts: ['Satu jam setelah lamaran dikirim', 'Sekitar 5–7 hari kerja setelah lamaran dikirim', 'Setiap hari sampai dibalas', 'Tidak perlu follow-up sama sekali'], a: 1, why: 'Follow-up biasanya dikirim sekitar 5–7 hari kerja setelah lamaran terkirim.' },
+  { type: 'mcq', topic: 'Bahasa', q: 'Kalimat mana yang paling pas untuk email profesional?', opts: ['Kak, gimana lamaran aku? 🙏', 'TOLONG SEGERA DIBALAS', 'gmn kabar lamaran sy', 'Mohon maaf mengganggu, saya ingin menanyakan perkembangan lamaran saya. Terima kasih.'], a: 3, why: 'Kalimat yang jelas dan sopan, tanpa singkatan, emoji, atau kapital berlebihan.' },
+  { type: 'mcq', topic: 'Salam pembuka', q: 'Apa fungsi salam pembuka di email?', opts: ['Menunjukkan rasa hormat kepada penerima', 'Menjelaskan isi email secara singkat', 'Menyebutkan lampiran yang dikirim', 'Menunjukkan nama pengirim'], a: 0, why: 'Salam pembuka dipakai untuk menunjukkan rasa hormat kepada penerima.' },
+  { type: 'mcq', topic: 'Perkenalan', q: 'Apa saja yang cukup disebutkan saat memperkenalkan diri di email lamaran?', opts: ['Nama, hobi, dan alamat rumah', 'Nama, latar belakang pendidikan, dan posisi yang dilamar', 'Nama orang tua dan jumlah saudara', 'Alasan kenapa sedang menganggur'], a: 1, why: 'Cukup sebutkan nama, latar belakang pendidikan, dan posisi yang dilamar.' },
+  { type: 'mcq', topic: 'Lampiran', q: 'Format file yang disarankan untuk CV dan portofolio adalah …', opts: ['JPG hasil foto layar', 'PDF', 'Link tanpa keterangan', 'Dokumen yang belum disimpan'], a: 1, why: 'CV dan portofolio sebaiknya dikirim dalam format PDF.' },
+  { type: 'mcq', topic: 'Email lamaran', q: 'Kenapa email lamaran disebut “kesan pertama”?', opts: ['Karena dikirim paling pagi', 'Karena perekrut mulai menilai kandidat dari email tersebut', 'Karena hanya dibaca satu kali', 'Karena harus dikirim sebelum wawancara'], a: 1, why: 'Email lamaran adalah kesan pertama yang memengaruhi penilaian perekrut.' },
+  { type: 'mcq', topic: 'Salam penutup', q: 'Salam penutup mana yang paling tepat?', opts: ['“Udah gitu aja, makasih.”', '“Hormat saya,” lalu nama pengirim', '“Ditunggu balasannya ASAP!!”', '“Bye 👋”'], a: 1, why: 'Salam penutup yang sopan, misalnya “Hormat saya,” lalu diikuti nama pengirim.' },
+  { type: 'mcq', topic: 'Follow-up', q: 'Bagaimana sebaiknya nada email follow-up?', opts: ['Tegas dan sedikit mendesak', 'Sopan, singkat, dan tidak memaksa', 'Panjang supaya HR paham', 'Santai seperti chat dengan teman'], a: 1, why: 'Email follow-up harus sopan, singkat, dan tidak terkesan memaksa.' },
+  { type: 'mcq', topic: 'Benar atau salah', q: '“CC dipakai untuk mengirim salinan email kepada orang yang perlu tahu isinya.”', opts: ['Benar', 'Salah'], a: 0, why: 'Benar. Itulah kegunaan CC (Carbon Copy).' },
+  { type: 'mcq', topic: 'Benar atau salah', q: '“Mengirim email lamaran tengah malam tidak masalah, asalkan isinya rapi.”', opts: ['Benar', 'Salah'], a: 1, why: 'Salah. Hindari mengirim email larut malam, kecuali ada keperluan mendesak.' },
+  { type: 'mcq', topic: 'Benar atau salah', q: '“Isi email lamaran sebaiknya panjang supaya perekrut tahu semua tentang kita.”', opts: ['Benar', 'Salah'], a: 1, why: 'Salah. Isi email sebaiknya singkat, padat, dan relevan.' },
+  { type: 'mcq', topic: 'Benar atau salah', q: '“Sebelum mengirim, pastikan semua lampiran sudah terunggah dan bisa dibuka.”', opts: ['Benar', 'Salah'], a: 0, why: 'Benar. Lampiran yang gagal terunggah bisa membuat lamaranmu tidak diproses.' },
+  { type: 'match', topic: 'Istilah', q: 'Pasangkan istilah dengan artinya.', pairs: [['Subject', 'Judul singkat isi email'], ['CC', 'Salinan yang penerimanya terlihat'], ['BCC', 'Salinan yang penerimanya disembunyikan'], ['Follow-up', 'Menanyakan kabar proses rekrutmen']], why: 'Subject = judul email; CC = salinan terlihat; BCC = salinan tersembunyi; follow-up = menanyakan perkembangan lamaran.' },
+  { type: 'match', topic: 'Contoh & bagian', q: 'Pasangkan contoh tulisan dengan bagian emailnya.', pairs: [['“Yth. Tim Rekrutmen PT ABC,”', 'Salam pembuka'], [`“Hormat saya, ${NAMA}”`, 'Salam penutup'], [`“Application for Graphic Designer Position – ${NAMA}”`, 'Subject'], [`“CV_${NAMAF}.pdf”`, 'Lampiran']], why: 'Yth. … = salam pembuka; Hormat saya = salam penutup; Application for … = subject; CV_… .pdf = lampiran.' },
+  { type: 'order', topic: 'Email follow-up', q: 'Urutkan isi email follow-up dari atas ke bawah.', items: ['Yth. Tim Rekrutmen PT ABC,', `Saya ${NAMA}, pelamar posisi Graphic Designer.`, 'Saya telah mengirimkan lamaran beserta CV dan portofolio pada (tanggal).', 'Mohon informasi mengenai perkembangan proses seleksi.', 'Terima kasih atas waktu dan perhatian Bapak/Ibu.', `Hormat saya, ${NAMA}`], why: 'Salam pembuka → perkenalan → keterangan lamaran → pertanyaan → terima kasih → penutup.' },
+  { type: 'order', topic: 'Sebelum kirim', q: 'Urutkan langkah sebelum menekan tombol kirim, dari yang pertama.', items: ['Tulis subject yang jelas', 'Tulis salam pembuka dan isi email', 'Lampirkan CV dan portofolio (PDF)', 'Cek lagi lampiran sudah terunggah', 'Kirim di jam kerja'], why: 'Subject → salam dan isi → lampiran → cek lampiran → kirim di jam kerja.' },
+  { type: 'sort', topic: 'Kesalahan vs kebiasaan baik', q: 'Kelompokkan: mana kebiasaan baik dan mana kesalahan?', buckets: ['Kebiasaan baik', 'Kesalahan'], items: [['Subject spesifik sesuai posisi', 0], ['Alamat email berisi julukan', 1], ['Isi email singkat dan relevan', 0], ['Salah menulis nama perusahaan', 1], ['Mengirim di jam kerja', 0], ['Lupa melampirkan CV', 1]], why: 'Kesalahan umum: alamat email tidak profesional, salah tulis nama perusahaan, dan lupa lampiran.' },
+];
+
+/* ---------- Bank soal EVALUASI (dari aktivitas materi, tanpa pilihan ganda) ---------- */
+const EVALUASI = [
+  { type: 'order', q: 'Susun bagian-bagian email profesional dari atas ke bawah.', items: ['Subject', 'Salam pembuka', 'Isi email', 'Salam penutup', 'Tanda tangan'] },
+  { type: 'match', q: 'Pasangkan bagian email lamaran dengan fungsinya.', pairs: [['Perkenalan diri', 'Menyebut nama dan pendidikan'], ['Tujuan email', 'Menyebut posisi yang dilamar'], ['Keterangan lampiran', 'Menyebut CV dan portofolio'], ['Salam penutup', 'Mengakhiri email dengan sopan']] },
+  { type: 'sort', q: 'Kelompokkan file berikut: mana yang layak dilampirkan?', buckets: ['Layak', 'Tidak layak'], items: [[`CV_${NAMAF}.pdf`, 0], ['cv baru final.docx', 1], [`Portfolio_${NAMAF}.pdf`, 0], ['scan0001.jpg', 1]] },
+  { type: 'spot', q: 'Tandai bagian email ini yang salah.', segs: [['Dari: syarif.kerenabis99@email.com', true], ['Kepada: Tim Rekrutmen PT ABC', false], ['Subject: Lamaran', true], ['Yth. Tim Rekrutmen PT ABC,', false], ['Halo kak, aku mau ngelamar yaa 😁', true], ['Hormat saya, Syarif Udin', false]] },
+  { type: 'match', q: 'Pilih fitur yang tepat untuk setiap situasi.', pairs: [['Atasanmu perlu tahu isi email yang kamu kirim ke klien', 'CC'], ['Pengumuman ke 20 orang yang tidak saling kenal', 'BCC'], ['Penerima utama email lamaranmu', 'Kepada']] },
+  { type: 'hour', q: 'Atur jam yang tepat untuk mengirim email lamaran.' },
+  { type: 'order', q: 'Lamaran belum dibalas. Urutkan langkah yang tepat.', items: ['Kirim lamaran di jam kerja', 'Tunggu sekitar 5–7 hari kerja', 'Belum ada kabar dari perusahaan', 'Kirim satu email follow-up yang sopan dan singkat'] },
+  { type: 'sort', q: 'Kelompokkan kalimat berikut: formal atau tidak formal?', buckets: ['Formal', 'Tidak formal'], items: [['Mohon informasi mengenai perkembangan proses seleksi.', 0], ['Sy kirim lamaran ya, tolong dicek!!!', 1], ['Selamat pagi, Bapak/Ibu.', 0], ['Mohon info lanjutannya ya Kak 🙏', 1], ['SAYA MAU DAFTAR KERJA', 1], ['Terima kasih atas waktu dan perhatian Bapak/Ibu.', 0]] },
+];
+
+/* =========================================================================
+   LAYAR: LATIHAN SOAL (ada pembahasan, hasil disimpan)
+   ========================================================================= */
+function viewLatihan() { return `<section class="quiz enter" id="quiz"></section>`; }
+function mountLatihan() {
+  const L = state.lat = state.lat || { i: 0, ans: {}, res: {} }; save();
+  const box = $('#quiz');
+  const render = () => {
+    const i = L.i, q = LATIHAN[i], checked = L.res[i] !== undefined, a = qInit(q, L.ans[i]);
+    if (L.ans[i] === undefined && q.type !== 'mcq') { L.ans[i] = a; save(); }
+    const benar = Object.values(L.res).filter(Boolean).length, dijawab = Object.keys(L.res).length;
+    box.innerHTML = `<aside class="quiz-side">
+      <div class="eyebrow"><span class="scode">L</span>Latihan soal</div>
+      <h1>Latihan Soal</h1>
+      <p class="muted small">${LATIHAN.length} soal campuran. Jawab, periksa, lalu baca pembahasannya. Hasilnya tersimpan.</p>
+      <div class="score-box"><b>${benar}</b><span>benar dari ${dijawab} soal yang sudah diperiksa</span></div>
+      <div class="qgrid">${LATIHAN.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${L.res[k] === true ? 'ok' : L.res[k] === false ? 'no' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
+      <button type="button" class="btn btn-outline btn-sm" data-reset>${icon('refresh')} Ulangi latihan</button>
+    </aside>
+    <div class="quiz-main">
+      <div class="act-head"><span class="act-tag">${icon('pen')} ${q.topic}</span><span class="counter">Soal <b>${i + 1}</b> dari ${LATIHAN.length}</span></div>
+      <div id="qbox"></div>
+      <div class="fb" id="qfb" hidden></div>
+      <div class="quiz-foot">
+        <button type="button" class="btn btn-outline btn-sm" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
+        ${checked ? '' : `<button type="button" class="btn btn-primary btn-sm" data-check ${qAnswered(q, a) ? '' : 'disabled'}>Periksa jawaban</button>`}
+        <button type="button" class="btn btn-outline btn-sm" data-next ${i === LATIHAN.length - 1 ? 'disabled' : ''}>Berikutnya ${icon('right')}</button>
+      </div>
+    </div>`;
+    qRender($('#qbox', box), q, a, { mode: 'latihan', checked, onChange: (v, soft) => { L.ans[i] = v; save(); if (!soft) render(); else { const c = $('[data-check]', box); if (c) c.disabled = false; } } });
+    if (checked) showFb($('#qfb', box), L.res[i], `${L.res[i] ? 'Benar!' : 'Belum tepat.'} ${q.why}`);
+  };
+  render();
+  box.addEventListener('click', e => {
+    const go = e.target.closest('[data-go]'); if (go) { L.i = +go.dataset.go; save(); render(); return; }
+    if (e.target.closest('[data-prev]')) { L.i = Math.max(0, L.i - 1); save(); render(); return; }
+    if (e.target.closest('[data-next]')) { L.i = Math.min(LATIHAN.length - 1, L.i + 1); save(); render(); return; }
+    if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; save(); sfx(ok ? 'ok' : 'no'); render(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan sudah kamu kerjakan!'); return; }
+    if (e.target.closest('[data-reset]')) { if (!confirm('Ulangi latihan dari awal? Jawaban latihan akan dihapus.')) return; state.lat = { i: 0, ans: {}, res: {} }; save(); mountLatihan(); }
+  });
+}
+function latihanBar() {
+  const ok = materiDone();
+  return `<a class="btn btn-outline" href="#/scene/S11">${icon('left')} Kembali</a>
+    <div class="dots"><span class="dots-l">${ok ? 'Materi sudah lengkap' : `${MATERI_SCENES.filter(id => state.done[id]).length}/10 scene materi selesai`}</span></div>
+    <a class="btn btn-primary ${ok ? '' : 'is-locked'}" href="#/scene/S12" id="nextBtn">${ok ? '' : icon('lock')} Ke evaluasi ${icon('right')}</a>`;
+}
+
+/* =========================================================================
+   S12 — EVALUASI: tanpa umpan balik per soal, hanya nilai akhir
+   ========================================================================= */
+ACT.S12 = (el, done, st) => {
+  if (!materiDone()) {
+    const left = MATERI_SCENES.filter(id => !state.done[id]);
+    el.innerHTML = `<div class="lockbox">${icon('lock')}<h3>Evaluasi masih terkunci</h3><p class="muted">Selesaikan dulu semua scene materi. Tinggal ${left.length} lagi:</p>
+      <div class="rec-links">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div></div>`;
+    return;
+  }
+  const E = state.ev = state.ev || { i: 0, ans: {}, done: false }; save();
+  const result = () => {
+    el.innerHTML = `<div class="ev-result ${E.score >= KKM ? 'pass' : 'fail'}">
+      <div class="ring big" style="--p:${E.score}"><b>${E.score}</b><small>nilai akhir</small></div>
+      <div><div class="badge ${E.score >= KKM ? 'ok' : 'no'}">${E.score >= KKM ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
+        <h3>${E.score >= KKM ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h3>
+        <p class="muted">${E.score >= KKM ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
+        <div class="row-btns">${E.score >= KKM ? `<a class="btn btn-primary" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-primary" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-outline" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
+      </div></div>`;
+  };
+  const intro = () => {
+    el.innerHTML = `<div class="ev-intro"><div class="ev-stats"><div><b>${EVALUASI.length}</b><span>soal</span></div><div><b>${KKM}</b><span>batas lulus</span></div><div><b>${icon('eyeoff')}</b><span>tanpa tanda benar/salah</span></div></div>
+      <p>Soal evaluasi diambil dari aktivitas di materi: menyusun, memasangkan, mengelompokkan, menandai kesalahan, dan mengatur jam. Tidak ada pilihan ganda.</p>
+      <p class="muted">Selama mengerjakan, kamu tidak akan diberi tahu benar atau salahnya. Nilai akhir baru muncul setelah semua jawaban dikirim.</p>
+      <button type="button" class="btn btn-primary btn-lg" data-start>Mulai evaluasi ${icon('right')}</button></div>`;
+  };
+  const render = () => {
+    const i = E.i, q = EVALUASI[i], a = qInit(q, E.ans[i]);
+    if (E.ans[i] === undefined) { E.ans[i] = a; save(); }
+    const answered = EVALUASI.filter((qq, k) => E.touched && E.touched[k]).length;
+    el.innerHTML = `<div class="act-head"><span class="act-tag">${icon('flag')} Evaluasi</span><span class="counter">Soal <b>${i + 1}</b> dari ${EVALUASI.length}</span></div>
+      <div class="ev-nav">${EVALUASI.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${E.touched && E.touched[k] ? 'filled' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
+      <div id="qbox"></div>
+      <div class="quiz-foot">
+        <button type="button" class="btn btn-outline btn-sm" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
+        ${i < EVALUASI.length - 1 ? `<button type="button" class="btn btn-primary btn-sm" data-next>Berikutnya ${icon('right')}</button>` : `<button type="button" class="btn btn-primary btn-sm" data-submit>${icon('send')} Kirim jawaban (${answered}/${EVALUASI.length} dijawab)</button>`}
+      </div>`;
+    qRender($('#qbox', el), q, a, { mode: 'ujian', onChange: (v, soft) => { E.ans[i] = v; E.touched = E.touched || {}; E.touched[i] = true; save(); if (!soft) render(); } });
+  };
+  if (E.done) { result(); if (E.score >= KKM) done(true); }
+  else if (E.started) render(); else intro();
+  el.onclick = e => {
+    if (e.target.closest('[data-start]')) { E.started = true; save(); sfx(); render(); return; }
+    if (e.target.closest('[data-retry]')) { state.ev = { i: 0, ans: {}, done: false, started: true }; save(); ACT.S12(el, done, st); return; }
+    const go = e.target.closest('[data-go]'); if (go) { E.i = +go.dataset.go; save(); render(); return; }
+    if (e.target.closest('[data-prev]')) { E.i = Math.max(0, E.i - 1); save(); render(); return; }
+    if (e.target.closest('[data-next]')) { E.i = Math.min(EVALUASI.length - 1, E.i + 1); save(); render(); return; }
+    if (e.target.closest('[data-submit]')) {
+      const belum = EVALUASI.filter((q, k) => !(E.touched && E.touched[k])).length;
+      if (belum && !confirm(`Masih ada ${belum} soal yang belum kamu ubah jawabannya. Tetap kirim?`)) return;
+      const total = EVALUASI.reduce((s, q, k) => s + qScore(q, E.ans[k]), 0);
+      E.score = Math.round(total / EVALUASI.length * 100); E.done = true; save(); updateBar();
+      sfx(E.score >= KKM ? 'ok' : 'no'); result();
+      if (E.score >= KKM) done(false);
+      const nb = $('#nextBtn'); if (nb && E.score >= KKM) { nb.classList.remove('is-locked'); nb.setAttribute('href', '#/scene/S13'); }
+    }
+  };
+};
+
+/* S13 — rangkuman + masukan */
+ACT.S13 = (el, done) => {
+  if (!evalPassed()) { el.innerHTML = `<div class="lockbox">${icon('lock')}<h3>Penutup masih terkunci</h3><p class="muted">Halaman ini terbuka setelah kamu lulus evaluasi.</p><a class="btn btn-primary" href="#/scene/S12">Ke evaluasi ${icon('right')}</a></div>`; return; }
+  const fb = state.feedback;
+  const thanks = f => `<div class="thanks">${icon('check')}<h3>Terima kasih atas masukanmu!</h3><p class="muted">Nilai ${f.rate}/5${f.saran ? ` · “${esc(f.saran)}”` : ''}</p></div>`;
+  el.innerHTML = `<div class="infog" id="infog">
+    <div class="ig-head"><span class="brand-mark sm">${LOGO}</span><div><b>SMART EMAILING</b><small>Rangkuman pelatihan</small></div></div>
+    <div class="ig-grid">
+      <div class="ig"><h4>${icon('layers')} Bagian email</h4><ol><li>Subject</li><li>Salam pembuka</li><li>Isi email</li><li>Salam penutup</li><li>Tanda tangan</li></ol></div>
+      <div class="ig"><h4>${icon('list')} Cek sebelum kirim</h4><ul class="ticks"><li>Subject jelas</li><li>Salam sesuai</li><li>Perkenalan singkat</li><li>Lampiran disebutkan</li><li>Bahasa formal</li></ul></div>
+      <div class="ig"><h4>${icon('users')} CC dan BCC</h4><p><b>CC</b>: salinan, penerimanya terlihat.</p><p><b>BCC</b>: salinan, penerimanya disembunyikan.</p></div>
+      <div class="ig"><h4>${icon('clock')} Waktu kirim</h4><p class="ig-big">08.00–17.00</p><p>Di jam kerja. Hindari larut malam dan hari libur.</p></div>
+      <div class="ig"><h4>${icon('calendar')} Follow-up</h4><p class="ig-big">5–7 hari kerja</p><p>Kalau belum ada kabar. Sopan, singkat, tidak memaksa.</p></div>
+      <div class="ig"><h4>${icon('type')} Bahasa</h4><p>Jelas dan sopan. Tanpa bahasa gaul, singkatan, emoji, atau kapital berlebihan.</p></div>
+    </div>
+  </div>
+  <div class="row-btns"><button type="button" class="btn btn-outline btn-sm" data-print>${icon('printer')} Simpan rangkuman (PDF)</button></div>
+  <div class="feedback" id="fbBox">${fb ? thanks(fb) : `<h3>Beri masukan</h3><form id="fbForm">
+    <div class="stars" role="radiogroup" aria-label="Nilai 1 sampai 5">${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="rate" value="${n}"><span>${icon('star')}</span><em>${n}</em></label>`).join('')}</div>
+    <label class="saran">Saran<textarea name="saran" rows="2" placeholder="Apa yang bisa diperbaiki dari pelatihan ini?"></textarea></label>
+    <button class="btn btn-primary btn-sm" type="submit">${icon('send')} Kirim masukan</button></form>`}</div>`;
+  $('[data-print]', el).onclick = () => { document.body.classList.add('print-infog'); window.print(); setTimeout(() => document.body.classList.remove('print-infog'), 500); };
+  const form = $('#fbForm', el);
+  if (form) form.onsubmit = e => { e.preventDefault(); const r = form.querySelector('input[name=rate]:checked'); if (!r) { toast('Pilih nilai 1–5 dulu, ya.'); return; } state.feedback = { rate: +r.value, saran: form.saran.value.trim() }; save(); sfx('ok'); $('#fbBox', el).innerHTML = thanks(state.feedback); };
+  done(false);
+};
+
+/* =========================================================================
+   LAYAR PANDUAN
+   ========================================================================= */
+const GLOSARIUM = [
+  ['BCC (Blind Carbon Copy)', 'Mengirim salinan email dengan alamat penerima yang disembunyikan dari penerima lain.', 'S09'],
+  ['CC (Carbon Copy)', 'Mengirim salinan email kepada orang lain yang perlu tahu isinya. Alamatnya terlihat oleh semua penerima.', 'S09'],
+  ['CV dan portofolio', 'Dokumen pendukung lamaran. Kirim dalam format PDF dengan nama file yang rapi.', 'S06'],
+  ['Email lamaran kerja', 'Email untuk memperkenalkan diri, menyampaikan minat pada posisi tertentu, dan mengirim CV serta portofolio.', 'S05'],
+  ['Evaluasi', 'Soal akhir tanpa pilihan ganda. Terbuka setelah semua materi selesai, dan hanya menampilkan nilai akhir.', 'S12'],
+  ['Follow-up', 'Email untuk menanyakan kabar proses rekrutmen, biasanya 5–7 hari kerja setelah lamaran dikirim.', 'S10'],
+  ['Isi email', 'Bagian yang memuat pesan utama, ditulis jelas dan ringkas.', 'S03'],
+  ['Jam kerja', 'Waktu yang pas untuk mengirim email profesional, sekitar pukul 08.00–17.00.', 'S09'],
+  ['Lampiran', 'File yang ikut dikirim bersama email, misalnya CV dan portofolio.', 'S06'],
+  ['Salam pembuka', 'Kalimat pembuka yang menunjukkan rasa hormat, misalnya “Yth. Tim Rekrutmen PT ABC,”.', 'S04'],
+  ['Salam penutup', 'Kalimat penutup yang sopan, misalnya “Hormat saya,” lalu diikuti nama.', 'S04'],
+  ['Subject', 'Judul email. Bagian pertama yang dilihat penerima, jadi harus singkat, jelas, dan spesifik.', 'S04'],
+  ['Tanda tangan', 'Nama pengirim di bagian paling bawah email.', 'S03'],
+];
+const pageWrap = (eyebrow, title, inner) => `<section class="page enter"><div class="page-h"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1></div>${inner}</section>`;
+
+function viewTujuan() {
+  return pageWrap('Tujuan belajar', 'Yang akan kamu kuasai', `
+    <div class="goal-main"><p>Setelah mengikuti pelatihan ini, peserta mampu <b>merancang email lamaran kerja yang efektif</b>, sesuai susunan dan etika komunikasi profesional di dunia kerja.</p><small>Sasaran: fresh graduate</small></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Kode</th><th>Topik</th><th>Tujuan</th></tr></thead><tbody>
+      ${ORDER.map(id => `<tr><td><a href="#/scene/${id}">${id}</a></td><td>${SCENES[id].title}</td><td>${SCENES[id].tujuan}</td></tr>`).join('')}
+      <tr><td><a href="#/latihan">L</a></td><td>Latihan Soal</td><td>Menguji pemahaman lewat ${LATIHAN.length} soal campuran beserta pembahasannya.</td></tr>
+    </tbody></table></div>`);
+}
+function viewPetunjuk() {
+  const kode = [['Normal', 'Tombol', 'Tampilan awal sebelum disentuh.'], ['Hover', 'Tombol', 'Tampilan saat kursor ada di atas tombol (hanya di laptop).'], ['Hit', 'Tombol', 'Diklik atau diketuk untuk lanjut ke tahap berikutnya.'], ['Swipe', 'Objek', 'Digeser atau digulir.'], ['Seret & letakkan', 'Objek', 'Seret lalu lepaskan. Di HP: ketuk kartu, lalu ketuk slotnya.'], ['Show', 'Objek', 'Penjelasan atau umpan balik yang muncul setelah suatu aksi.']];
+  return pageWrap('Petunjuk', 'Cara memakai modul ini', `
+    <div class="how">${[['play', 'Mulai dari video pembuka', 'S01 menjelaskan tujuan dan tiga materi.'], ['book', 'Baca materi dan narasinya', 'Kolom kiri berisi materi. Tekan “Dengarkan” untuk memutar narasi.'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.'], ['grid', 'Bebas pindah halaman', 'Buka menu untuk lompat ke scene mana saja. Hasilmu tidak akan hilang.'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`]].map(([ic, t, d]) => `<div class="how-item"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></div>`).join('')}</div>
+    <h2 class="h2">Kode interaksi</h2>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Kode</th><th>Untuk</th><th>Artinya</th></tr></thead><tbody>${kode.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td></tr>`).join('')}</tbody></table></div>
+    <h2 class="h2">Progres tersimpan otomatis</h2>
+    <p class="muted">Jawaban setiap aktivitas, latihan, evaluasi, dan masukanmu tersimpan di browser ini. Kalau mau mulai dari awal:</p>
+    <button type="button" class="btn btn-outline btn-sm" id="resetBtn">${icon('trash')} Hapus semua progres</button>`);
+}
+function mountPetunjuk() { $('#resetBtn').onclick = () => { if (!confirm('Hapus semua progres, jawaban, dan nilai di browser ini?')) return; const snd = state.sound; state = fresh(); state.sound = snd; save(); updateBar(); toast('Progres sudah dihapus.'); }; }
+
+function viewAlur() {
+  const node = (id, cls = '') => `<a class="fnode ${cls} ${state.done[id] ? 'ok' : ''}" href="#/scene/${id}"><span class="fcode">${id}</span><b>${SCENES[id].title}</b></a>`;
+  const arrow = '<span class="farrow" aria-hidden="true"></span>';
+  return pageWrap('Alur belajar', 'Flowchart', `
+    <p class="muted small">Setiap scene punya kotak sendiri lengkap dengan kodenya. Klik kotak untuk membuka scene.</p>
+    <div class="flow">
+      <div class="frow"><span class="fterm">Mulai</span>${arrow}<div class="fgroup"><span class="fg-l">Pembuka</span>${node('S01')}</div></div>
+      ${MATERI.filter(m => /^m\d$/.test(m.id)).map(m => `<div class="frow">${arrow}<div class="fgroup"><span class="fg-l">${m.short} · ${m.title}</span>${m.scenes.map(node).join(arrow)}</div></div>`).join('')}
+      <div class="frow">${arrow}<a class="fnode" href="#/latihan"><span class="fcode">L</span><b>Latihan Soal</b></a>${arrow}<span class="fdecide">Semua materi selesai?</span>${arrow}${node('S12', 'dark')}${arrow}<span class="fdecide">Nilai ≥ ${KKM}?</span></div>
+      <div class="frow split"><div class="fbranch ok"><span class="fb-l">Ya</span>${node('S13')}${arrow}<span class="fterm">Selesai</span></div><div class="fbranch no"><span class="fb-l">Tidak</span><a class="fnode" href="#/scene/S02"><span class="fcode">S02</span><b>Ulangi dari Materi 1</b></a></div></div>
+    </div>`);
+}
+function viewPeta() {
+  const topics = { m1: [['Kegunaan email di dunia kerja', 'S02'], ['Bagian-bagian email', 'S03'], ['Subject yang efektif', 'S04'], ['Salam pembuka dan penutup', 'S04']], m2: [['Fungsi dan susunan email lamaran', 'S05'], ['Memperkenalkan diri', 'S06'], ['Melampirkan CV dan portofolio', 'S06'], ['Kesalahan yang sering terjadi', 'S07'], ['Praktik menulis email lamaran', 'S08']], m3: [['CC dan BCC', 'S09'], ['Waktu mengirim email', 'S09'], ['Follow-up ke HR', 'S10'], ['Bahasa formal dan sopan', 'S11']] };
+  return pageWrap('Peta konsep', 'Seluruh isi dalam satu peta', `
+    <div class="cmap"><a class="cm-root" href="#/scene/S01">${icon('mail')}<b>Smart Emailing</b></a>
+      <div class="cm-cols">${MATERI.filter(m => topics[m.id]).map(m => `<div class="cm-col"><a class="cm-m" href="#/scene/${m.scenes[0]}"><span>${m.no}</span><b>${m.title}</b></a><ul>${topics[m.id].map(([t, id]) => `<li><a class="cm-t ${state.done[id] ? 'done' : ''}" href="#/scene/${id}">${t}<small>${id}</small></a></li>`).join('')}</ul></div>`).join('')}</div>
+      <div class="cm-end"><a href="#/latihan">${icon('pen')} Latihan soal</a><a href="#/scene/S12">${icon('flag')} Evaluasi</a><a href="#/scene/S13">${icon('award')} Penutup</a></div>
+    </div>`);
+}
+function viewGlosarium() {
+  return pageWrap('Glosarium', 'Istilah penting', `
+    <label class="search">${icon('search')}<input id="gq" type="search" placeholder="Cari istilah…" aria-label="Cari istilah"></label>
+    <dl class="gloss">${GLOSARIUM.map(([t, d, id]) => `<div class="g-item" data-t="${(t + ' ' + d).toLowerCase()}"><dt>${t}</dt><dd>${d} <a href="#/scene/${id}">${id} ${icon('right')}</a></dd></div>`).join('')}</dl>
+    <p class="muted" id="gEmpty" hidden>Istilah tidak ditemukan.</p>`);
+}
+function mountGlosarium() { $('#gq').oninput = e => { const q = e.target.value.trim().toLowerCase(); let n = 0; $$('.g-item').forEach(g => { const s = !q || g.dataset.t.includes(q); g.hidden = !s; n += s; }); $('#gEmpty').hidden = n > 0; }; }
+
+/* =========================================================================
+   ROUTER
+   ========================================================================= */
+const PAGES = {
+  '': { v: viewCover, title: '', bar: () => '' },
+  menu: { v: viewMenu, title: 'Menu materi', bar: () => `<a class="btn btn-outline" href="#/">${icon('home')} Sampul</a><span></span><a class="btn btn-primary" href="${resumeHref()}">${doneCount() ? 'Lanjutkan' : 'Mulai'} ${icon('right')}</a>` },
+  latihan: { v: viewLatihan, m: mountLatihan, title: 'Latihan soal', bar: latihanBar },
+  tujuan: { v: viewTujuan, title: 'Tujuan belajar' },
+  petunjuk: { v: viewPetunjuk, m: mountPetunjuk, title: 'Petunjuk' },
+  alur: { v: viewAlur, title: 'Alur belajar' },
+  peta: { v: viewPeta, title: 'Peta konsep' },
+  glosarium: { v: viewGlosarium, m: mountGlosarium, title: 'Glosarium' },
+};
+const backBar = () => `<a class="btn btn-outline" href="#/menu">${icon('grid')} Menu</a><span></span><span></span>`;
+
+let routeToken = 0, firstRoute = true;
+async function route() {
+  const token = ++routeToken;
+  cleanups.forEach(fn => fn()); cleanups = [];
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  const [page = '', arg] = location.hash.replace(/^#\/?/, '').split('/');
+  const isScene = page === 'scene' && SCENES[arg];
+  const curtain = $('#curtain');
+  if (!firstRoute && !reduced && (isScene || page === 'latihan')) {
+    $('.cur-code', curtain).textContent = isScene ? arg : 'Latihan';
+    $('.cur-title', curtain).textContent = isScene ? SCENES[arg].title : 'Latihan soal';
+    curtain.className = 'curtain cover';
+    await wait(420); if (token !== routeToken) return;
+  }
+  const wasCover = firstRoute; firstRoute = false;
+  const bb = $('#bottomBar'), stage = $('#stage');
+  if (isScene) {
+    state.last = arg; save();
+    app.innerHTML = viewScene(arg);
+    bb.innerHTML = sceneBar(arg);
+    $('#barTitle').innerHTML = `<span class="bt-code">${arg}</span>${SCENES[arg].title}`;
+    mountScene(arg);
+  } else {
+    const p = PAGES[page] || PAGES[''];
+    app.innerHTML = p.v();
+    bb.innerHTML = p.bar ? p.bar() : backBar();
+    $('#barTitle').textContent = p.title || '';
+    p.m && p.m();
+    const nb = $('#nextBtn'); if (nb) nb.addEventListener('click', e => { if (nb.classList.contains('is-locked')) { e.preventDefault(); toast('Evaluasi terbuka setelah semua scene materi selesai.'); } });
+  }
+  stage.classList.toggle('is-cover', !isScene && !page);
+  app.scrollTop = 0; window.scrollTo(0, 0);
+  app.focus({ preventScroll: true });
+  updateBar();
+  /* Cadangan agar konten tetap tampil walau animasi tertahan */
+  document.body.classList.remove('settled'); later(() => document.body.classList.add('settled'), 1400);
+  if (curtain.classList.contains('cover')) { curtain.className = 'curtain cover leave'; setTimeout(() => { if (token === routeToken) curtain.className = 'curtain'; }, 600); }
+  void wasCover;
+}
+
+function updateBar() {
+  $('#progFill').style.width = pct() + '%';
+  $('#progText').textContent = pct() + '%';
+  const sb = $('#soundBtn');
+  sb.innerHTML = icon(state.sound ? 'vol' : 'mute');
+  sb.setAttribute('aria-label', state.sound ? 'Matikan efek suara' : 'Nyalakan efek suara'); sb.title = sb.getAttribute('aria-label');
+}
+
+/* ---------- Mulai ---------- */
+$('#brandMark').innerHTML = LOGO;
+$('#menuBtn').innerHTML = icon('grid');
+$('.curtain-in').insertAdjacentHTML('afterbegin', `<span class="cur-logo">${LOGO}</span>`);
+$('#soundBtn').onclick = () => { state.sound = !state.sound; save(); updateBar(); sfx(); toast(state.sound ? 'Efek suara aktif.' : 'Efek suara dimatikan.'); };
+window.addEventListener('hashchange', route);
+route();
+
+</script>
+</body>
+</html>

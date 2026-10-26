@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Emailing — Pelatihan Menulis Email Profesional</title>
+  <meta name="description" content="Smart Emailing: modul pelatihan interaktif menulis email lamaran kerja yang rapi dan sopan untuk fresh graduate.">
+  <meta name="theme-color" content="#3b1119">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="stage" id="stage">
+    <header class="bar bar-top">
+      <a class="brand" href="#/" aria-label="Smart Emailing, ke sampul">
+        <span class="brand-mark" id="brandMark"></span>
+        <span class="brand-text">Smart<b>Emailing</b></span>
+      </a>
+      <div class="bar-title" id="barTitle"></div>
+      <div class="bar-tools">
+        <div class="prog" id="progBox" title="Progres materi">
+          <span class="prog-bar"><i id="progFill"></i></span>
+          <b id="progText">0%</b>
+        </div>
+        <button class="icon-btn" id="soundBtn" type="button" aria-label="Efek suara"></button>
+        <a class="icon-btn" id="menuBtn" href="#/menu" aria-label="Menu materi"></a>
+      </div>
+    </header>
+
+    <main class="stage-body" id="app" tabindex="-1"></main>
+
+    <footer class="bar bar-bottom" id="bottomBar"></footer>
+
+    <div class="curtain" id="curtain" aria-hidden="true">
+      <div class="curtain-in"><span class="cur-code"></span><span class="cur-title"></span></div>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
