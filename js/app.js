@@ -1297,7 +1297,62 @@ const PAGES = {
   glosarium: { v: viewGlosarium, m: mountGlosarium, title: 'Glosarium', nav: 'panduan' },
 };
 
-let routeToken = 0, firstRoute = true;
+let routeToken = 0, firstRoute = true, lastKey = null;
+
+/* =========================================================================
+   TRANSISI ANTAR-HALAMAN — berbeda menurut tujuan, tetap halus
+   ========================================================================= */
+const GUIDE = ['tujuan', 'petunjuk', 'alur', 'peta', 'glosarium'];
+function pickTransition(from, to) {
+  if (from === to) return null;
+  if (to === 'S12') return 'curtain';
+  if (to === 'S13') return 'circle';
+  const fi = ORDER.indexOf(from), ti = ORDER.indexOf(to);
+  if (ti >= 0 && fi >= 0) return ti > fi ? 'slideL' : 'slideR';
+  if (ti >= 0) return 'wipe';
+  if (to === 'latihan') return 'flip';
+  if (to === '') return 'zoom';
+  if (to === 'materi' || to === 'menu') return 'rise';
+  if (GUIDE.includes(to)) return 'blur';
+  return 'zoom';
+}
+const EASE = 'cubic-bezier(.2, .8, .2, 1)';
+const T_EXIT = {
+  slideL: [{ opacity: 1, transform: 'translateX(0)' }, { opacity: 0, transform: 'translateX(-48px)' }],
+  slideR: [{ opacity: 1, transform: 'translateX(0)' }, { opacity: 0, transform: 'translateX(48px)' }],
+  wipe: [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-18px)' }],
+  flip: [{ opacity: 1, transform: 'perspective(1400px) rotateY(0)' }, { opacity: 0, transform: 'perspective(1400px) rotateY(9deg)' }],
+  zoom: [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.97)' }],
+  rise: [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-14px)' }],
+  blur: [{ opacity: 1, filter: 'blur(0)' }, { opacity: 0, filter: 'blur(6px)' }],
+  circle: [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.98)' }],
+};
+const T_ENTER = {
+  slideL: [{ opacity: 0, transform: 'translateX(64px)' }, { opacity: 1, transform: 'translateX(0)' }],
+  slideR: [{ opacity: 0, transform: 'translateX(-64px)' }, { opacity: 1, transform: 'translateX(0)' }],
+  wipe: [{ opacity: .4, clipPath: 'inset(0 0 100% 0 round 24px)' }, { opacity: 1, clipPath: 'inset(0 0 0% 0 round 0px)' }],
+  flip: [{ opacity: 0, transform: 'perspective(1400px) rotateY(-12deg) translateX(-20px)' }, { opacity: 1, transform: 'perspective(1400px) rotateY(0) translateX(0)' }],
+  zoom: [{ opacity: 0, transform: 'scale(1.03)' }, { opacity: 1, transform: 'scale(1)' }],
+  rise: [{ opacity: 0, transform: 'translateY(36px)' }, { opacity: 1, transform: 'translateY(0)' }],
+  blur: [{ opacity: 0, filter: 'blur(10px)', transform: 'translateY(10px)' }, { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }],
+  circle: [{ clipPath: 'circle(0% at 50% 35%)' }, { clipPath: 'circle(150% at 50% 35%)' }],
+};
+const T_DUR = { slideL: 520, slideR: 520, wipe: 700, flip: 620, zoom: 560, rise: 600, blur: 600, circle: 900 };
+async function pageExit(t) {
+  try {
+    const an = app.animate(T_EXIT[t], { duration: 200, easing: 'ease-in', fill: 'forwards' });
+    await Promise.race([an.finished, wait(260)]);
+  } catch (e) { /* browser lama: tanpa animasi */ }
+}
+function pageEnter(t) {
+  try {
+    $$('.side, .sheet > *, .hero-text > *, .hero-art, .start-card, .mat-card, .cat-card').forEach(e => (e.style.animation = 'none'));
+    app.getAnimations().forEach(a => a.cancel());
+    const an = app.animate(T_ENTER[t], { duration: T_DUR[t], easing: EASE });
+    /* Cadangan: bila timeline tertahan (tab tersembunyi/iframe), lepas animasinya agar konten tetap terlihat */
+    later(() => an.cancel(), T_DUR[t] + 300);
+  } catch (e) { app.getAnimations && app.getAnimations().forEach(a => a.cancel()); }
+}
 async function route() {
   const token = ++routeToken;
   cleanups.forEach(fn => fn()); cleanups = [];
@@ -1306,12 +1361,18 @@ async function route() {
   const [page = '', arg] = location.hash.replace(/^#\/?/, '').split('/');
   const isScene = page === 'scene' && SCENES[arg];
   const curtain = $('#curtain');
-  if (!firstRoute && !reduced && (isScene || page === 'latihan')) {
-    $('.cur-code', curtain).textContent = isScene ? arg : 'L';
-    $('.cur-title', curtain).textContent = isScene ? SCENES[arg].title : 'Latihan soal';
+  const key = isScene ? arg : (PAGES[page] ? page : '');
+  const tr = firstRoute || reduced ? null : pickTransition(lastKey, key);
+  if (tr === 'curtain') {
+    $('.cur-code', curtain).textContent = arg;
+    $('.cur-title', curtain).textContent = SCENES[arg].title;
     curtain.className = 'curtain cover';
     await wait(420); if (token !== routeToken) return;
+  } else if (tr) {
+    await pageExit(tr); if (token !== routeToken) return;
   }
+  lastKey = key;
+  if (app.getAnimations) app.getAnimations().forEach(a => a.cancel());
   firstRoute = false;
   let navKey = '';
   if (isScene) {
@@ -1336,6 +1397,7 @@ async function route() {
   updateBar();
   /* Cadangan agar konten tetap tampil walau animasi tertahan */
   document.body.classList.remove('settled'); later(() => document.body.classList.add('settled'), 1400);
+  if (tr && tr !== 'curtain') pageEnter(tr);
   if (curtain.classList.contains('cover')) { curtain.className = 'curtain cover leave'; setTimeout(() => { if (token === routeToken) curtain.className = 'curtain'; }, 600); }
 }
 
