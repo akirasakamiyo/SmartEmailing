@@ -21,7 +21,7 @@ Tanggal audit: ____________  Pemeriksa: ____________
 - [ ] Elemen **Show** (umpan balik, penjelasan, contoh email) muncul setelah aksi
 - [ ] S12: nilai ≥ 75 → S13; nilai < 75 → kembali ke S02
 - [ ] Progres tiap aktivitas tetap tersimpan setelah pindah halaman
-- [ ] Tampilan 16:9 di laptop, penuh layar di HP
+- [ ] Tampilan nyaman di laptop dan HP (sidebar daftar scene bisa dibuka-tutup di HP)
 
 ## D. Uji per scene
 | Scene | Berjalan? | Catatan |

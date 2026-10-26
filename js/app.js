@@ -132,7 +132,7 @@ function celebrate() {
     s.style.cssText = `--dx:${((Math.random() - .5) * 520).toFixed(0)}px;--dy:${-(160 + Math.random() * 240).toFixed(0)}px;--r:${(Math.random() * 720 - 360).toFixed(0)}deg;background:${colors[i % colors.length]};animation-delay:${(Math.random() * 140).toFixed(0)}ms;width:${(6 + Math.random() * 6).toFixed(0)}px;height:${(10 + Math.random() * 8).toFixed(0)}px`;
     box.appendChild(s);
   }
-  $('#stage').appendChild(box); setTimeout(() => box.remove(), 2000);
+  document.body.appendChild(box); setTimeout(() => box.remove(), 2000);
 }
 
 /* =========================================================================
@@ -255,7 +255,7 @@ const pct = () => Math.round(doneCount() / ORDER.length * 100);
 const nextOf = id => ({ S11: '#/latihan', S12: evalPassed() ? '#/scene/S13' : null, S13: null }[id] !== undefined
   ? { S11: '#/latihan', S12: evalPassed() ? '#/scene/S13' : null, S13: null }[id]
   : '#/scene/' + ORDER[ORDER.indexOf(id) + 1]);
-const prevOf = id => id === 'S12' ? '#/latihan' : (ORDER.indexOf(id) > 0 ? '#/scene/' + ORDER[ORDER.indexOf(id) - 1] : '#/menu');
+const prevOf = id => id === 'S12' ? '#/latihan' : (ORDER.indexOf(id) > 0 ? '#/scene/' + ORDER[ORDER.indexOf(id) - 1] : '#/materi');
 const resumeHref = () => { const id = MATERI_SCENES.concat('S01').find(x => !state.done[x]); return id ? '#/scene/' + (state.done.S01 ? id : 'S01') : (evalPassed() ? '#/scene/S13' : '#/scene/S12'); };
 
 /* =========================================================================
@@ -288,115 +288,193 @@ function mcq(el, { q, opts, onDone, store, key }) {
 }
 
 /* =========================================================================
-   LAYAR: SAMPUL
+   NAVIGASI SAMPING (halaman scene, latihan, evaluasi)
    ========================================================================= */
-function viewCover() {
-  const started = doneCount() > 0;
-  return `<section class="cover">
-    <div class="cover-text enter">
-      <div class="pill-tag"><span class="dot"></span>Pelatihan Kelompok 7 · untuk fresh graduate</div>
-      <h1 class="cover-title">Smart<br><span>Emailing<svg class="swoosh" viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true"><path d="M5 18 C 80 5, 170 3, 295 13"/></svg></span></h1>
-      <p class="cover-hook"><span class="q-mark">“</span>Lamaran tak kunjung dibalas? Bisa jadi masalahnya ada di <mark>emailnya.</mark></p>
-      <p class="cover-sub">Belajar menulis email lamaran yang rapi, sopan, dan siap dibaca HR, lewat simulasi dan latihan langsung.</p>
-      <div class="cover-cta">
-        <a class="btn btn-primary btn-lg" href="${started ? resumeHref() : '#/scene/S01'}">${started ? 'Lanjutkan belajar' : 'Mulai belajar'} ${icon('right')}</a>
-        <a class="btn btn-ghost btn-lg" href="#/menu">${icon('grid')} Lihat materi</a>
-      </div>
-      <div class="cover-links"><a href="#/petunjuk">Petunjuk</a><span>·</span><a href="#/tujuan">Tujuan</a><span>·</span><a href="#/alur">Alur belajar</a></div>
-    </div>
-    <div class="cover-art" aria-hidden="true">
-      <div class="mailcard">
-        <div class="mc-top"><i></i><i></i><i></i></div>
-        <div class="mc-row"><small>Subject</small>Application for Graphic Designer Position – ${NAMA}</div>
-        <div class="mc-line w70"></div><div class="mc-line"></div><div class="mc-line w85"></div>
-        <div class="mc-attach">${icon('clip')} CV_${NAMAF}.pdf</div>
-      </div>
-      <span class="chip-f c1">${icon('check')} Subject jelas</span>
-      <span class="chip-f c2">${icon('clock')} 08.00–17.00</span>
-      <span class="chip-f c3">${icon('send')} Siap dikirim</span>
-    </div>
-  </section>`;
-}
-
-/* =========================================================================
-   LAYAR: MENU MATERI
-   ========================================================================= */
-function viewMenu() {
-  const lat = state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
-  const tile = id => {
-    const s = SCENES[id], lk = locked(id);
-    return `<a class="tile ${state.done[id] ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}">
-      <span class="tile-code">${state.done[id] ? icon('check') : lk ? icon('lock') : id}</span>
-      <span class="tile-t"><b>${s.title}</b><small>${s.type}</small></span></a>`;
+function sideNav(cur) {
+  const link = id => {
+    const lk = locked(id), d = state.done[id];
+    return `<a class="side-link ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}"><span class="sl-st">${d ? icon('check') : lk ? icon('lock') : id.slice(1)}</span><span>${SCENES[id].title}</span></a>`;
   };
-  return `<section class="menu enter">
-    <aside class="menu-side">
-      <div class="ring" style="--p:${pct()}"><b>${pct()}%</b><small>${doneCount()}/13 scene</small></div>
-      <a class="btn btn-primary" href="${resumeHref()}">${doneCount() ? 'Lanjutkan' : 'Mulai'} ${icon('right')}</a>
-      <nav class="menu-links">
-        <a href="#/tujuan">${icon('target')} Tujuan belajar</a>
-        <a href="#/petunjuk">${icon('help')} Petunjuk</a>
-        <a href="#/alur">${icon('branch')} Alur belajar</a>
-        <a href="#/peta">${icon('map')} Peta konsep</a>
-        <a href="#/glosarium">${icon('book')} Glosarium</a>
-      </nav>
-    </aside>
-    <div class="menu-main">
-      <div class="menu-row">${tile('S01')}</div>
-      <div class="menu-cols">
-        ${MATERI.filter(m => /^m\d$/.test(m.id)).map(m => `<div class="mcol">
-          <div class="mcol-h"><span class="mcol-ic">${icon(m.icon)}</span><div><small>${m.short}</small><b>${m.title}</b></div></div>
-          ${m.scenes.map(tile).join('')}
-        </div>`).join('')}
+  return `<a class="side-back" href="#/materi">${icon('left')} Semua materi</a>
+    <div class="side-prog"><span class="bar"><i style="width:${pct()}%"></i></span><small>${doneCount()} / 13 scene selesai</small></div>
+    <details class="side-list" ${window.innerWidth > 1080 ? 'open' : ''}><summary>${icon('list')} Daftar scene</summary><div class="side-groups">${MATERI.map(m => `<div class="side-group"><div class="side-gh">${m.id === 'akhir' ? 'Latihan & Evaluasi' : m.short}</div>
+      ${m.id === 'akhir' ? `<a class="side-link ${cur === 'L' ? 'cur' : ''}" href="#/latihan"><span class="sl-st">L</span><span>Latihan Soal</span></a>` : ''}
+      ${m.scenes.map(link).join('')}</div>`).join('')}</div></details>`;
+}
+
+/* =========================================================================
+   BERANDA
+   ========================================================================= */
+function viewHome() {
+  const started = doneCount() > 0, res = resumeHref();
+  const nx = (res.match(/S\d+/) || ['S01'])[0], nxs = SCENES[nx], nxm = materiOf(nx);
+  const latOk = state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
+  const ev = state.ev && state.ev.done ? state.ev.score : null;
+  const faq = [
+    ['Apa itu Smart Emailing?', 'Pelatihan singkat berbasis multimedia untuk membantu fresh graduate menulis email lamaran kerja yang rapi, sopan, dan sesuai etika komunikasi di dunia kerja.'],
+    ['Untuk siapa pelatihan ini?', 'Untuk fresh graduate yang sedang bersiap melamar kerja.'],
+    ['Materinya apa saja?', 'Ada tiga materi: dasar komunikasi lewat email, menulis email lamaran kerja, dan etika berkirim email. Setelah itu ada latihan soal dan evaluasi.'],
+    ['Harus belajar berurutan?', 'Tidak wajib. Kamu bisa membuka scene mana saja dari halaman Materi. Tapi evaluasi baru terbuka setelah semua scene materi selesai.'],
+    ['Progresku tersimpan di mana?', 'Di browser yang kamu pakai, tanpa akun. Jawaban di setiap aktivitas tidak akan hilang walau kamu pindah halaman. Kalau data browser dihapus, progres mulai dari awal.'],
+    ['Bagaimana evaluasi dinilai?', `Evaluasi berisi ${EVALUASI.length} soal tanpa pilihan ganda. Selama mengerjakan tidak ada tanda benar atau salah. Nilai akhir muncul setelah semua jawaban dikirim, dan batas lulusnya ${KKM}.`],
+  ];
+  return `
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div class="hero-text">
+        <div class="pill-tag"><span class="dot"></span>Media pembelajaran · Kelompok 7</div>
+        <h1 class="hero-title">Smart <span>Emailing<svg class="swoosh" viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true"><path d="M5 18 C 80 5, 170 3, 295 13"/></svg></span></h1>
+        <p class="hero-hook"><span class="q-mark">“</span>Lamaran tak kunjung dibalas? Bisa jadi masalahnya ada di <mark>emailnya.</mark></p>
+        <p class="hero-sub">Pelatihan singkat untuk fresh graduate. Belajar menulis email lamaran yang rapi dan sopan lewat ${MATERI_SCENES.length} scene materi, ${LATIHAN.length} soal latihan, dan evaluasi akhir.</p>
+        <div class="hero-cta">
+          <a class="btn btn-gold btn-lg" href="${started ? res : '#/scene/S01'}">${started ? 'Lanjutkan belajar' : 'Mulai belajar'} ${icon('right')}</a>
+          <a class="btn btn-ghost btn-lg" href="#/materi">Lihat materi</a>
+        </div>
       </div>
-      <div class="menu-row two">
-        <a class="tile big" href="#/latihan"><span class="tile-code">${icon('pen')}</span><span class="tile-t"><b>Latihan Soal</b><small>${LATIHAN.length} soal · ${lat} sudah dijawab benar</small></span></a>
-        ${tile('S12')}${tile('S13')}
+      <div class="hero-art" aria-hidden="true">
+        <div class="mailcard">
+          <div class="mc-top"><i></i><i></i><i></i></div>
+          <div class="mc-row"><small>Subject</small>Application for Graphic Designer Position – ${NAMA}</div>
+          <div class="mc-line w70"></div><div class="mc-line"></div><div class="mc-line w85"></div>
+          <div class="mc-attach">${icon('clip')} CV_${NAMAF}.pdf</div>
+        </div>
+        <span class="chip-f c1">${icon('check')} Subject jelas</span>
+        <span class="chip-f c2">${icon('clock')} 08.00–17.00</span>
+        <span class="chip-f c3">${icon('send')} Siap dikirim</span>
       </div>
+    </div>
+    <div class="wrap"><div class="stats">
+      <div><b>3</b><span>Materi</span></div><div><b>13</b><span>Scene</span></div><div><b>${LATIHAN.length}</b><span>Soal latihan</span></div><div><b>${EVALUASI.length}</b><span>Soal evaluasi</span></div><div><b>${pct()}%</b><span>Progresmu</span></div>
+    </div></div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow">Mulai dari sini</div><h2 class="display-2">Kenali pelatihannya dulu</h2><p class="lead-s">Baca tujuan dan petunjuknya, lihat alurnya, lalu mulai dari materi yang paling kamu butuhkan.</p></div>
+        <a class="btn btn-outline" href="#/glosarium">${icon('book')} Glosarium istilah</a></div>
+      <div class="start-grid">
+        ${[['01', 'Tujuan belajar', 'Apa yang akan kamu kuasai di setiap scene.', '#/tujuan', 'target'], ['02', 'Petunjuk', 'Cara memakai modul, arti kode interaksi, dan menyimpan progres.', '#/petunjuk', 'help'], ['03', 'Alur belajar', 'Flowchart dari video pembuka sampai evaluasi dan penutup.', '#/alur', 'branch'], ['04', 'Peta konsep', 'Seluruh isi materi dalam satu peta. Klik untuk langsung membuka.', '#/peta', 'map']]
+          .map(([n, t, d, h, ic]) => `<a class="start-card" href="${h}"><span class="sc-n">${n}</span><span class="sc-ic">${icon(ic)}</span><h3>${t}</h3><p>${d}</p><span class="sc-go">Buka ${icon('right')}</span></a>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tint">
+    <div class="wrap continue-grid">
+      <div class="continue">
+        <div class="eyebrow light">${started ? 'Lanjutkan belajar' : 'Mulai belajar'}</div>
+        <h3>${nxs.title}</h3>
+        <p>${nxm.short} · <span class="scode">${nx}</span> · ${nxs.type}</p>
+        <span class="bar light"><i style="width:${pct()}%"></i></span>
+        <small>${doneCount()}/13 scene selesai · latihan ${latOk}/${LATIHAN.length} benar · evaluasi ${ev === null ? 'belum' : ev}</small>
+        <a class="btn btn-gold" href="${started ? res : '#/scene/S01'}">${started ? 'Lanjutkan' : 'Mulai'} ${icon('right')}</a>
+      </div>
+      <div class="mini-list">
+        <div class="eyebrow">Progres per materi</div>
+        ${MATERI.map(m => `<a class="mini-row" href="#/scene/${m.scenes.find(id => !state.done[id] && !locked(id)) || m.scenes[0]}"><span class="mr-n">${m.no}</span><span class="mr-t">${m.title}</span><span class="mr-p">${m.scenes.filter(id => state.done[id]).length}/${m.scenes.length}</span></a>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow">Materi</div><h2 class="display-2">Tiga materi, sepuluh scene</h2><p class="lead-s">Setiap scene berisi penjelasan singkat, narasi, dan satu aktivitas yang langsung bisa dicoba.</p></div>
+        <a class="btn btn-outline" href="#/materi">Semua scene ${icon('right')}</a></div>
+      <div class="mat-grid">
+        ${MATERI.filter(m => /^m\d$/.test(m.id)).map(m => { const d = m.scenes.filter(id => state.done[id]).length; return `<a class="mat-card" href="#/scene/${m.scenes.find(id => !state.done[id]) || m.scenes[0]}">
+          <div class="mat-top"><span class="mat-no">${m.no}</span><span class="mat-ic">${icon(m.icon)}</span></div>
+          <small>${m.short}</small><h3>${m.title}</h3><p>${m.desc}</p>
+          <div class="mat-scenes">${m.scenes.map(id => `<span class="${state.done[id] ? 'ok' : ''}">${id}</span>`).join('')}</div>
+          <div class="mat-foot"><span class="bar"><i style="width:${d / m.scenes.length * 100}%"></i></span><b>${d}/${m.scenes.length}</b></div>
+        </a>`; }).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tint">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow">Latihan & evaluasi</div><h2 class="display-2">Uji pemahamanmu</h2><p class="lead-s">Latihan untuk mengasah diri dengan pembahasan. Evaluasi untuk nilai akhir.</p></div></div>
+      <div class="two-cards">
+        <a class="big-card" href="#/latihan"><span class="bc-ic">${icon('pen')}</span><div><small>Latihan soal</small><h3>${LATIHAN.length} soal campuran</h3><p>Pilihan ganda, benar/salah, pasangkan, urutkan, dan kelompokkan. Setiap jawaban langsung diperiksa dan dijelaskan.</p><span class="bc-meta">${latOk} soal sudah dijawab benar</span></div></a>
+        <a class="big-card dark ${materiDone() ? '' : 'locked'}" href="#/scene/S12"><span class="bc-ic">${icon(materiDone() ? 'flag' : 'lock')}</span><div><small>Evaluasi · S12</small><h3>${EVALUASI.length} soal tanpa pilihan ganda</h3><p>Soal diambil dari aktivitas di materi. Tidak ada tanda benar atau salah, hanya nilai akhir. Batas lulus ${KKM}.</p><span class="bc-meta">${ev !== null ? `Nilai terakhir: ${ev}` : materiDone() ? 'Sudah bisa dikerjakan' : `Terbuka setelah ${MATERI_SCENES.filter(id => !state.done[id]).length} scene materi lagi`}</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap faq-wrap">
+      <div><div class="eyebrow">Yang sering ditanyakan</div><h2 class="display-2">Pertanyaan umum</h2><p class="lead-s">Masih bingung? Buka halaman petunjuk.</p><a class="btn btn-outline" href="#/petunjuk">Petunjuk</a></div>
+      <div class="faq">${faq.map(([q, a], i) => `<details ${i === 0 ? 'open' : ''}><summary>${q}<span class="plus"></span></summary><p>${a}</p></details>`).join('')}</div>
     </div>
   </section>`;
 }
 
 /* =========================================================================
-   LAYAR: SCENE
+   KATALOG MATERI
    ========================================================================= */
+function viewMateri() {
+  const row = id => { const lk = locked(id), d = state.done[id]; return `<a class="srow ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}"><span class="srow-st">${d ? icon('check') : lk ? icon('lock') : id}</span><span class="srow-t"><b>${SCENES[id].title}</b><small>${id} · ${SCENES[id].type}</small></span>${icon('right')}</a>`; };
+  return `<div class="page wrap">
+    <header class="page-head"><div class="eyebrow">Materi</div><h1 class="display">Semua materi</h1><p class="lead-s">Pilih scene mana saja. Hasil kerjamu di setiap aktivitas tersimpan otomatis.</p>
+      <div class="page-prog"><span class="bar"><i style="width:${pct()}%"></i></span><b>${pct()}%</b><small>${doneCount()}/13 scene selesai</small></div></header>
+    <div class="cat">${MATERI.map(m => `<article class="cat-card">
+      <header><span class="cat-no">${m.no}</span><div><small>${m.short}</small><h2>${m.title}</h2>${m.desc ? `<p>${m.desc}</p>` : ''}</div><span class="cat-p">${m.scenes.filter(id => state.done[id]).length}/${m.scenes.length}</span></header>
+      <div class="cat-list">${m.id === 'akhir' ? `<a class="srow" href="#/latihan"><span class="srow-st">L</span><span class="srow-t"><b>Latihan Soal</b><small>L · ${LATIHAN.length} soal campuran dengan pembahasan</small></span>${icon('right')}</a>` : ''}${m.scenes.map(row).join('')}</div>
+    </article>`).join('')}</div>
+  </div>`;
+}
+
+/* =========================================================================
+   HALAMAN SCENE (gaya halaman pelajaran)
+   ========================================================================= */
+const uraianSections = s => s.uraian.map((u, i) => `<section class="u-sec" id="u${i}"><h2 class="sec-title">${u.h}</h2>${u.p.map(p => p.startsWith('<ol') ? p : `<p>${p}</p>`).join('')}</section>`).join('');
+const uraianHTML = uraianSections;
+
 function viewScene(id) {
   const s = SCENES[id], m = materiOf(id);
+  const text = ((s.uraian || []).map(u => u.p.join(' ')).join(' ') + ' ' + (s.narasi || '')).replace(/<[^>]+>/g, '');
+  const mins = Math.max(1, Math.round(text.split(/\s+/).length / 170));
   const showUraian = s.uraian && !(s.uraianAfter && !state.done[id]);
-  return `<section class="scene ${s.wide ? 'wide' : ''}">
-    <aside class="scene-info enter">
-      <div class="eyebrow"><span class="scode">${id}</span>${m.short} · ${s.type}</div>
-      <h1>${s.title}</h1>
-      <p class="tujuan">${icon('target')}<span>${s.tujuan}</span></p>
-      ${s.uraian ? `<div class="uraian" id="uraian">${showUraian ? uraianHTML(s) : `<p class="muted locked-note">${icon('eyeoff')} Rangkuman kesalahan baru muncul setelah kamu menemukan semuanya, supaya jawabannya tidak bocor.</p>`}</div>` : ''}
-      ${s.narasi && id !== 'S01' ? `<div class="narasi"><div class="narasi-h">${icon('chat')}<span>Narasi</span><button type="button" class="chip-btn" data-speak>${icon('vol')}<span>Dengarkan</span></button></div><p>${s.narasi}</p></div>` : ''}
-    </aside>
-    <div class="scene-act enter" id="activity"></div>
-  </section>`;
+  const chips = [
+    ...(s.uraian ? (showUraian ? s.uraian.map((u, i) => ['u' + i, u.h]) : [['uraian', 'Materi']]) : []),
+    ...(s.narasi && id !== 'S01' ? [['narasi', 'Narasi']] : []),
+    ['aktivitas', s.type],
+  ];
+  return `<div class="lesson wrap">
+    <aside class="side" id="side">${sideNav(id)}</aside>
+    <article class="sheet">
+      <div class="eyebrow">${m.short} · <span class="scode">${id}</span> · ${s.type}</div>
+      <h1 class="display">${s.title}</h1>
+      <p class="meta">± ${mins} menit · 1 aktivitas interaktif</p>
+      <div class="goal-box"><div class="box-h">Tujuan halaman ini</div><p>${icon('target')}<span>${s.tujuan}</span></p></div>
+      <div class="toc-box"><div class="box-h">Di halaman ini</div><div class="toc">${chips.map(([k, t]) => `<button type="button" class="toc-chip ${k === 'aktivitas' ? 'strong' : ''}" data-jump="${k}">${k === 'aktivitas' ? icon('pointer') + ' ' : ''}${t}</button>`).join('')}</div></div>
+      ${s.uraian ? `<div id="uraian">${showUraian ? uraianSections(s) : `<section class="u-sec"><p class="locked-note">${icon('eyeoff')} Rangkuman kesalahan baru muncul setelah kamu menemukan semuanya di aktivitas bawah, supaya jawabannya tidak bocor.</p></section>`}</div>` : ''}
+      ${s.narasi && id !== 'S01' ? `<section class="narasi" id="narasi"><div class="narasi-h">${icon('chat')}<span>Narasi</span><button type="button" class="chip-btn" data-speak>${icon('vol')}<span>Dengarkan</span></button></div><p>${s.narasi}</p></section>` : ''}
+      <section class="act-sec" id="aktivitas"><h2 class="sec-title">${id === 'S01' ? 'Tonton dulu' : id === 'S12' ? 'Kerjakan evaluasi' : id === 'S13' ? 'Rangkuman' : 'Ayo coba'}</h2><div class="act-card" id="activity"></div></section>
+      <nav class="lesson-nav">${lessonNav(id)}</nav>
+    </article>
+  </div>`;
 }
-const uraianHTML = s => s.uraian.map(u => `<h3>${u.h}</h3>${u.p.map(p => p.startsWith('<ol') ? p : `<p>${p}</p>`).join('')}`).join('');
 
-function sceneBar(id) {
-  const m = materiOf(id), idx = m.scenes.indexOf(id), nx = nextOf(id);
-  const nextLabel = id === 'S11' ? 'Ke latihan soal' : id === 'S12' ? 'Ke penutup' : 'Lanjut';
-  return `<a class="btn btn-outline" href="${prevOf(id)}">${icon('left')} Kembali</a>
-    <div class="dots" aria-label="${m.short}, bagian ${idx + 1} dari ${m.scenes.length}">
-      <span class="dots-l">${m.short}</span>${m.scenes.map(x => `<a href="#/scene/${x}" class="dot-i ${x === id ? 'cur' : ''} ${state.done[x] ? 'ok' : ''}" aria-label="${x}"></a>`).join('')}
-    </div>
-    ${nx ? `<a class="btn btn-primary ${state.done[id] ? '' : 'is-locked'}" id="nextBtn" href="${nx}">${nextLabel} ${icon('right')}</a>` : id === 'S13' ? `<a class="btn btn-primary" href="#/menu">Selesai ${icon('check')}</a>` : '<span></span>'}`;
+function lessonNav(id) {
+  const nx = nextOf(id);
+  const label = id === 'S11' ? 'Ke latihan soal' : id === 'S12' ? 'Ke penutup' : 'Lanjut';
+  return `<a class="btn btn-outline" href="${prevOf(id)}">${icon('left')} Sebelumnya</a>
+    ${nx ? `<a class="btn btn-primary ${state.done[id] ? '' : 'is-locked'}" id="nextBtn" href="${nx}">${label} ${icon('right')}</a>` : id === 'S13' ? `<a class="btn btn-primary" href="#/">Selesai ${icon('check')}</a>` : ''}`;
 }
 
 function mountScene(id) {
   const btn = $('#nextBtn');
-  if (btn) btn.addEventListener('click', e => { if (btn.classList.contains('is-locked')) { e.preventDefault(); toast('Selesaikan aktivitas di halaman ini dulu, ya.'); } });
+  if (btn) btn.addEventListener('click', e => { if (btn.classList.contains('is-locked')) { e.preventDefault(); toast('Selesaikan aktivitas di halaman ini dulu, ya.'); $('#aktivitas').scrollIntoView({ behavior: 'smooth' }); } });
   const sp = $('[data-speak]'); if (sp) sp.onclick = () => speak(SCENES[id].narasi, sp);
+  $$('[data-jump]').forEach(b => b.onclick = () => { const t = document.getElementById(b.dataset.jump); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   const done = silent => {
     const freshDone = !state.done[id];
     state.done[id] = true; save(); updateBar();
     if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
     if (freshDone && !silent) celebrate();
-    $$('.dot-i').forEach(d => { if (d.getAttribute('href') === '#/scene/' + id) d.classList.add('ok'); });
-    const ur = $('#uraian'); if (ur && SCENES[id].uraianAfter) ur.innerHTML = uraianHTML(SCENES[id]);
+    $$('.side-link').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.querySelector('.sl-st').innerHTML = icon('check'); } });
+    const ur = $('#uraian'); if (ur && SCENES[id].uraianAfter) ur.innerHTML = uraianSections(SCENES[id]);
   };
   ACT[id]($('#activity'), done, A(id));
 }
@@ -929,7 +1007,7 @@ const EVALUASI = [
 /* =========================================================================
    LAYAR: LATIHAN SOAL (ada pembahasan, hasil disimpan)
    ========================================================================= */
-function viewLatihan() { return `<section class="quiz enter" id="quiz"></section>`; }
+function viewLatihan() { return `<div class="lesson wrap" id="quiz"></div>`; }
 function mountLatihan() {
   const L = state.lat = state.lat || { i: 0, ans: {}, res: {} }; save();
   const box = $('#quiz');
@@ -937,41 +1015,44 @@ function mountLatihan() {
     const i = L.i, q = LATIHAN[i], checked = L.res[i] !== undefined, a = qInit(q, L.ans[i]);
     if (L.ans[i] === undefined && q.type !== 'mcq') { L.ans[i] = a; save(); }
     const benar = Object.values(L.res).filter(Boolean).length, dijawab = Object.keys(L.res).length;
-    box.innerHTML = `<aside class="quiz-side">
-      <div class="eyebrow"><span class="scode">L</span>Latihan soal</div>
-      <h1>Latihan Soal</h1>
-      <p class="muted small">${LATIHAN.length} soal campuran. Jawab, periksa, lalu baca pembahasannya. Hasilnya tersimpan.</p>
+    const ok = materiDone();
+    box.innerHTML = `<aside class="side">
+      <a class="side-back" href="#/materi">${icon('left')} Semua materi</a>
       <div class="score-box"><b>${benar}</b><span>benar dari ${dijawab} soal yang sudah diperiksa</span></div>
+      <div class="side-gh">Nomor soal</div>
       <div class="qgrid">${LATIHAN.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${L.res[k] === true ? 'ok' : L.res[k] === false ? 'no' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
+      <div class="legend-s"><span><i class="lg ok"></i>benar</span><span><i class="lg no"></i>belum tepat</span></div>
       <button type="button" class="btn btn-outline btn-sm" data-reset>${icon('refresh')} Ulangi latihan</button>
     </aside>
-    <div class="quiz-main">
-      <div class="act-head"><span class="act-tag">${icon('pen')} ${q.topic}</span><span class="counter">Soal <b>${i + 1}</b> dari ${LATIHAN.length}</span></div>
-      <div id="qbox"></div>
-      <div class="fb" id="qfb" hidden></div>
-      <div class="quiz-foot">
-        <button type="button" class="btn btn-outline btn-sm" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
-        ${checked ? '' : `<button type="button" class="btn btn-primary btn-sm" data-check ${qAnswered(q, a) ? '' : 'disabled'}>Periksa jawaban</button>`}
-        <button type="button" class="btn btn-outline btn-sm" data-next ${i === LATIHAN.length - 1 ? 'disabled' : ''}>Berikutnya ${icon('right')}</button>
-      </div>
-    </div>`;
+    <article class="sheet">
+      <div class="eyebrow">Latihan & Evaluasi · <span class="scode">L</span> · Latihan soal</div>
+      <h1 class="display">Latihan Soal</h1>
+      <p class="meta">${LATIHAN.length} soal campuran · jawab, periksa, lalu baca pembahasannya</p>
+      <section class="act-sec"><div class="act-head"><span class="act-tag">${icon('pen')} ${q.topic}</span><span class="counter">Soal <b>${i + 1}</b> dari ${LATIHAN.length}</span></div>
+        <div class="act-card"><div id="qbox"></div><div class="fb" id="qfb" hidden></div>
+        <div class="quiz-foot">
+          <button type="button" class="btn btn-outline btn-sm" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
+          ${checked ? '' : `<button type="button" class="btn btn-primary btn-sm" data-check ${qAnswered(q, a) ? '' : 'disabled'}>Periksa jawaban</button>`}
+          <button type="button" class="btn btn-outline btn-sm" data-next ${i === LATIHAN.length - 1 ? 'disabled' : ''}>Berikutnya ${icon('right')}</button>
+        </div></div>
+      </section>
+      <nav class="lesson-nav">
+        <a class="btn btn-outline" href="#/scene/S11">${icon('left')} Kembali ke materi</a>
+        <a class="btn btn-primary ${ok ? '' : 'is-locked'}" href="#/scene/S12" id="nextBtn">${ok ? '' : icon('lock')} Ke evaluasi ${icon('right')}</a>
+      </nav>
+    </article>`;
     qRender($('#qbox', box), q, a, { mode: 'latihan', checked, onChange: (v, soft) => { L.ans[i] = v; save(); if (!soft) render(); else { const c = $('[data-check]', box); if (c) c.disabled = false; } } });
     if (checked) showFb($('#qfb', box), L.res[i], `${L.res[i] ? 'Benar!' : 'Belum tepat.'} ${q.why}`);
   };
   render();
   box.addEventListener('click', e => {
+    const nb = e.target.closest('#nextBtn'); if (nb && nb.classList.contains('is-locked')) { e.preventDefault(); toast('Evaluasi terbuka setelah semua scene materi selesai.'); return; }
     const go = e.target.closest('[data-go]'); if (go) { L.i = +go.dataset.go; save(); render(); return; }
     if (e.target.closest('[data-prev]')) { L.i = Math.max(0, L.i - 1); save(); render(); return; }
     if (e.target.closest('[data-next]')) { L.i = Math.min(LATIHAN.length - 1, L.i + 1); save(); render(); return; }
     if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; save(); sfx(ok ? 'ok' : 'no'); render(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan sudah kamu kerjakan!'); return; }
     if (e.target.closest('[data-reset]')) { if (!confirm('Ulangi latihan dari awal? Jawaban latihan akan dihapus.')) return; state.lat = { i: 0, ans: {}, res: {} }; save(); mountLatihan(); }
   });
-}
-function latihanBar() {
-  const ok = materiDone();
-  return `<a class="btn btn-outline" href="#/scene/S11">${icon('left')} Kembali</a>
-    <div class="dots"><span class="dots-l">${ok ? 'Materi sudah lengkap' : `${MATERI_SCENES.filter(id => state.done[id]).length}/10 scene materi selesai`}</span></div>
-    <a class="btn btn-primary ${ok ? '' : 'is-locked'}" href="#/scene/S12" id="nextBtn">${ok ? '' : icon('lock')} Ke evaluasi ${icon('right')}</a>`;
 }
 
 /* =========================================================================
@@ -1078,7 +1159,7 @@ const GLOSARIUM = [
   ['Subject', 'Judul email. Bagian pertama yang dilihat penerima, jadi harus singkat, jelas, dan spesifik.', 'S04'],
   ['Tanda tangan', 'Nama pengirim di bagian paling bawah email.', 'S03'],
 ];
-const pageWrap = (eyebrow, title, inner) => `<section class="page enter"><div class="page-h"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1></div>${inner}</section>`;
+const pageWrap = (eyebrow, title, inner) => `<div class="page wrap"><article class="sheet wide"><div class="eyebrow">Panduan · ${eyebrow}</div><h1 class="display">${title}</h1>${inner}</article></div>`;
 
 function viewTujuan() {
   return pageWrap('Tujuan belajar', 'Yang akan kamu kuasai', `
@@ -1132,55 +1213,54 @@ function mountGlosarium() { $('#gq').oninput = e => { const q = e.target.value.t
    ROUTER
    ========================================================================= */
 const PAGES = {
-  '': { v: viewCover, title: '', bar: () => '' },
-  menu: { v: viewMenu, title: 'Menu materi', bar: () => `<a class="btn btn-outline" href="#/">${icon('home')} Sampul</a><span></span><a class="btn btn-primary" href="${resumeHref()}">${doneCount() ? 'Lanjutkan' : 'Mulai'} ${icon('right')}</a>` },
-  latihan: { v: viewLatihan, m: mountLatihan, title: 'Latihan soal', bar: latihanBar },
-  tujuan: { v: viewTujuan, title: 'Tujuan belajar' },
-  petunjuk: { v: viewPetunjuk, m: mountPetunjuk, title: 'Petunjuk' },
-  alur: { v: viewAlur, title: 'Alur belajar' },
-  peta: { v: viewPeta, title: 'Peta konsep' },
-  glosarium: { v: viewGlosarium, m: mountGlosarium, title: 'Glosarium' },
+  '': { v: viewHome, title: '' },
+  materi: { v: viewMateri, title: 'Materi', nav: 'materi' },
+  menu: { v: viewMateri, title: 'Materi', nav: 'materi' },
+  latihan: { v: viewLatihan, m: mountLatihan, title: 'Latihan soal', nav: 'latihan' },
+  tujuan: { v: viewTujuan, title: 'Tujuan belajar', nav: 'panduan' },
+  petunjuk: { v: viewPetunjuk, m: mountPetunjuk, title: 'Petunjuk', nav: 'panduan' },
+  alur: { v: viewAlur, title: 'Alur belajar', nav: 'panduan' },
+  peta: { v: viewPeta, title: 'Peta konsep', nav: 'panduan' },
+  glosarium: { v: viewGlosarium, m: mountGlosarium, title: 'Glosarium', nav: 'panduan' },
 };
-const backBar = () => `<a class="btn btn-outline" href="#/menu">${icon('grid')} Menu</a><span></span><span></span>`;
 
 let routeToken = 0, firstRoute = true;
 async function route() {
   const token = ++routeToken;
   cleanups.forEach(fn => fn()); cleanups = [];
   if ('speechSynthesis' in window) speechSynthesis.cancel();
+  closeMenu();
   const [page = '', arg] = location.hash.replace(/^#\/?/, '').split('/');
   const isScene = page === 'scene' && SCENES[arg];
   const curtain = $('#curtain');
   if (!firstRoute && !reduced && (isScene || page === 'latihan')) {
-    $('.cur-code', curtain).textContent = isScene ? arg : 'Latihan';
+    $('.cur-code', curtain).textContent = isScene ? arg : 'L';
     $('.cur-title', curtain).textContent = isScene ? SCENES[arg].title : 'Latihan soal';
     curtain.className = 'curtain cover';
     await wait(420); if (token !== routeToken) return;
   }
-  const wasCover = firstRoute; firstRoute = false;
-  const bb = $('#bottomBar'), stage = $('#stage');
+  firstRoute = false;
+  let navKey = '';
   if (isScene) {
     state.last = arg; save();
     app.innerHTML = viewScene(arg);
-    bb.innerHTML = sceneBar(arg);
-    $('#barTitle').innerHTML = `<span class="bt-code">${arg}</span>${SCENES[arg].title}`;
     mountScene(arg);
+    navKey = arg === 'S12' ? 'evaluasi' : 'materi';
+    document.title = `${arg} · ${SCENES[arg].title} — Smart Emailing`;
   } else {
     const p = PAGES[page] || PAGES[''];
-    app.innerHTML = p.v();
-    bb.innerHTML = p.bar ? p.bar() : backBar();
-    $('#barTitle').textContent = p.title || '';
-    p.m && p.m();
-    const nb = $('#nextBtn'); if (nb) nb.addEventListener('click', e => { if (nb.classList.contains('is-locked')) { e.preventDefault(); toast('Evaluasi terbuka setelah semua scene materi selesai.'); } });
+    app.innerHTML = p.v(); p.m && p.m();
+    navKey = p.nav || '';
+    document.title = p.title ? `${p.title} — Smart Emailing` : 'Smart Emailing — Pelatihan Menulis Email Profesional';
   }
-  stage.classList.toggle('is-cover', !isScene && !page);
-  app.scrollTop = 0; window.scrollTo(0, 0);
+  $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === navKey));
+  document.body.classList.toggle('is-home', !isScene && !page);
+  window.scrollTo({ top: 0, behavior: 'instant' });
   app.focus({ preventScroll: true });
   updateBar();
   /* Cadangan agar konten tetap tampil walau animasi tertahan */
   document.body.classList.remove('settled'); later(() => document.body.classList.add('settled'), 1400);
   if (curtain.classList.contains('cover')) { curtain.className = 'curtain cover leave'; setTimeout(() => { if (token === routeToken) curtain.className = 'curtain'; }, 600); }
-  void wasCover;
 }
 
 function updateBar() {
@@ -1190,11 +1270,14 @@ function updateBar() {
   sb.innerHTML = icon(state.sound ? 'vol' : 'mute');
   sb.setAttribute('aria-label', state.sound ? 'Matikan efek suara' : 'Nyalakan efek suara'); sb.title = sb.getAttribute('aria-label');
 }
+function closeMenu() { document.body.classList.remove('menu-open'); $('#menuBtn').setAttribute('aria-expanded', 'false'); }
 
 /* ---------- Mulai ---------- */
 $('#brandMark').innerHTML = LOGO;
 $('#menuBtn').innerHTML = icon('grid');
+$('#menuBtn').onclick = () => { const o = document.body.classList.toggle('menu-open'); $('#menuBtn').setAttribute('aria-expanded', String(o)); };
 $('.curtain-in').insertAdjacentHTML('afterbegin', `<span class="cur-logo">${LOGO}</span>`);
 $('#soundBtn').onclick = () => { state.sound = !state.sound; save(); updateBar(); sfx(); toast(state.sound ? 'Efek suara aktif.' : 'Efek suara dimatikan.'); };
 window.addEventListener('hashchange', route);
+window.addEventListener('scroll', () => $('#nav').classList.toggle('scrolled', window.scrollY > 8), { passive: true });
 route();

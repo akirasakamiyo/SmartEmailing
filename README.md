@@ -1,7 +1,7 @@
 # Smart Emailing — Tim 7
 
 Modul pelatihan interaktif untuk belajar menulis email lamaran kerja yang rapi dan sopan, ditujukan untuk fresh graduate.
-Bentuknya modul 16:9: sampul, menu materi, 13 scene (S01–S13), latihan soal, dan evaluasi.
+Tata letaknya mengikuti gaya halaman pelajaran: beranda, katalog materi, 13 scene (S01–S13) dengan sidebar daftar scene, latihan soal, dan evaluasi.
 
 ## Cara membuka (offline)
 - Klik dua kali `dist/SmartEmailing_Tim7_offline.html`. Semua aset ada di dalam satu file ini.
@@ -22,7 +22,7 @@ Unggah `dist/SmartEmailing_Tim7.zip` (paket folder) atau `dist/SmartEmailing_Tim
 ```
 SmartEmailing_Tim7/
 ├── index.html          ← halaman utama (dipakai GitHub Pages)
-├── css/styles.css      ← tampilan (marun · krem · emas, bingkai 16:9)
+├── css/styles.css      ← tampilan (marun · krem · emas)
 ├── js/app.js           ← isi materi, scene, aktivitas, latihan, evaluasi
 ├── assets/img/         ← logo dan favicon
 ├── tools/build.py      ← membuat paket offline di dist/
