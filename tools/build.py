@@ -28,8 +28,8 @@ css = (ROOT / "css/styles.css").read_text(encoding="utf-8")
 js = (ROOT / "js/app.js").read_text(encoding="utf-8").replace("</script", "<\\/script")
 icon = base64.b64encode((ROOT / "assets/img/favicon.svg").read_bytes()).decode()
 
-html = html.replace('<link rel="stylesheet" href="css/styles.css">', f"<style>\n{css}\n</style>")
-html = html.replace('<script src="js/app.js"></script>', f"<script>\n{js}\n</script>")
+html = re.sub(r'<link rel="stylesheet" href="css/styles\.css(\?v=[\w-]+)?">', lambda m: f"<style>\n{css}\n</style>", html)
+html = re.sub(r'<script src="js/app\.js(\?v=[\w-]+)?"></script>', lambda m: f"<script>\n{js}\n</script>", html)
 html = html.replace('href="assets/img/favicon.svg"', f'href="data:image/svg+xml;base64,{icon}"')
 assert not re.search(r'(src|href)="(https?:)?//', html), "Masih ada tautan eksternal!"
 single = DIST / "SmartEmailing_Tim7_offline.html"
