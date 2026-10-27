@@ -7,7 +7,7 @@ Tanggal audit: ____________  Pemeriksa: ____________
 - [ ] Bisa dibuka **offline** (matikan Wi-Fi, buka `dist/SmartEmailing_Tim7_offline.html`)
 - [ ] Tidak ada tautan/embed eksternal (otomatis dicek oleh `tools/build.py`)
 - [ ] Semua aset dalam satu paket (`dist/SmartEmailing_Tim7.zip`)
-- [ ] Materi, video pembuka, aktivitas interaktif, kuis, dan post-test ada di dalam satu website
+- [ ] Materi, pengantar, aktivitas interaktif, kuis, dan post-test ada di dalam satu website
 - [ ] Kuis tidak memakai Google Forms / Quizizz / layanan luar
 - [ ] Dicoba di **HP** (Chrome Android / Safari iOS) dan di laptop
 
@@ -26,7 +26,7 @@ Tanggal audit: ____________  Pemeriksa: ____________
 ## D. Uji per scene
 | Scene | Berjalan? | Catatan |
 |---|---|---|
-| S01 Video pembuka | ☐ | |
+| S01 Pengantar | ☐ | |
 | S02 Klik informasi | ☐ | |
 | S03 Drag and drop (laptop + HP) | ☐ | |
 | S04 Studi kasus + quiz | ☐ | |

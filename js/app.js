@@ -141,17 +141,6 @@ function sfx(type = 'click') {
     o.connect(g).connect(actx.destination); o.start(t); o.stop(t + c[2] + .08);
   } catch (e) { /* tidak ada audio */ }
 }
-function speak(text, btn) {
-  if (!('speechSynthesis' in window)) { toast('Browser ini belum bisa membacakan narasi.'); return; }
-  if (speechSynthesis.speaking) { speechSynthesis.cancel(); btn && btn.classList.remove('on'); return; }
-  const u = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
-  u.lang = 'id-ID';
-  const v = speechSynthesis.getVoices().find(x => (x.lang || '').toLowerCase().startsWith('id'));
-  if (v) u.voice = v;
-  u.onend = u.onerror = () => { if (btn) { btn.classList.remove('on'); if (btn.classList.contains('au-play')) { btn.innerHTML = icon('play'); const n = $('#narasi'); n && n.classList.remove('playing'); } } };
-  btn && btn.classList.add('on');
-  speechSynthesis.speak(u);
-}
 let toastT;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
 function celebrate() {
@@ -175,7 +164,7 @@ const MATERI_SCENES = ['S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08', 'S09', '
 const KKM = 75;
 
 const MATERI = [
-  { id: 'intro', no: '00', short: 'Pembuka', title: 'Pembuka', icon: 'play', scenes: ['S01'] },
+  { id: 'intro', no: '00', short: 'Pembuka', title: 'Pembuka', icon: 'inbox', scenes: ['S01'] },
   { id: 'm1', no: '01', short: 'Materi 1', title: 'Dasar Komunikasi lewat Email', icon: 'mail', scenes: ['S02', 'S03', 'S04'],
     desc: 'Kegunaan email di dunia kerja, bagian-bagian email, subject, serta salam pembuka dan penutup.' },
   { id: 'm2', no: '02', short: 'Materi 2', title: 'Menulis Email Lamaran Kerja', icon: 'briefcase', scenes: ['S05', 'S06', 'S07', 'S08'],
@@ -187,7 +176,7 @@ const MATERI = [
 const materiOf = id => MATERI.find(m => m.scenes.includes(id));
 
 const SCENES = {
-  S01: { title: 'Selamat Datang', type: 'Video pembuka', wide: true,
+  S01: { title: 'Selamat Datang', type: 'Pengantar', wide: true,
     tujuan: 'Mengenal pelatihan ini: tujuannya apa dan materinya apa saja.',
     narasi: 'Halo, selamat datang di pelatihan Smart Emailing. Pernah kirim lamaran kerja, tapi tak kunjung dibalas? Bisa jadi masalahnya ada di email yang kamu kirim. Di sini kamu akan belajar menulis email lamaran yang rapi dan berkomunikasi dengan HR secara profesional. Materinya ada tiga: dasar komunikasi lewat email, menulis email lamaran, dan etika berkirim email. Setelah itu, kamu bisa berlatih soal, lalu mengerjakan evaluasi. Yuk, kita mulai!' },
   S02: { title: 'Kegunaan Email di Dunia Kerja', type: 'Klik informasi',
@@ -389,7 +378,7 @@ function viewHome() {
       <div class="sec-head"><div><div class="eyebrow">Mulai dari sini</div><h2 class="display-2">Kenali pelatihannya dulu</h2><p class="lead-s">Baca tujuan dan petunjuknya, lihat alurnya, lalu mulai dari materi yang paling kamu butuhkan.</p></div>
         <a class="btn btn-outline" href="#/glosarium">${icon('book')} Glosarium istilah</a></div>
       <div class="start-grid">
-        ${[['01', 'Tujuan belajar', 'Apa yang akan kamu kuasai di setiap scene.', '#/tujuan', 'target'], ['02', 'Petunjuk', 'Cara memakai modul, arti kode interaksi, dan menyimpan progres.', '#/petunjuk', 'help'], ['03', 'Alur belajar', 'Flowchart dari video pembuka sampai evaluasi dan penutup.', '#/alur', 'branch'], ['04', 'Peta konsep', 'Seluruh isi materi dalam satu peta. Klik untuk langsung membuka.', '#/peta', 'map']]
+        ${[['01', 'Tujuan belajar', 'Apa yang akan kamu kuasai di setiap scene.', '#/tujuan', 'target'], ['02', 'Petunjuk', 'Cara memakai modul, arti kode interaksi, dan menyimpan progres.', '#/petunjuk', 'help'], ['03', 'Alur belajar', 'Flowchart dari pengantar sampai evaluasi dan penutup.', '#/alur', 'branch'], ['04', 'Peta konsep', 'Seluruh isi materi dalam satu peta. Klik untuk langsung membuka.', '#/peta', 'map']]
           .map(([n, t, d, h, ic]) => `<a class="start-card" href="${h}"><span class="sc-n">${n}</span><span class="sc-ic">${icon(ic)}</span><h3>${t}</h3><p>${d}</p><span class="sc-go">Buka ${icon('right')}</span></a>`).join('')}
       </div>
     </div>
@@ -414,7 +403,7 @@ function viewHome() {
 
   <section class="sec">
     <div class="wrap">
-      <div class="sec-head"><div><div class="eyebrow">Materi</div><h2 class="display-2">Tiga materi, sepuluh scene</h2><p class="lead-s">Setiap scene berisi penjelasan singkat, narasi, dan satu aktivitas yang langsung bisa dicoba.</p></div>
+      <div class="sec-head"><div><div class="eyebrow">Materi</div><h2 class="display-2">Tiga materi, sepuluh scene</h2><p class="lead-s">Setiap scene berisi penjelasan singkat dan satu aktivitas yang langsung bisa dicoba.</p></div>
         <a class="btn btn-outline" href="#/materi">Semua scene ${icon('right')}</a></div>
       <div class="mat-grid">
         ${MATERI.filter(m => /^m\d$/.test(m.id)).map(m => { const d = m.scenes.filter(id => state.done[id]).length; return `<a class="mat-card" href="#/scene/${m.scenes.find(id => !state.done[id]) || m.scenes[0]}">
@@ -468,7 +457,7 @@ const uraianHTML = uraianSections;
 
 function viewScene(id) {
   const s = SCENES[id], m = materiOf(id), i = ORDER.indexOf(id);
-  const text = ((s.uraian || []).map(u => u.p.join(' ')).join(' ') + ' ' + (s.narasi || '')).replace(/<[^>]+>/g, '');
+  const text = (s.uraian || []).map(u => u.p.join(' ')).join(' ').replace(/<[^>]+>/g, '');
   const mins = Math.max(1, Math.round(text.split(/\s+/).length / 170));
   const prev = ORDER[i - 1], next = ORDER[i + 1];
   return `<div class="lesson-wide wrap">
@@ -491,14 +480,8 @@ function viewScene(id) {
         </div>
       </header>
       <div class="pin-note"><span class="pin" data-to="#/tujuan" title="Semua tujuan belajar"></span><b>Tujuan</b><p>${s.tujuan}</p></div>
-      ${s.narasi && id !== 'S01' ? `<section class="audio" id="narasi">
-        <button type="button" class="au-play" data-speak aria-label="Putar narasi">${icon('play')}</button>
-        <div class="au-body"><div class="au-top"><b>Narasi</b><button type="button" class="au-link" data-script>Lihat teks</button></div>
-          <div class="au-wave" aria-hidden="true">${Array.from({ length: 36 }, (_, k) => `<i style="--h:${(30 + Math.abs(Math.sin(k * 1.7)) * 70).toFixed(0)}%;--d:${(k * 45) % 900}ms"></i>`).join('')}</div></div>
-        <p class="au-script" hidden>${s.narasi}</p>
-      </section>` : ''}
       ${s.uraian ? `<section class="stepper" id="uraian"></section>` : ''}
-      <section class="act-sec" id="aktivitas"><div class="act-label"><span class="act-num" data-to="aktivitas" title="Ke aktivitas">${icon(id === 'S01' ? 'play' : id === 'S12' ? 'flag' : id === 'S13' ? 'award' : 'pointer')}</span><div><small>${id === 'S01' ? 'Tonton dulu' : id === 'S12' ? 'Evaluasi akhir' : id === 'S13' ? 'Penutup' : 'Aktivitas'}</small><h2 class="sec-title">${id === 'S01' ? 'Video pembuka' : id === 'S12' ? 'Kerjakan evaluasi' : id === 'S13' ? 'Rangkuman pelatihan' : 'Ayo coba: ' + s.type.toLowerCase()}</h2></div></div><div class="act-card" id="activity"></div></section>
+      <section class="act-sec" id="aktivitas"><div class="act-label"><span class="act-num" data-to="aktivitas" title="Ke aktivitas">${icon(id === 'S01' ? 'inbox' : id === 'S12' ? 'flag' : id === 'S13' ? 'award' : 'pointer')}</span><div><small>${id === 'S01' ? 'Pengantar' : id === 'S12' ? 'Evaluasi akhir' : id === 'S13' ? 'Penutup' : 'Aktivitas'}</small><h2 class="sec-title">${id === 'S01' ? 'Kenali pelatihannya' : id === 'S12' ? 'Kerjakan evaluasi' : id === 'S13' ? 'Rangkuman pelatihan' : 'Ayo coba: ' + s.type.toLowerCase()}</h2></div></div><div class="act-card" id="activity"></div></section>
       <nav class="lesson-nav">${lessonNav(id)}</nav>
     </article>
   </div>`;
@@ -533,9 +516,6 @@ function lessonNav(id) {
 function mountScene(id) {
   const btn = $('#nextBtn');
   if (btn) btn.addEventListener('click', e => { if (btn.classList.contains('is-locked')) { e.preventDefault(); toast('Selesaikan aktivitas di halaman ini dulu, ya.'); $('#aktivitas').scrollIntoView({ behavior: 'smooth' }); } });
-  const sp = $('[data-speak]');
-  if (sp) sp.onclick = () => { speak(SCENES[id].narasi, sp); const on = sp.classList.contains('on'); $('#narasi').classList.toggle('playing', on); sp.innerHTML = icon(on ? 'pause' : 'play'); };
-  const scr = $('[data-script]'); if (scr) scr.onclick = () => { const p = $('.au-script'); p.hidden = !p.hidden; scr.textContent = p.hidden ? 'Lihat teks' : 'Sembunyikan teks'; };
   renderSteps(id);
   const ur = $('#uraian');
   if (ur) ur.addEventListener('click', e => {
@@ -559,49 +539,28 @@ function mountScene(id) {
    ========================================================================= */
 const ACT = {};
 
-/* S01 — video pembuka (animasi kotak masuk + teks narasi) */
+/* S01 — pengantar: masalah yang sering terjadi + peta materi */
 ACT.S01 = (el, done, st) => {
-  const lines = SCENES.S01.narasi.match(/[^.!?]+[.!?]+/g).map(x => x.trim());
-  const skel = w => `<div class="irow"><span class="iav"></span><span class="iline" style="width:${w}%"></span><span class="itime"></span></div>`;
-  el.innerHTML = `<div class="video" id="video">
-    <div class="vscreen">
-      <div class="vinbox">
-        <div class="vinbox-top">${icon('inbox')} Kotak Masuk</div>
-        ${skel(62)}${skel(48)}
-        <div class="irow target"><span class="iav">SU</span>
-          <span class="imsg"><span class="messy"><b>syarif.keren99</b> lamaran!!! <em>halo kak aku mau ngelamar nih…</em></span>
-          <span class="tidy"><b>${NAMA}</b> Application for Graphic Designer Position – ${NAMA}</span></span>
-          <span class="ibadge">Belum dibalas</span></div>
-        ${skel(70)}${skel(40)}
+  el.innerHTML = `<div class="intro1">
+    <div class="i1-case">
+      <p class="i1-q">Pernah kirim lamaran kerja, tapi tak kunjung dibalas? Bisa jadi masalahnya ada di email yang kamu kirim.</p>
+      <div class="i1-mails">
+        <div class="i1-mail bad"><span class="i1-tag">${icon('x')} Sebelum</span><b>syarif.keren99</b><span>lamaran!!! <em>halo kak aku mau ngelamar nih…</em></span></div>
+        <div class="i1-mail good"><span class="i1-tag">${icon('check')} Sesudah</span><b>${NAMA}</b><span>Application for Graphic Designer Position – ${NAMA}</span></div>
       </div>
-      <div class="vend">
-        <span class="vend-logo">${LOGO}</span>
-        <h3>Smart Emailing</h3>
-        <p>Menulis email lamaran yang rapi dan sopan, sesuai etika komunikasi di dunia kerja.</p>
-        <ol><li><span>01</span>Dasar komunikasi lewat email</li><li><span>02</span>Menulis email lamaran</li><li><span>03</span>Etika berkirim email</li></ol>
-        <div class="vpost">${icon('pen')} Lalu latihan soal & evaluasi</div>
-      </div>
-      <button type="button" class="vplay" aria-label="Putar video pembuka">${icon('play')}<span>Putar video pembuka</span></button>
+      <p class="muted">Di sini kamu akan belajar menulis email lamaran yang rapi dan berkomunikasi dengan HR secara profesional.</p>
     </div>
-    <div class="vcap" aria-live="polite"></div>
-    <div class="vbar">
-      <button type="button" class="vbtn" data-v="toggle" aria-label="Putar">${icon('play')}</button>
-      <div class="vprog"><i></i></div>
-      <button type="button" class="vbtn txt" data-v="skip">Lewati</button>
+    <div class="i1-map">
+      <h3>Yang akan kamu pelajari</h3>
+      <ol>${MATERI.filter(m => /^m\d$/.test(m.id)).map(m => `<li><a href="#/scene/${m.scenes[0]}"><span>${m.no}</span>${m.title}</a></li>`).join('')}</ol>
+      <div class="i1-post">${icon('pen')} Setelah itu, latihan soal lalu evaluasi.</div>
+      <button type="button" class="btn btn-primary" data-ready>${icon('check')} Saya siap belajar</button>
     </div>
   </div>`;
-  const v = $('#video', el), cap = $('.vcap', el), prog = $('.vprog i', el), tbtn = $('[data-v=toggle]', el);
-  let step = 0, playing = false, t = null;
-  const dur = l => Math.max(2300, l.length * 62);
-  const show = k => { step = k; v.className = 'video ' + Array.from({ length: k }, (_, i) => 's' + (i + 1)).join(' ') + (playing ? ' playing' : ''); cap.textContent = lines[k - 1] || ''; prog.style.width = (k / lines.length * 100) + '%'; };
-  const finish = silent => { playing = false; show(lines.length); v.classList.add('ended'); tbtn.innerHTML = icon('refresh'); tbtn.setAttribute('aria-label', 'Putar ulang'); cap.textContent = 'Video selesai. Tekan Lanjut untuk masuk ke Materi 1.'; st.played = true; save(); done(silent); };
-  const tick = () => { clearTimeout(t); if (!playing) return; if (step >= lines.length) { t = later(() => finish(false), dur(lines[step - 1])); return; } t = later(() => { show(step + 1); tick(); }, step === 0 ? 200 : dur(lines[step - 1])); };
-  const play = () => { if (v.classList.contains('ended')) { v.classList.remove('ended'); step = 0; } playing = true; v.classList.add('playing'); sfx(); tbtn.innerHTML = icon('pause'); tbtn.setAttribute('aria-label', 'Jeda'); tick(); };
-  const pause = () => { playing = false; clearTimeout(t); v.classList.remove('playing'); tbtn.innerHTML = icon('play'); tbtn.setAttribute('aria-label', 'Putar'); };
-  $('.vplay', el).onclick = play;
-  tbtn.onclick = () => (playing ? pause() : play());
-  $('[data-v=skip]', el).onclick = () => { pause(); finish(false); };
-  if (st.played) finish(true);
+  const ready = $('[data-ready]', el);
+  const finish = silent => { st.ok = true; save(); ready.innerHTML = `${icon('check')} Siap! Tekan Lanjut di bawah`; ready.disabled = true; done(silent); };
+  ready.onclick = () => { sfx('ok'); finish(false); };
+  if (st.ok || st.played) finish(true);
 };
 
 /* S02 — klik 4 ikon di laptop */
@@ -1297,7 +1256,7 @@ function viewTujuan() {
 function viewPetunjuk() {
   const kode = [['Normal', 'Tombol', 'Tampilan awal sebelum disentuh.'], ['Hover', 'Tombol', 'Tampilan saat kursor ada di atas tombol (hanya di laptop).'], ['Hit', 'Tombol', 'Diklik atau diketuk untuk lanjut ke tahap berikutnya.'], ['Swipe', 'Objek', 'Digeser atau digulir.'], ['Seret & letakkan', 'Objek', 'Seret lalu lepaskan. Di HP: ketuk kartu, lalu ketuk slotnya.'], ['Show', 'Objek', 'Penjelasan atau umpan balik yang muncul setelah suatu aksi.']];
   return pageWrap('Petunjuk', 'Cara memakai modul ini', `
-    <div class="how">${[['play', 'Mulai dari video pembuka', 'S01 menjelaskan tujuan dan tiga materi.', '#/scene/S01'], ['book', 'Baca materi dan narasinya', 'Kolom kiri berisi materi. Tekan “Dengarkan” untuk memutar narasi.', '#/materi'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.', '#/scene/S02'], ['grid', 'Bebas pindah halaman', 'Buka menu untuk lompat ke scene mana saja. Hasilmu tidak akan hilang.', '#/peta'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`, '#/latihan'], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`, '#/scene/S12']].map(([ic, t, d, h]) => `<a class="how-item" href="${h}"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></a>`).join('')}</div>
+    <div class="how">${[['inbox', 'Mulai dari pengantar', 'S01 menjelaskan tujuan dan tiga materi.', '#/scene/S01'], ['book', 'Baca materinya', 'Materi di setiap scene dibaca per kartu. Pindah kartu dengan tombol Berikutnya.', '#/materi'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.', '#/scene/S02'], ['grid', 'Bebas pindah halaman', 'Buka menu untuk lompat ke scene mana saja. Hasilmu tidak akan hilang.', '#/peta'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`, '#/latihan'], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`, '#/scene/S12']].map(([ic, t, d, h]) => `<a class="how-item" href="${h}"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></a>`).join('')}</div>
     <h2 class="h2">Kode interaksi</h2>
     <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Kode</th><th>Untuk</th><th>Artinya</th></tr></thead><tbody>${kode.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td></tr>`).join('')}</tbody></table></div>
     <h2 class="h2">Progres tersimpan otomatis</h2>
@@ -1408,7 +1367,6 @@ function pageEnter(t) {
 async function route() {
   const token = ++routeToken;
   cleanups.forEach(fn => fn()); cleanups = [];
-  if ('speechSynthesis' in window) speechSynthesis.cancel();
   closeMenu();
   const [page = '', arg] = location.hash.replace(/^#\/?/, '').split('/');
   const isScene = page === 'scene' && SCENES[arg];

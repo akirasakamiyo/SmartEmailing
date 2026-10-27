@@ -42,8 +42,6 @@ with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
         put(z, f"SmartEmailing_Tim7/{p}", (ROOT / p).read_bytes())
     for img in sorted((ROOT / "assets/img").glob("*.svg")):
         put(z, f"SmartEmailing_Tim7/assets/img/{img.name}", img.read_bytes())
-    for v in sorted((ROOT / "assets/video").glob("*.mp4")):
-        put(z, f"SmartEmailing_Tim7/assets/video/{v.name}", v.read_bytes())
 
 # Paket SCORM 1.2 (imsmanifest.xml harus berada di akar zip)
 MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>

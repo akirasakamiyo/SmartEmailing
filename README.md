@@ -23,7 +23,7 @@ Media pembelajaran berbasis web · Kelompok 7
 
 ## Sekilas
 
-Banyak lamaran kerja tidak dibalas bukan karena pelamarnya kurang mampu, tapi karena emailnya berantakan: subject tidak jelas, bahasa terlalu santai, lampiran lupa disebutkan, atau dikirim tengah malam. **Smart Emailing** mengajarkan cara menulis email lamaran yang benar lewat 13 scene singkat. Setiap scene punya penjelasan, narasi suara, dan aktivitas yang langsung bisa dicoba.
+Banyak lamaran kerja tidak dibalas bukan karena pelamarnya kurang mampu, tapi karena emailnya berantakan: subject tidak jelas, bahasa terlalu santai, lampiran lupa disebutkan, atau dikirim tengah malam. **Smart Emailing** mengajarkan cara menulis email lamaran yang benar lewat 13 scene singkat. Setiap scene punya penjelasan singkat dan aktivitas yang langsung bisa dicoba.
 
 | | |
 |---|---|
@@ -35,7 +35,7 @@ Banyak lamaran kerja tidak dibalas bukan karena pelamarnya kurang mampu, tapi ka
 ## Alur belajar
 
 ```
-Mulai → S01 Video pembuka
+Mulai → S01 Pengantar
       → Materi 1: Dasar Komunikasi lewat Email      (S02 · S03 · S04)
       → Materi 2: Menulis Email Lamaran Kerja       (S05 · S06 · S07 · S08)
       → Materi 3: Etika Berkirim Email              (S09 · S10 · S11)
@@ -56,7 +56,6 @@ Beranda berisi pengenalan pelatihan, pintasan ke Tujuan, Petunjuk, Alur, dan Pet
 ### 2. Halaman scene
 Setiap scene ditampilkan seperti email masuk. Di atasnya ada **Rute Belajar**, deretan kode scene yang bisa diklik untuk berpindah scene. Isi setiap scene:
 - **Tujuan** scene dalam bentuk catatan tempel
-- **Narasi** yang bisa diputar sebagai suara, lengkap dengan teksnya
 - **Materi** yang dibaca per kartu (Bagian 1, 2, …)
 - **Aktivitas**. Tombol *Lanjut* baru aktif setelah aktivitasnya selesai.
 
@@ -71,7 +70,7 @@ Setiap scene memakai jenis aktivitas yang berbeda, dan semua jawaban tersimpan o
 
 | Kode | Scene | Aktivitas |
 |---|---|---|
-| S01 | Selamat Datang | Video pembuka (animasi + narasi) |
+| S01 | Selamat Datang | Pengantar: contoh email sebelum dan sesudah + peta materi |
 | S02 | Kegunaan Email di Dunia Kerja | Klik informasi |
 | S03 | Bagian-Bagian Email | Seret & letakkan |
 | S04 | Subject, Salam Pembuka, dan Penutup | Studi kasus + kuis |
@@ -116,7 +115,7 @@ Di HP, semua halaman tampil layar penuh dengan menu di bagian bawah. Seret & let
 - **Progres tersimpan otomatis** di browser: scene selesai, jawaban setiap aktivitas, latihan, dan evaluasi. Pindah halaman tidak menghapus apa pun.
 - **Cincin progres dan badge** di navbar: persentase belajar, jumlah soal latihan yang belum dikerjakan, dan status evaluasi.
 - **Panduan**: Tujuan belajar per scene, Petunjuk dan arti kode interaksi (*Normal, Hover, Hit, Swipe, Seret & letakkan, Show*), Flowchart, Peta Konsep, dan Glosarium yang bisa dicari.
-- **Animasi dan suara**: transisi berbeda untuk setiap jenis halaman, ikon yang bergerak saat diklik, efek suara benar/salah (bisa dimatikan), dan konfeti saat scene selesai.
+- **Animasi**: transisi berbeda untuk setiap jenis halaman, ikon yang bergerak saat diklik, efek suara klik dan benar/salah (bisa dimatikan), serta konfeti saat scene selesai.
 - **Tanpa tautan luar**: semua aset ada di dalam web, jadi bisa dipakai tanpa internet.
 - **Warna**: marun, krem, dan emas.
 
@@ -125,7 +124,7 @@ Di HP, semua halaman tampil layar penuh dengan menu di bagian bawah. Seret & let
 - **Single Page Application** dengan router berbasis hash (`#/scene/S04`, `#/latihan`, …).
 - **localStorage** untuk menyimpan progres dan jawaban di perangkat peserta.
 - **SCORM 1.2 API** untuk mengirim status dan nilai ke LMS.
-- **Web Speech API** untuk narasi suara, **Web Audio API** untuk efek suara, dan **Web Animations API** untuk transisi halaman.
+- **Web Audio API** untuk efek suara dan **Web Animations API** untuk transisi halaman.
 - **Build script Python** (`tools/build.py`) yang menggabungkan semua file menjadi satu HTML offline beserta paket ZIP dan SCORM.
 
 ## Cara memakai
