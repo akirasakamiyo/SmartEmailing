@@ -1447,23 +1447,13 @@ async function route() {
   if (curStop) trk.scrollLeft = curStop.closest('.rail-grp').offsetLeft + curStop.offsetLeft - trk.clientWidth / 2 + curStop.offsetWidth / 2;
   $('#readLine').style.width = '0%';
   document.body.classList.toggle('is-home', !isScene && !page);
-  document.body.classList.toggle('is-slide', !!isScene || page === 'latihan');
   window.scrollTo({ top: 0, behavior: 'instant' });
-  fitSlide();
   app.focus({ preventScroll: true });
   updateBar();
   /* Cadangan agar konten tetap tampil walau animasi tertahan */
   document.body.classList.remove('settled'); later(() => document.body.classList.add('settled'), 1400);
   if (tr && tr !== 'curtain') pageEnter(tr);
   if (curtain.classList.contains('cover')) { curtain.className = 'curtain cover leave'; setTimeout(() => { if (token === routeToken) curtain.className = 'curtain'; }, 600); }
-}
-
-/* Bingkai 16:9: tinggi bingkai mengikuti sisa layar di bawah navbar dan rute belajar */
-function fitSlide() {
-  const f = document.body.classList.contains('is-slide') && $('.mail-view, #quiz'); if (!f) return;
-  document.documentElement.style.setProperty('--slide-top', Math.round(f.getBoundingClientRect().top + scrollY) + 'px');
-  f.scrollTop = 0;
-  f.onscroll = () => { const max = f.scrollHeight - f.clientHeight; $('#readLine').style.width = (max > 0 ? f.scrollTop / max * 100 : 0) + '%'; };
 }
 
 function updateBar() {
@@ -1513,7 +1503,7 @@ $('#navLinks').addEventListener('mouseleave', () => moveInd(activeTab()));
 $('#progBtn').onclick = e => { e.stopPropagation(); togglePop(); };
 document.addEventListener('click', e => { if (!$('#progPop').hidden && !e.target.closest('#progPop')) togglePop(false); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') togglePop(false); });
-window.addEventListener('resize', () => { moveInd(activeTab()); fitSlide(); });
+window.addEventListener('resize', () => moveInd(activeTab()));
 $('.curtain-in').insertAdjacentHTML('afterbegin', `<span class="cur-logo">${LOGO}</span>`);
 $('#soundBtn').onclick = () => { state.sound = !state.sound; save(); updateBar(); sfx(); toast(state.sound ? 'Efek suara aktif.' : 'Efek suara dimatikan.'); };
 /* Semua ikon bisa diklik: memantul + bunyi klik (ubin dekoratif juga) */
