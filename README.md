@@ -8,7 +8,14 @@
 
 Media pembelajaran berbasis web · Kelompok 7
 
-[**Buka web**](https://akirasakamiyo.github.io/SmartEmailing/) · [Unduh versi offline](dist/SmartEmailing_Tim7_offline.html) · [Paket SCORM untuk LMS](dist/SmartEmailing_Tim7_SCORM.zip)
+[![Web online](https://img.shields.io/badge/web-online-7a1f2e?style=flat-square&logo=githubpages&logoColor=white)](https://akirasakamiyo.github.io/SmartEmailing/)
+[![Rilis](https://img.shields.io/github/v/release/akirasakamiyo/SmartEmailing?style=flat-square&color=e2b04a&label=rilis)](https://github.com/akirasakamiyo/SmartEmailing/releases/latest)
+![SCORM 1.2](https://img.shields.io/badge/SCORM-1.2-3b1119?style=flat-square)
+![Offline](https://img.shields.io/badge/offline-siap-2f6f4e?style=flat-square)
+![Bahasa](https://img.shields.io/badge/bahasa-Indonesia-c9952e?style=flat-square)
+![Tanpa framework](https://img.shields.io/badge/HTML%20%C2%B7%20CSS%20%C2%B7%20JS-tanpa%20framework-5c1522?style=flat-square)
+
+**[Buka web](https://akirasakamiyo.github.io/SmartEmailing/)** · **[Unduh rilis terbaru](https://github.com/akirasakamiyo/SmartEmailing/releases/latest)** · [Versi offline](dist/SmartEmailing_Tim7_offline.html) · [Paket SCORM](dist/SmartEmailing_Tim7_SCORM.zip)
 
 ![Beranda Smart Emailing](docs/screenshots/01-beranda.png)
 
@@ -113,6 +120,14 @@ Di HP, semua halaman tampil layar penuh dengan menu di bagian bawah. Seret & let
 - **Tanpa tautan luar**: semua aset ada di dalam web, jadi bisa dipakai tanpa internet.
 - **Warna**: marun, krem, dan emas.
 
+## Teknologi
+- **HTML, CSS, dan JavaScript murni** tanpa framework dan tanpa library luar, jadi ringan dan bisa berjalan offline.
+- **Single Page Application** dengan router berbasis hash (`#/scene/S04`, `#/latihan`, …).
+- **localStorage** untuk menyimpan progres dan jawaban di perangkat peserta.
+- **SCORM 1.2 API** untuk mengirim status dan nilai ke LMS.
+- **Web Speech API** untuk narasi suara, **Web Audio API** untuk efek suara, dan **Web Animations API** untuk transisi halaman.
+- **Build script Python** (`tools/build.py`) yang menggabungkan semua file menjadi satu HTML offline beserta paket ZIP dan SCORM.
+
 ## Cara memakai
 
 | Cara | Langkah |
@@ -149,5 +164,8 @@ SmartEmailing_Tim7/
 ```
 </details>
 
+## Riwayat versi
+Lihat halaman [Releases](https://github.com/akirasakamiyo/SmartEmailing/releases) untuk catatan setiap versi dan file unduhannya.
+
 ---
-<sub>Smart Emailing · Kelompok 7 · Materi seluruhnya disusun dari dokumen desain tim.</sub>
+<div align="center"><sub>Smart Emailing · Kelompok 7 · Seluruh materi disusun dari dokumen desain tim.</sub></div>
