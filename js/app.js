@@ -125,6 +125,8 @@ const SCORM = (() => {
   };
 })();
 const A = id => (state.act[id] = state.act[id] || {});
+/* Migrasi: soal latihan no. 7 dan 8 diganti, jawaban lamanya dibuang */
+if (state.lat && state.lat.v !== 2) { [6, 7].forEach(k => { delete state.lat.ans[k]; delete state.lat.res[k]; }); state.lat.v = 2; }
 
 /* ---------- Suara ---------- */
 let actx;
@@ -1047,8 +1049,8 @@ const LATIHAN = [
   { type: 'mcq', topic: 'Susunan lamaran', q: 'Mana yang TIDAK perlu ada di email lamaran?', opts: ['Perkenalan diri singkat', 'Keterangan lampiran CV dan portofolio', 'Cerita tentang keluarga dan hobi', 'Salam penutup'], a: 2, why: 'Cerita pribadi yang tidak berhubungan dengan pekerjaan sebaiknya tidak ditulis.' },
   { type: 'mcq', topic: 'Lampiran', q: 'Nama file CV yang paling rapi adalah …', opts: ['cv_fix_banget_revisi2.docx', 'IMG_2041.jpg', `CV_${NAMAF}.pdf`, 'lamaran baru.zip'], a: 2, why: 'Pakai format PDF dengan nama file yang rapi dan mudah dikenali.' },
   { type: 'mcq', topic: 'Kesalahan umum', q: 'Mana yang termasuk kesalahan saat mengirim email lamaran?', opts: ['Menulis subject yang spesifik', 'Memakai bahasa formal', 'Menulis nama perusahaan dengan benar', 'Lupa melampirkan CV atau portofolio'], a: 3, why: 'Lupa melampirkan CV atau portofolio bisa membuat lamaran tidak diproses.' },
-  { type: 'mcq', topic: 'CC/BCC', q: 'Kamu mau mengirim undangan ke banyak rekan tanpa memperlihatkan alamat mereka satu sama lain. Fitur apa yang dipakai?', opts: ['CC', 'BCC', 'Reply all', 'Forward'], a: 1, why: 'BCC menyembunyikan alamat penerima dari penerima lain.' },
-  { type: 'mcq', topic: 'Waktu kirim', q: 'Email lamaran sebaiknya dikirim pada …', opts: ['Pukul 23.30 malam', 'Hari Minggu pagi', 'Hari kerja, sekitar pukul 08.00–17.00', 'Kapan saja, waktu tidak berpengaruh'], a: 2, why: 'Email profesional sebaiknya dikirim di jam kerja, sekitar 08.00–17.00.' },
+  { type: 'mcq', topic: 'CC', q: 'Kapan sebaiknya kamu memakai CC?', opts: ['Saat ada pihak lain yang perlu tahu isi email, misalnya atasanmu', 'Saat ingin menyembunyikan alamat para penerima', 'Saat menulis subject email', 'Saat melampirkan CV dan portofolio'], a: 0, why: 'CC dipakai untuk mengirim salinan email kepada pihak lain yang perlu mengetahui isinya. Untuk menyembunyikan penerima, pakai BCC.' },
+  { type: 'mcq', topic: 'Waktu kirim', q: 'Kenapa waktu mengirim email perlu diperhatikan?', opts: ['Karena email yang dikirim malam hari otomatis terhapus', 'Karena waktu kirim memengaruhi kemungkinan email dibaca penerima', 'Karena email hanya bisa dikirim saat jam kerja', 'Karena waktu kirim tidak berpengaruh apa pun'], a: 1, why: 'Waktu pengiriman memengaruhi kemungkinan email dibaca. Itulah sebabnya email profesional dikirim di jam kerja.' },
   { type: 'mcq', topic: 'Follow-up', q: 'Kalau belum ada kabar, kapan biasanya follow-up dikirim?', opts: ['Satu jam setelah lamaran dikirim', 'Sekitar 5–7 hari kerja setelah lamaran dikirim', 'Setiap hari sampai dibalas', 'Tidak perlu follow-up sama sekali'], a: 1, why: 'Follow-up biasanya dikirim sekitar 5–7 hari kerja setelah lamaran terkirim.' },
   { type: 'mcq', topic: 'Bahasa', q: 'Kalimat mana yang paling pas untuk email profesional?', opts: ['Kak, gimana lamaran aku? 🙏', 'TOLONG SEGERA DIBALAS', 'gmn kabar lamaran sy', 'Mohon maaf mengganggu, saya ingin menanyakan perkembangan lamaran saya. Terima kasih.'], a: 3, why: 'Kalimat yang jelas dan sopan, tanpa singkatan, emoji, atau kapital berlebihan.' },
   { type: 'mcq', topic: 'Salam pembuka', q: 'Apa fungsi salam pembuka di email?', opts: ['Menunjukkan rasa hormat kepada penerima', 'Menjelaskan isi email secara singkat', 'Menyebutkan lampiran yang dikirim', 'Menunjukkan nama pengirim'], a: 0, why: 'Salam pembuka dipakai untuk menunjukkan rasa hormat kepada penerima.' },
@@ -1085,7 +1087,7 @@ const EVALUASI = [
    ========================================================================= */
 function viewLatihan() { return `<div class="lesson-wide wrap">${routeRail('L')}<div id="quiz"></div></div>`; }
 function mountLatihan() {
-  const L = state.lat = state.lat || { i: 0, ans: {}, res: {} }; save();
+  const L = state.lat = state.lat || { i: 0, ans: {}, res: {}, v: 2 }; save();
   const box = $('#quiz');
   const render = () => {
     const i = L.i, q = LATIHAN[i], checked = L.res[i] !== undefined, a = qInit(q, L.ans[i]);
@@ -1124,7 +1126,7 @@ function mountLatihan() {
     if (e.target.closest('[data-prev]')) { L.i = Math.max(0, L.i - 1); save(); render(); return; }
     if (e.target.closest('[data-next]')) { L.i = Math.min(LATIHAN.length - 1, L.i + 1); save(); render(); return; }
     if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; save(); sfx(ok ? 'ok' : 'no'); render(); updateBar(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan sudah kamu kerjakan!'); return; }
-    if (e.target.closest('[data-reset]')) { if (!confirm('Ulangi latihan dari awal? Jawaban latihan akan dihapus.')) return; state.lat = { i: 0, ans: {}, res: {} }; save(); updateBar(); mountLatihan(); }
+    if (e.target.closest('[data-reset]')) { if (!confirm('Ulangi latihan dari awal? Jawaban latihan akan dihapus.')) return; state.lat = { i: 0, ans: {}, res: {}, v: 2 }; save(); updateBar(); mountLatihan(); }
   });
 }
 
