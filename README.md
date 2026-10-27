@@ -111,25 +111,8 @@ Di HP, semua halaman tampil layar penuh dengan menu di bagian bawah. Seret & let
   <img src="docs/screenshots/12-hp-scene.png" width="260" alt="Scene di HP">
 </p>
 
-### 8. Materi terbuka berurutan
-Setiap scene baru terbuka setelah scene sebelumnya selesai. Selesai artinya **semua kartu materinya sudah dibaca** dan **aktivitasnya sudah dikerjakan**. Kartu yang sudah dibaca diberi tanda centang, dan tombol *Lanjut* menjelaskan apa yang masih kurang. Scene yang belum terbuka ditandai gembok di Rute Belajar dan halaman Materi.
-
-![Scene terkunci](docs/screenshots/15-scene-terkunci.png)
-
-### 9. Gamifikasi: skor, lencana, dan reward
-| Unsur | Isinya |
-|---|---|
-| **Skor (XP)** | Pengantar 20 · setiap scene materi 50 · setiap soal latihan benar 20 · bonus combo latihan 10 × combo terbaik · nilai evaluasi × 3 · bonus lulus 100 · penutup 30 (maksimal 1.700 XP) |
-| **Level** | 1 Pemula → 2 Pengirim Rapi (200) → 3 Penulis Lamaran (500) → 4 Komunikator Sopan (900) → 5 Email Profesional (1.300) |
-| **10 lencana** | Langkah Pertama, Paham Dasar Email, Siap Melamar, Beretika, Rajin Berlatih, Latihan Sempurna, Tak Terbendung (combo 5×), Lulus Evaluasi, Nilai Sempurna, Memberi Masukan |
-| **Reward** | Animasi "+XP", kartu "Lencana baru!" dan "Naik level!", konfeti, combo saat latihan, dan **sertifikat** dengan nama peserta setelah lulus evaluasi (bisa disimpan sebagai PDF) |
-
-| Halaman pencapaian | Sertifikat |
-|---|---|
-| ![Pencapaian](docs/screenshots/13-pencapaian.png) | ![Sertifikat](docs/screenshots/14-sertifikat.png) |
-
 ## Fitur lain
-- **Progres tersimpan otomatis** di browser: scene selesai, kartu yang sudah dibaca, jawaban setiap aktivitas, latihan, evaluasi, skor, dan lencana. Pindah halaman tidak menghapus apa pun.
+- **Progres tersimpan otomatis** di browser: scene selesai, jawaban setiap aktivitas, latihan, dan evaluasi. Pindah halaman tidak menghapus apa pun.
 - **Cincin progres dan badge** di navbar: persentase belajar, jumlah soal latihan yang belum dikerjakan, dan status evaluasi.
 - **Panduan**: Tujuan belajar per scene, Petunjuk dan arti kode interaksi (*Normal, Hover, Hit, Swipe, Seret & letakkan, Show*), Flowchart, Peta Konsep, dan Glosarium yang bisa dicari.
 - **Animasi**: transisi berbeda untuk setiap jenis halaman, ikon yang bergerak saat diklik, efek suara klik dan benar/salah (bisa dimatikan), serta konfeti saat scene selesai.
