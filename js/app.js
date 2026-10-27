@@ -85,7 +85,7 @@ const F = {
   grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>', lock: '<rect x="4" y="11" width="16" height="10" rx="2"/>',
   flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>', printer: '<rect x="6" y="14" width="12" height="8"/>',
 };
-const icon = (n, cls = '') => `<svg class="ic ${F[n] ? 'duo' : ''} ${cls}" viewBox="-1 -1 26 26" aria-hidden="true">${F[n] ? `<g class="f">${F[n]}</g>` : ''}<g class="s">${P[n] || ''}</g></svg>`;
+const icon = (n, cls = '') => `<svg class="ic i-${n} ${F[n] ? 'duo' : ''} ${cls}" viewBox="-1 -1 26 26" aria-hidden="true">${F[n] ? `<g class="f">${F[n]}</g>` : ''}<g class="s">${P[n] || ''}</g></svg>`;
 
 /* Logo: amplop yang tutupnya membentuk centang + kilau */
 const LOGO = `<svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#7a1f2e"/><rect x="8" y="14" width="31" height="22" rx="4.5" fill="#fbf5ec"/><path class="logo-ck" d="M12 18.5 21.5 26 35.5 15.5" fill="none" stroke="#3b1119" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path class="logo-sp" d="M38 3.5 39.8 8.2 44.5 10 39.8 11.8 38 16.5 36.2 11.8 31.5 10 36.2 8.2Z" fill="#e2b04a" stroke="#7a1f2e" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
@@ -1506,6 +1506,14 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') togglePop(fa
 window.addEventListener('resize', () => moveInd(activeTab()));
 $('.curtain-in').insertAdjacentHTML('afterbegin', `<span class="cur-logo">${LOGO}</span>`);
 $('#soundBtn').onclick = () => { state.sound = !state.sound; save(); updateBar(); sfx(); toast(state.sound ? 'Efek suara aktif.' : 'Efek suara dimatikan.'); };
+/* Semua ikon bisa diklik: memantul + bunyi klik (ubin dekoratif juga) */
+const ICON_TILE = '.sc-ic, .mat-ic, .bc-ic, .rail-ic, .act-num, .ip-ic, .how-ic, .mv-av, .env-ic, .ib-ic, .mcol-ic, .lico-c, .avatar, .pin, .tag, .brand-mark, .sc-av, .iav, .hs-num, .bk, .opt-l, .o-n, .lockbox > .ic, .thanks > .ic, .ig h4 .ic, .goal-box .ic, .narasi-h .ic, .act-tag .ic, .box-h, .tt-f .ic';
+document.addEventListener('pointerdown', e => {
+  const tile = e.target.closest(ICON_TILE), ic = e.target.closest('.ic') || (tile && tile.querySelector('.ic'));
+  const target = tile || ic; if (!target || reduced) return;
+  try { target.animate([{ transform: 'scale(1)' }, { transform: 'scale(.82) rotate(-6deg)' }, { transform: 'scale(1.12) rotate(4deg)' }, { transform: 'scale(1)' }], { duration: 480, easing: 'cubic-bezier(.3, 1.4, .5, 1)' }); } catch (err) { /* tanpa animasi */ }
+  if (tile && !e.target.closest('a, button, label, input, select, textarea')) sfx();
+}, { passive: true });
 window.addEventListener('hashchange', route);
 window.addEventListener('scroll', () => { const max = document.documentElement.scrollHeight - innerHeight; $('#nav').classList.toggle('scrolled', scrollY > 8); $('#readLine').style.width = (max > 0 ? scrollY / max * 100 : 0) + '%'; }, { passive: true });
 route();
