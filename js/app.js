@@ -94,8 +94,7 @@ const LOGO = `<svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect wid
 const KEY = 'smart-emailing:v2';
 const fresh = () => ({ done: {}, act: {}, lat: null, ev: null, feedback: null, sound: true, last: null });
 let state = (() => { try { return Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return fresh(); } })();
-let gameOn = false;
-function save() { if (gameOn) gameCheck(); try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* mode privat */ } SCORM.sync(); }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* mode privat */ } SCORM.sync(); }
 
 /* ---------- Koneksi LMS (SCORM 1.2) ----------
    Bila dibuka di dalam LMS, status belajar dan nilai evaluasi dikirim ke LMS.
@@ -410,14 +409,6 @@ function viewHome() {
         <div class="eyebrow">Progres per materi</div>
         ${MATERI.map(m => `<a class="mini-row" href="#/scene/${m.scenes.find(id => !state.done[id] && !locked(id)) || m.scenes[0]}"><span class="mr-n">${m.no}</span><span class="mr-t">${m.title}</span><span class="mr-p">${m.scenes.filter(id => state.done[id]).length}/${m.scenes.length}</span></a>`).join('')}
       </div>
-    </div>
-  </section>
-
-  <section class="sec">
-    <div class="wrap ach-home">
-      <div><div class="eyebrow">Pencapaian</div><h2 class="display-2">Kumpulkan XP dan lencana</h2><p class="lead-s">Setiap scene, soal latihan, dan evaluasi memberi XP. Capai level tertinggi dan dapatkan sertifikat setelah lulus.</p>
-        <a class="btn btn-outline" href="#/pencapaian">${icon('award')} Lihat pencapaian</a></div>
-      <div>${levelCard()}<div class="bdg-row">${BADGES.map(b => `<a class="bdg-mini ${b.ok() ? 'on' : ''}" href="#/pencapaian" title="${b.t}${b.ok() ? '' : ' (belum didapat)'}">${icon(b.ok() ? b.ic : 'lock')}</a>`).join('')}</div></div>
     </div>
   </section>
 
@@ -1204,7 +1195,7 @@ ACT.S12 = (el, done, st) => {
       <div><div class="badge ${pass ? 'ok' : 'no'}">${pass ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
         <h3>${pass ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h3>
         <p class="muted">${pass ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
-        <div class="row-btns">${pass ? `<a class="btn btn-primary" href="#/scene/S13">Ke penutup ${icon('right')}</a><a class="btn btn-gold" href="#/sertifikat">${icon('award')} Ambil sertifikat</a>` : `<a class="btn btn-primary" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-outline" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
+        <div class="row-btns">${pass ? `<a class="btn btn-primary" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-primary" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-outline" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
       </div></div>`;
     if (animated) {
       const ring = $('.ring', el), b = $('.ring b', el), t0 = performance.now();
@@ -1264,7 +1255,7 @@ ACT.S13 = (el, done) => {
       <div class="ig"><h4 data-to="#/scene/S11" title="Buka S11">${icon('type')} Bahasa</h4><p>Jelas dan sopan. Tanpa bahasa gaul, singkatan, emoji, atau kapital berlebihan.</p></div>
     </div>
   </div>
-  <div class="row-btns"><button type="button" class="btn btn-outline btn-sm" data-print>${icon('printer')} Simpan rangkuman (PDF)</button><a class="btn btn-gold btn-sm" href="#/sertifikat">${icon('award')} Ambil sertifikat</a><a class="btn btn-outline btn-sm" href="#/pencapaian">${icon('star')} Pencapaianku</a></div>
+  <div class="row-btns"><button type="button" class="btn btn-outline btn-sm" data-print>${icon('printer')} Simpan rangkuman (PDF)</button></div>
   <div class="feedback" id="fbBox">${fb ? thanks(fb) : `<h3>Beri masukan</h3><form id="fbForm">
     <div class="stars" role="radiogroup" aria-label="Nilai 1 sampai 5">${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="rate" value="${n}"><span>${icon('star')}</span><em>${n}</em></label>`).join('')}</div>
     <label class="saran">Saran<textarea name="saran" rows="2" placeholder="Apa yang bisa diperbaiki dari pelatihan ini?"></textarea></label>
@@ -1293,7 +1284,7 @@ const GLOSARIUM = [
   ['Subject', 'Judul email. Bagian pertama yang dilihat penerima, jadi harus singkat, jelas, dan spesifik.', 'S04'],
   ['Tanda tangan', 'Nama pengirim di bagian paling bawah email.', 'S03'],
 ];
-const pageWrap = (eyebrow, title, inner, grup = 'Panduan') => `<div class="page wrap"><article class="sheet wide"><div class="eyebrow">${grup} · ${eyebrow}</div><h1 class="display">${title}</h1>${inner}</article></div>`;
+const pageWrap = (eyebrow, title, inner) => `<div class="page wrap"><article class="sheet wide"><div class="eyebrow">Panduan · ${eyebrow}</div><h1 class="display">${title}</h1>${inner}</article></div>`;
 
 function viewTujuan() {
   return pageWrap('Tujuan belajar', 'Yang akan kamu kuasai', `
@@ -1346,125 +1337,6 @@ function mountGlosarium() { $('#gq').oninput = e => { const q = e.target.value.t
 /* =========================================================================
    ROUTER
    ========================================================================= */
-/* =========================================================================
-   GAMIFIKASI — poin (XP), level, lencana, dan sertifikat.
-   Semua dihitung ulang dari progres, jadi tidak bisa dobel dan ikut terhapus saat progres direset.
-   ========================================================================= */
-const latBenar = () => state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
-const latDikerjakan = () => state.lat ? Object.keys(state.lat.res || {}).length : 0;
-const evScore = () => state.ev && state.ev.done ? state.ev.score : null;
-function xpParts() {
-  const ev = evScore();
-  return [
-    ['play', 'Video pembuka', state.done.S01 ? 20 : 0, 20],
-    ['book', 'Scene materi (50/scene)', MATERI_SCENES.filter(id => state.done[id]).length * 50, MATERI_SCENES.length * 50],
-    ['pen', 'Soal latihan benar (20/soal)', latBenar() * 20, LATIHAN.length * 20],
-    ['flag', 'Nilai evaluasi (×3)', ev === null ? 0 : ev * 3, 300],
-    ['award', 'Bonus lulus evaluasi', evalPassed() ? 100 : 0, 100],
-    ['check', 'Penutup', state.done.S13 ? 30 : 0, 30],
-  ];
-}
-const xpTotal = () => xpParts().reduce((t, p) => t + p[2], 0);
-const xpMax = () => xpParts().reduce((t, p) => t + p[3], 0);
-const LEVELS = [[0, 'Pemula'], [200, 'Pengirim Rapi'], [500, 'Penulis Lamaran'], [900, 'Komunikator Sopan'], [1300, 'Email Profesional']];
-function levelOf(xp) {
-  let k = 0; LEVELS.forEach(([min], i) => { if (xp >= min) k = i; });
-  const nx = LEVELS[k + 1];
-  return { n: k + 1, name: LEVELS[k][1], min: LEVELS[k][0], next: nx ? nx[0] : null, nextName: nx ? nx[1] : null, pct: nx ? Math.round((xp - LEVELS[k][0]) / (nx[0] - LEVELS[k][0]) * 100) : 100 };
-}
-const materiSelesai = mid => MATERI.find(m => m.id === mid).scenes.every(id => state.done[id]);
-const BADGES = [
-  { k: 'mulai', ic: 'play', t: 'Langkah Pertama', d: 'Menonton video pembuka (S01).', to: '#/scene/S01', ok: () => !!state.done.S01 },
-  { k: 'm1', ic: 'mail', t: 'Paham Dasar Email', d: 'Menyelesaikan semua scene Materi 1.', to: '#/scene/S02', ok: () => materiSelesai('m1') },
-  { k: 'm2', ic: 'briefcase', t: 'Siap Melamar', d: 'Menyelesaikan semua scene Materi 2.', to: '#/scene/S05', ok: () => materiSelesai('m2') },
-  { k: 'm3', ic: 'shield', t: 'Beretika', d: 'Menyelesaikan semua scene Materi 3.', to: '#/scene/S09', ok: () => materiSelesai('m3') },
-  { k: 'rajin', ic: 'pen', t: 'Rajin Berlatih', d: 'Memeriksa semua soal latihan.', to: '#/latihan', ok: () => latDikerjakan() === LATIHAN.length },
-  { k: 'jitu', ic: 'target', t: 'Latihan Sempurna', d: 'Semua soal latihan dijawab benar.', to: '#/latihan', ok: () => latBenar() === LATIHAN.length },
-  { k: 'lulus', ic: 'flag', t: 'Lulus Evaluasi', d: `Nilai evaluasi minimal ${KKM}.`, to: '#/scene/S12', ok: evalPassed },
-  { k: 'seratus', ic: 'award', t: 'Nilai Sempurna', d: 'Nilai evaluasi 100.', to: '#/scene/S12', ok: () => evScore() === 100 },
-  { k: 'masukan', ic: 'chat', t: 'Memberi Masukan', d: 'Mengisi masukan di penutup.', to: '#/scene/S13', ok: () => !!state.feedback },
-];
-const badgesGot = () => BADGES.filter(b => b.ok());
-
-/* Dipanggil setiap progres disimpan: munculkan +XP, lencana baru, dan naik level */
-let popQ = Promise.resolve();
-function gameCheck() {
-  const xp = xpTotal(), got = badgesGot().map(b => b.k), g = state.game;
-  if (!g) { state.game = { xp, got }; return; }
-  const baru = got.filter(k => !g.got.includes(k)), naik = levelOf(xp).n > levelOf(g.xp).n, gain = xp - g.xp;
-  g.xp = xp; g.got = got;
-  if (gain > 0) xpFloat(gain);
-  if (baru.length > 2) unlockPop(icon('award'), `${baru.length} lencana baru!`, BADGES.filter(x => baru.includes(x.k)).map(x => x.t).join(' · '), '#/pencapaian');
-  else baru.forEach(k => { const b = BADGES.find(x => x.k === k); unlockPop(icon(b.ic), 'Lencana baru!', b.t, '#/pencapaian'); });
-  if (naik) { const L = levelOf(xp); unlockPop(`<b class="lv-n">${L.n}</b>`, 'Naik level!', `Level ${L.n} · ${L.name}`, '#/pencapaian'); }
-}
-function xpFloat(gain) {
-  const chip = $('#xpChip'); if (!chip) return;
-  const r = chip.getBoundingClientRect(), f = document.createElement('span');
-  f.className = 'xp-float'; f.textContent = `+${gain} XP`;
-  f.style.left = (r.left + r.width / 2) + 'px'; f.style.top = (r.bottom + 6) + 'px';
-  document.body.appendChild(f); setTimeout(() => f.remove(), 1700);
-  chip.classList.remove('bump'); void chip.offsetWidth; chip.classList.add('bump');
-}
-function unlockPop(art, kicker, title, href) {
-  popQ = popQ.then(() => new Promise(res => {
-    const el = document.createElement('a');
-    el.className = 'unlock'; el.href = href; el.setAttribute('role', 'status');
-    el.innerHTML = `<span class="ul-art">${art}</span><span><small>${kicker}</small><b>${title}</b></span>`;
-    document.body.appendChild(el); sfx('ok'); celebrate();
-    setTimeout(() => el.classList.add('show'), 30);
-    setTimeout(() => { el.classList.remove('show'); setTimeout(() => { el.remove(); res(); }, 400); }, 2800);
-  }));
-}
-const badgeTile = b => { const on = b.ok(); return `<a class="bdg ${on ? 'on' : ''}" href="${b.to}" title="${on ? 'Didapat' : 'Belum didapat'}: ${b.d}"><span class="bdg-ic">${icon(on ? b.ic : 'lock')}</span><b>${b.t}</b><small>${b.d}</small></a>`; };
-const levelCard = (cls = '') => { const xp = xpTotal(), L = levelOf(xp); return `<div class="lv-card ${cls}">
-  <span class="lv-badge"><small>Level</small><b>${L.n}</b></span>
-  <div class="lv-body"><small>${xp} XP dari ${xpMax()}</small><b>${L.name}</b>
-    <span class="bar"><i style="width:${L.pct}%"></i></span>
-    <small>${L.next !== null ? `${L.next - xp} XP lagi menuju <b>${L.nextName}</b>` : 'Level tertinggi tercapai!'}</small></div></div>`; };
-
-function viewPencapaian() {
-  const got = badgesGot().length;
-  return pageWrap('Pencapaian', 'Pencapaianmu', `
-    <p class="muted">Kumpulkan XP dari setiap scene, latihan, dan evaluasi. XP menaikkan levelmu, dan setiap target yang tercapai memberi lencana.</p>
-    ${levelCard('big')}
-    <h2 class="h2">Asal XP</h2>
-    <div class="xp-list">${xpParts().map(([ic, t, v, m]) => `<div class="xp-row ${v >= m ? 'full' : ''}"><span class="xp-ic">${icon(ic)}</span><span>${t}</span><span class="bar"><i style="width:${m ? v / m * 100 : 0}%"></i></span><b>${v}/${m}</b></div>`).join('')}</div>
-    <h2 class="h2">Lencana <small class="muted">${got}/${BADGES.length}</small></h2>
-    <div class="bdg-grid">${BADGES.map(badgeTile).join('')}</div>
-    <h2 class="h2">Tangga level</h2>
-    <ol class="lv-ladder">${LEVELS.map(([min, n], i) => `<li class="${xpTotal() >= min ? 'on' : ''}"><b>${i + 1}</b><span>${n}</span><small>${min} XP</small></li>`).join('')}</ol>
-    <div class="cert-cta">${icon(evalPassed() ? 'award' : 'lock')}<div><b>Sertifikat</b><p class="muted">${evalPassed() ? 'Kamu sudah lulus evaluasi. Sertifikatmu siap dicetak.' : `Terbuka setelah kamu lulus evaluasi dengan nilai minimal ${KKM}.`}</p></div><a class="btn ${evalPassed() ? 'btn-gold' : 'btn-outline'}" href="${evalPassed() ? '#/sertifikat' : materiDone() ? '#/scene/S12' : resumeHref()}">${evalPassed() ? 'Lihat sertifikat' : materiDone() ? 'Ke evaluasi' : 'Lanjutkan belajar'} ${icon('right')}</a></div>`, 'Progres');
-}
-
-function viewSertifikat() {
-  if (!evalPassed()) return pageWrap('Sertifikat', 'Sertifikat belum terbuka', `<div class="lockbox"><a href="#/scene/S12" title="Ke evaluasi">${icon('lock')}</a><h3>Lulus evaluasi dulu, ya</h3><p class="muted">Sertifikat terbuka setelah nilai evaluasimu minimal ${KKM}.</p><a class="btn btn-primary" href="${materiDone() ? '#/scene/S12' : resumeHref()}">${materiDone() ? 'Ke evaluasi' : 'Lanjutkan belajar'} ${icon('right')}</a></div>`, 'Progres');
-  const g = state.game || {};
-  if (!g.tgl) { g.tgl = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); save(); }
-  const L = levelOf(xpTotal());
-  return `<div class="page wrap cert-page">
-    <div class="cert-tools"><label class="cert-name">Nama di sertifikat<input id="certNama" type="text" maxlength="60" placeholder="Tulis nama lengkapmu" value="${esc(g.nama || '')}"></label>
-      <button type="button" class="btn btn-gold" id="certPrint">${icon('printer')} Cetak / simpan PDF</button></div>
-    <div class="cert" id="cert">
-      <div class="cert-in">
-        <span class="cert-logo">${LOGO}</span>
-        <small class="cert-k">Sertifikat penyelesaian</small>
-        <h1>Smart Emailing</h1>
-        <p>Diberikan kepada</p>
-        <b class="cert-nm" id="certNm">${esc(g.nama || 'Nama Peserta')}</b>
-        <p>atas keberhasilannya menyelesaikan pelatihan <b>Menulis Email Lamaran Kerja</b> yang rapi, sopan, dan sesuai etika komunikasi profesional.</p>
-        <div class="cert-stats"><div><b>${evScore()}</b><small>Nilai evaluasi</small></div><div><b>${L.n}</b><small>${L.name}</small></div><div><b>${badgesGot().length}/${BADGES.length}</b><small>Lencana</small></div></div>
-        <div class="cert-foot"><span>${g.tgl}</span><span>Kelompok 7</span></div>
-      </div>
-    </div>
-  </div>`;
-}
-function mountSertifikat() {
-  const inp = $('#certNama'); if (!inp) return;
-  inp.oninput = () => { state.game.nama = inp.value.trim(); save(); $('#certNm').textContent = state.game.nama || 'Nama Peserta'; };
-  $('#certPrint').onclick = () => { if (!state.game.nama) { toast('Tulis namamu dulu, ya.'); inp.focus(); return; } document.body.classList.add('print-cert'); window.print(); setTimeout(() => document.body.classList.remove('print-cert'), 500); };
-}
-
 const PAGES = {
   '': { v: viewHome, title: '' },
   materi: { v: viewMateri, title: 'Materi', nav: 'materi' },
@@ -1475,8 +1347,6 @@ const PAGES = {
   alur: { v: viewAlur, title: 'Alur belajar', nav: 'panduan' },
   peta: { v: viewPeta, title: 'Peta konsep', nav: 'panduan' },
   glosarium: { v: viewGlosarium, m: mountGlosarium, title: 'Glosarium', nav: 'panduan' },
-  pencapaian: { v: viewPencapaian, title: 'Pencapaian' },
-  sertifikat: { v: viewSertifikat, m: mountSertifikat, title: 'Sertifikat' },
 };
 
 let routeToken = 0, firstRoute = true, lastKey = null;
@@ -1590,9 +1460,6 @@ function updateBar() {
   const p = pct(), C = 2 * Math.PI * 16;
   const ring = $('#progRing'); ring.style.strokeDasharray = C; ring.style.strokeDashoffset = C * (1 - p / 100);
   $('#progText').textContent = p + '%';
-  const xp = xpTotal(), L = levelOf(xp);
-  $('#xpChip').innerHTML = `<span class="xc-lv">${L.n}</span><span class="xc-t"><b>${xp}</b> XP</span>`;
-  $('#xpChip').title = `Level ${L.n} · ${L.name} · ${xp} XP. Lihat pencapaian`;
   const sb = $('#soundBtn');
   sb.innerHTML = icon(state.sound ? 'vol' : 'mute');
   sb.setAttribute('aria-label', state.sound ? 'Matikan efek suara' : 'Nyalakan efek suara'); sb.title = sb.getAttribute('aria-label');
@@ -1608,7 +1475,6 @@ function renderPop() {
   const latOk = state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
   const ev = state.ev && state.ev.done ? state.ev.score : null;
   $('#progPop').innerHTML = `<div class="pp-h"><b>Progres kamu</b><small>${doneCount()} dari 13 scene selesai</small></div>
-    <a class="pp-lv" href="#/pencapaian">${levelCard('mini')}<span class="pp-bdg">${BADGES.map(b => `<i class="${b.ok() ? 'on' : ''}" title="${b.t}">${icon(b.ok() ? b.ic : 'lock')}</i>`).join('')}</span></a>
     ${MATERI.map(m => { const d = m.scenes.filter(id => state.done[id]).length; return `<div class="pp-row"><span>${m.short}</span><span class="bar"><i style="width:${d / m.scenes.length * 100}%"></i></span><b>${d}/${m.scenes.length}</b></div>`; }).join('')}
     <div class="pp-sub"><span>${icon('pen')} Latihan</span><b>${latOk}/${LATIHAN.length} benar</b></div>
     <div class="pp-sub"><span>${icon('flag')} Evaluasi</span><b>${ev !== null ? 'Nilai ' + ev : materiDone() ? 'Siap dikerjakan' : 'Terkunci'}</b></div>
@@ -1654,9 +1520,6 @@ const markTo = () => $$('[data-to]:not([tabindex])').forEach(e => { e.tabIndex =
 document.addEventListener('click', e => { const t = e.target.closest('[data-to]'); if (t && !e.target.closest('a, button')) jumpTo(t.dataset.to); });
 document.addEventListener('keydown', e => { const t = e.target.closest && e.target.closest('[data-to]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); jumpTo(t.dataset.to); } });
 new MutationObserver(markTo).observe(document.body, { childList: true, subtree: true });
-$('#xpChip').onclick = () => { location.hash = '#/pencapaian'; };
 window.addEventListener('hashchange', route);
 window.addEventListener('scroll', () => { const max = document.documentElement.scrollHeight - innerHeight; $('#nav').classList.toggle('scrolled', scrollY > 8); $('#readLine').style.width = (max > 0 ? scrollY / max * 100 : 0) + '%'; }, { passive: true });
-if (!state.game) gameCheck();
-gameOn = true;
 route();
