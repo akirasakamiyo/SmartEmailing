@@ -663,6 +663,12 @@ code, .code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size:
 .ev-stats span { font-size: .76rem; color: var(--muted); }
 .ev-result { display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; align-items: center; max-width: 42rem; margin-top: 1rem; }
 .ev-result h3 { font-size: 1.3rem; color: var(--maroon-2); margin-top: .5rem; }
+/* Cincin nilai akhir evaluasi */
+.ring { --p: 0; width: 7.5rem; height: 7.5rem; border-radius: 50%; display: grid; place-content: center; text-align: center; background: radial-gradient(closest-side, var(--card) 78%, transparent 79% 100%), conic-gradient(var(--maroon) calc(var(--p) * 1%), var(--sand) 0); }
+.ring b { font-size: 1.6rem; color: var(--maroon-2); line-height: 1; }
+.ring small { color: var(--muted); font-size: .72rem; }
+.ring.big { width: 9rem; height: 9rem; }
+.ring.big b { font-size: 2.2rem; }
 .ev-result.fail .ring { background: radial-gradient(closest-side, var(--card) 78%, transparent 79% 100%), conic-gradient(var(--bad) calc(var(--p) * 1%), var(--sand) 0); }
 .badge { display: inline-flex; align-items: center; gap: .35rem; padding: .25em .75em; border-radius: 999px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
 .badge.ok { background: var(--ok-bg); color: var(--ok); } .badge.no { background: var(--bad-bg); color: var(--bad); }
