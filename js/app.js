@@ -465,6 +465,15 @@ const uraianSections = s => s.uraian.map((u, i) => `<section class="u-sec" id="u
 const uraianHTML = uraianSections;
 
 function viewScene(id) {
+  /* Evaluasi: mode ujian layar penuh, satu soal per layar */
+  if (id === 'S12') return `<div class="exam">
+    <header class="ex-top">
+      <span class="ex-brand"><span class="brand-mark sm">${LOGO}</span><span><b>Evaluasi</b><small>S12 · Smart Emailing</small></span></span>
+      <div class="ex-prog" id="exProg"></div>
+      <a class="btn btn-ghost btn-sm" href="#/materi" aria-label="Keluar dari evaluasi">${icon('x')} Keluar</a>
+    </header>
+    <main class="ex-stage" id="activity"></main>
+  </div>`;
   const s = SCENES[id], m = materiOf(id), i = ORDER.indexOf(id);
   const text = ((s.uraian || []).map(u => u.p.join(' ')).join(' ') + ' ' + (s.narasi || '')).replace(/<[^>]+>/g, '');
   const mins = Math.max(1, Math.round(text.split(/\s+/).length / 170));
@@ -1021,7 +1030,7 @@ function qRender(box, q, a, { mode, checked, onChange }) {
   if (q.type === 'order') body = `<ol class="olist">${a.map((v, pos) => `<li class="${lock ? (v === pos ? 'ok' : 'no') : ''}"><span class="o-n">${pos + 1}</span><span class="o-t">${q.items[v]}</span>${lock ? '' : `<span class="o-btn"><button type="button" data-up="${pos}" ${pos === 0 ? 'disabled' : ''} aria-label="Naikkan">${icon('up')}</button><button type="button" data-down="${pos}" ${pos === a.length - 1 ? 'disabled' : ''} aria-label="Turunkan">${icon('down')}</button></span>`}</li>`).join('')}</ol>`;
   if (q.type === 'match') { const opts = [...new Set(q.pairs.map(p => p[1]))].sort(); body = `<div class="mlist">${q.pairs.map((p, i) => `<label class="mrow ${lock ? (a[i] === p[1] ? 'ok' : 'no') : ''}"><span>${p[0]}</span><select data-m="${i}" ${lock ? 'disabled' : ''}><option value="">— pilih —</option>${opts.map(o => `<option ${a[i] === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>`).join('')}</div>`; }
   if (q.type === 'sort') body = `<div class="slist">${q.items.map((it, i) => `<div class="srow2 ${lock ? (a[i] === it[1] ? 'ok' : 'no') : ''}"><span class="s-t">${it[0]}</span><span class="seg2">${q.buckets.map((bk, b) => `<button type="button" data-s="${i}" data-b="${b}" class="${a[i] === b ? 'on' : ''}" ${lock ? 'disabled' : ''}>${bk}</button>`).join('')}</span></div>`).join('')}</div>`;
-  if (q.type === 'spot') body = `<div class="mail spot exam">${q.segs.map((sg, i) => `<button type="button" class="sp ${a[i] ? 'marked' : ''}" data-sp="${i}">${sg[0]}</button>`).join('')}</div><p class="muted small">Ketuk bagian yang menurutmu salah. Ketuk lagi untuk membatalkan.</p>`;
+  if (q.type === 'spot') body = `<div class="mail spot spot-q">${q.segs.map((sg, i) => `<button type="button" class="sp ${a[i] ? 'marked' : ''}" data-sp="${i}">${sg[0]}</button>`).join('')}</div><p class="muted small">Ketuk bagian yang menurutmu salah. Ketuk lagi untuk membatalkan.</p>`;
   if (q.type === 'hour') body = `<div class="hour-q"><div class="clock-dig big">${String(a).padStart(2, '0')}.00</div><label class="range"><input type="range" min="0" max="23" value="${a}" data-hour aria-label="Jam kirim"><span class="range-scale"><i>00</i><i>06</i><i>12</i><i>18</i><i>23</i></span></label></div>`;
   box.innerHTML = `<p class="q">${q.q}</p>${body}`;
   const set = v => { onChange(v); };
@@ -1132,59 +1141,89 @@ function mountLatihan() {
    S12 — EVALUASI: tanpa umpan balik per soal, hanya nilai akhir
    ========================================================================= */
 ACT.S12 = (el, done, st) => {
+  const prog = $('#exProg');
+  const setProg = (k, n, label) => { if (prog) prog.innerHTML = n ? `<span class="ex-count">${label}</span><span class="ex-dots">${Array.from({ length: n }, (_, j) => `<i class="${j < k ? 'past' : j === k ? 'cur' : ''}"></i>`).join('')}</span>` : `<span class="ex-count">${label}</span>`; };
   if (!materiDone()) {
     const left = MATERI_SCENES.filter(id => !state.done[id]);
-    el.innerHTML = `<div class="lockbox">${icon('lock')}<h3>Evaluasi masih terkunci</h3><p class="muted">Selesaikan dulu semua scene materi. Tinggal ${left.length} lagi:</p>
-      <div class="rec-links">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div></div>`;
+    setProg(0, 0, 'Terkunci');
+    el.innerHTML = `<div class="ex-slide ex-center">
+      <span class="ex-big-ic">${icon('lock')}</span>
+      <h1 class="ex-title">Evaluasi masih terkunci</h1>
+      <p class="ex-lead">Selesaikan dulu semua scene materi. Tinggal <b>${left.length}</b> lagi:</p>
+      <div class="ex-chips">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div>
+      <a class="btn btn-gold btn-lg" href="#/scene/${left[0]}">Lanjutkan materi ${icon('right')}</a>
+    </div>`;
     return;
   }
   const E = state.ev = state.ev || { i: 0, ans: {}, done: false }; save();
-  const result = () => {
-    el.innerHTML = `<div class="ev-result ${E.score >= KKM ? 'pass' : 'fail'}">
-      <div class="ring big" style="--p:${E.score}"><b>${E.score}</b><small>nilai akhir</small></div>
-      <div><div class="badge ${E.score >= KKM ? 'ok' : 'no'}">${E.score >= KKM ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
-        <h3>${E.score >= KKM ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h3>
-        <p class="muted">${E.score >= KKM ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
-        <div class="row-btns">${E.score >= KKM ? `<a class="btn btn-primary" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-primary" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-outline" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
-      </div></div>`;
-  };
+  const N = EVALUASI.length;
+  let dir = 1;
+  const slide = () => { const c = $('.ex-slide', el); if (!c || reduced) return; try { c.animate([{ opacity: 0, transform: `translateX(${dir * 80}px)` }, { opacity: 1, transform: 'translateX(0)' }], { duration: 450, easing: 'cubic-bezier(.2,.8,.2,1)' }); } catch (e) { /* tanpa animasi */ } };
   const intro = () => {
-    el.innerHTML = `<div class="ev-intro"><div class="ev-stats"><div><b>${EVALUASI.length}</b><span>soal</span></div><div><b>${KKM}</b><span>batas lulus</span></div><div><b>${icon('eyeoff')}</b><span>tanpa tanda benar/salah</span></div></div>
-      <p>Soal evaluasi diambil dari aktivitas di materi: menyusun, memasangkan, mengelompokkan, menandai kesalahan, dan mengatur jam. Tidak ada pilihan ganda.</p>
-      <p class="muted">Selama mengerjakan, kamu tidak akan diberi tahu benar atau salahnya. Nilai akhir baru muncul setelah semua jawaban dikirim.</p>
-      <button type="button" class="btn btn-primary btn-lg" data-start>Mulai evaluasi ${icon('right')}</button></div>`;
+    setProg(0, 0, `${N} soal`);
+    el.innerHTML = `<div class="ex-slide ex-center">
+      <span class="ex-big-ic">${icon('flag')}</span>
+      <div class="eyebrow light">S12 · Evaluasi akhir</div>
+      <h1 class="ex-title">Siap mengerjakan evaluasi?</h1>
+      <p class="ex-lead">${SCENES.S12.narasi}</p>
+      <div class="ex-stats"><div><b>${N}</b><span>soal</span></div><div><b>${KKM}</b><span>batas lulus</span></div><div><b>${icon('eyeoff')}</b><span>tanpa tanda benar/salah</span></div></div>
+      <p class="ex-note">Soal diambil dari aktivitas di materi: menyusun, memasangkan, mengelompokkan, menandai kesalahan, dan mengatur jam. Pindah soal dengan tombol <b>Berikutnya</b> atau panah ← → di keyboard.</p>
+      <button type="button" class="btn btn-gold btn-lg" data-start>Mulai evaluasi ${icon('right')}</button>
+    </div>`;
+  };
+  const result = () => {
+    const pass = E.score >= KKM;
+    setProg(N, N, 'Selesai');
+    el.innerHTML = `<div class="ex-slide ex-center ${pass ? 'pass' : 'fail'}">
+      <div class="ex-ring" style="--p:${E.score}"><b>${E.score}</b><small>nilai akhir</small></div>
+      <div class="badge ${pass ? 'ok' : 'no'}">${pass ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
+      <h1 class="ex-title">${pass ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h1>
+      <p class="ex-lead">${pass ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
+      <div class="row-btns center">${pass ? `<a class="btn btn-gold btn-lg" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-gold btn-lg" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-ghost btn-lg" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
+    </div>`;
   };
   const render = () => {
     const i = E.i, q = EVALUASI[i], a = qInit(q, E.ans[i]);
     if (E.ans[i] === undefined) { E.ans[i] = a; save(); }
     const answered = EVALUASI.filter((qq, k) => E.touched && E.touched[k]).length;
-    el.innerHTML = `<div class="act-head"><span class="act-tag">${icon('flag')} Evaluasi</span><span class="counter">Soal <b>${i + 1}</b> dari ${EVALUASI.length}</span></div>
-      <div class="ev-nav">${EVALUASI.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${E.touched && E.touched[k] ? 'filled' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
-      <div id="qbox"></div>
-      <div class="quiz-foot">
-        <button type="button" class="btn btn-outline btn-sm" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
-        ${i < EVALUASI.length - 1 ? `<button type="button" class="btn btn-primary btn-sm" data-next>Berikutnya ${icon('right')}</button>` : `<button type="button" class="btn btn-primary btn-sm" data-submit>${icon('send')} Kirim jawaban (${answered}/${EVALUASI.length} dijawab)</button>`}
-      </div>`;
-    qRender($('#qbox', el), q, a, { mode: 'ujian', onChange: (v, soft) => { E.ans[i] = v; E.touched = E.touched || {}; E.touched[i] = true; save(); if (!soft) render(); } });
+    setProg(i, N, `Soal ${i + 1} dari ${N}`);
+    el.innerHTML = `<div class="ex-slide ex-q">
+      <div class="ex-card"><div class="ex-qn">Soal ${i + 1}</div><div id="qbox"></div></div>
+      <div class="ex-foot">
+        <button type="button" class="btn btn-ghost" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
+        <span class="ex-nums">${EVALUASI.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${E.touched && E.touched[k] ? 'filled' : ''}" data-go="${k}" aria-label="Soal ${k + 1}">${k + 1}</button>`).join('')}</span>
+        ${i < N - 1 ? `<button type="button" class="btn btn-gold btn-lg" data-next>Berikutnya ${icon('right')}</button>` : `<button type="button" class="btn btn-gold btn-lg" data-submit>${icon('send')} Kirim (${answered}/${N})</button>`}
+      </div>
+    </div>`;
+    qRender($('#qbox', el), q, a, { mode: 'ujian', onChange: (v, soft) => { E.ans[i] = v; E.touched = E.touched || {}; E.touched[i] = true; save(); if (!soft) { dir = 0; render(); } } });
+    if (dir) slide();
+  };
+  const goTo = k => { if (k < 0 || k >= N || k === E.i) return; dir = k > E.i ? 1 : -1; E.i = k; save(); sfx(); render(); };
+  const submit = () => {
+    const belum = EVALUASI.filter((q, k) => !(E.touched && E.touched[k])).length;
+    if (belum && !confirm(`Masih ada ${belum} soal yang belum kamu ubah jawabannya. Tetap kirim?`)) return;
+    const total = EVALUASI.reduce((sum, q, k) => sum + qScore(q, E.ans[k]), 0);
+    E.score = Math.round(total / N * 100); E.done = true; save(); updateBar();
+    sfx(E.score >= KKM ? 'ok' : 'no'); dir = 1; result(); slide();
+    if (E.score >= KKM) done(false);
   };
   if (E.done) { result(); if (E.score >= KKM) done(true); }
-  else if (E.started) render(); else intro();
+  else if (E.started) { dir = 0; render(); } else intro();
   el.onclick = e => {
-    if (e.target.closest('[data-start]')) { E.started = true; save(); sfx(); render(); return; }
+    if (e.target.closest('[data-start]')) { E.started = true; save(); sfx(); dir = 1; render(); return; }
     if (e.target.closest('[data-retry]')) { state.ev = { i: 0, ans: {}, done: false, started: true }; save(); ACT.S12(el, done, st); return; }
-    const go = e.target.closest('[data-go]'); if (go) { E.i = +go.dataset.go; save(); render(); return; }
-    if (e.target.closest('[data-prev]')) { E.i = Math.max(0, E.i - 1); save(); render(); return; }
-    if (e.target.closest('[data-next]')) { E.i = Math.min(EVALUASI.length - 1, E.i + 1); save(); render(); return; }
-    if (e.target.closest('[data-submit]')) {
-      const belum = EVALUASI.filter((q, k) => !(E.touched && E.touched[k])).length;
-      if (belum && !confirm(`Masih ada ${belum} soal yang belum kamu ubah jawabannya. Tetap kirim?`)) return;
-      const total = EVALUASI.reduce((s, q, k) => s + qScore(q, E.ans[k]), 0);
-      E.score = Math.round(total / EVALUASI.length * 100); E.done = true; save(); updateBar();
-      sfx(E.score >= KKM ? 'ok' : 'no'); result();
-      if (E.score >= KKM) done(false);
-      const nb = $('#nextBtn'); if (nb && E.score >= KKM) { nb.classList.remove('is-locked'); nb.setAttribute('href', '#/scene/S13'); }
-    }
+    const g = e.target.closest('[data-go]'); if (g) { goTo(+g.dataset.go); return; }
+    if (e.target.closest('[data-prev]')) { goTo(E.i - 1); return; }
+    if (e.target.closest('[data-next]')) { goTo(E.i + 1); return; }
+    if (e.target.closest('[data-submit]')) submit();
   };
+  const onKey = e => {
+    if (!E.started || E.done || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(E.i + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(E.i - 1); }
+  };
+  document.addEventListener('keydown', onKey);
+  onLeave(() => document.removeEventListener('keydown', onKey));
 };
 
 /* S13 — rangkuman + masukan */
@@ -1392,6 +1431,7 @@ async function route() {
   requestAnimationFrame(() => moveInd(activeTab()));
   $('#readLine').style.width = '0%';
   document.body.classList.toggle('is-home', !isScene && !page);
+  document.body.classList.toggle('exam-mode', isScene && arg === 'S12');
   window.scrollTo({ top: 0, behavior: 'instant' });
   app.focus({ preventScroll: true });
   updateBar();
