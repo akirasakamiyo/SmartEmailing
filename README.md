@@ -8,14 +8,14 @@
 
 Media pembelajaran berbasis web · Kelompok 7
 
-[![Web online](https://img.shields.io/badge/web-online-7a1f2e?style=flat-square&logo=githubpages&logoColor=white)](https://akirasakamiyo.github.io/SmartEmailing/)
-[![Rilis](https://img.shields.io/github/v/release/akirasakamiyo/SmartEmailing?style=flat-square&color=e2b04a&label=rilis)](https://github.com/akirasakamiyo/SmartEmailing/releases/latest)
+[![Web online](https://img.shields.io/badge/web-online-7a1f2e?style=flat-square&logo=githubpages&logoColor=white)](https://syahladfa.github.io/SmartEmailing/)
+[![Rilis](https://img.shields.io/github/v/release/syahladfa/SmartEmailing?style=flat-square&color=e2b04a&label=rilis)](https://github.com/syahladfa/SmartEmailing/releases/latest)
 ![SCORM 1.2](https://img.shields.io/badge/SCORM-1.2-3b1119?style=flat-square)
 ![Offline](https://img.shields.io/badge/offline-siap-2f6f4e?style=flat-square)
 ![Bahasa](https://img.shields.io/badge/bahasa-Indonesia-c9952e?style=flat-square)
 ![Tanpa framework](https://img.shields.io/badge/HTML%20%C2%B7%20CSS%20%C2%B7%20JS-tanpa%20framework-5c1522?style=flat-square)
 
-**[Buka web](https://akirasakamiyo.github.io/SmartEmailing/)** · **[Unduh rilis terbaru](https://github.com/akirasakamiyo/SmartEmailing/releases/latest)** · [Versi offline](dist/SmartEmailing_Tim7_offline.html) · [Paket SCORM](dist/SmartEmailing_Tim7_SCORM.zip)
+**[Buka web](https://syahladfa.github.io/SmartEmailing/)** · **[Unduh rilis terbaru](https://github.com/syahladfa/SmartEmailing/releases/latest)** · [Versi offline](dist/SmartEmailing_Tim7_offline.html) · [Paket SCORM](dist/SmartEmailing_Tim7_SCORM.zip)
 
 ![Beranda Smart Emailing](docs/screenshots/01-beranda.png)
 
@@ -131,7 +131,7 @@ Di HP, semua halaman tampil layar penuh dengan menu di bagian bawah. Seret & let
 
 | Cara | Langkah |
 |---|---|
-| **Online** | Buka https://akirasakamiyo.github.io/SmartEmailing/ |
+| **Online** | Buka https://syahladfa.github.io/SmartEmailing/ |
 | **Offline** | Unduh `dist/SmartEmailing_Tim7_offline.html`, lalu klik dua kali. Tidak butuh internet. |
 | **LMS (Moodle, dll.)** | Unggah `dist/SmartEmailing_Tim7_SCORM.zip` sebagai aktivitas SCORM (*Add an activity → SCORM package*). Status belajar dan nilai evaluasi otomatis tercatat di LMS, dan peserta dinyatakan lulus bila nilainya ≥ 75. |
 | **Folder web** | `dist/SmartEmailing_Tim7.zip` untuk aktivitas *Folder* / *IMS content*. |
@@ -164,7 +164,7 @@ SmartEmailing_Tim7/
 </details>
 
 ## Riwayat versi
-Lihat halaman [Releases](https://github.com/akirasakamiyo/SmartEmailing/releases) untuk catatan setiap versi dan file unduhannya.
+Lihat halaman [Releases](https://github.com/syahladfa/SmartEmailing/releases) untuk catatan setiap versi dan file unduhannya.
 
 ---
 <div align="center"><sub>Smart Emailing · Kelompok 7 · Seluruh materi disusun dari dokumen desain tim.</sub></div>
