@@ -26,6 +26,13 @@ Setelah mengedit file di folder ini, pilih salah satu:
 
 GitHub Pages memperbarui web sekitar 1–2 menit setelah unggahan.
 
+## Gamifikasi
+- **XP**: video pembuka 20, setiap scene materi 50, setiap soal latihan benar 20, nilai evaluasi ×3, bonus lulus 100, penutup 30 (maksimal 1.450 XP).
+- **Level**: 1 Pemula (0), 2 Pengirim Rapi (200), 3 Penulis Lamaran (500), 4 Komunikator Sopan (900), 5 Email Profesional (1.300).
+- **9 lencana**: Langkah Pertama, Paham Dasar Email, Siap Melamar, Beretika, Rajin Berlatih, Latihan Sempurna, Lulus Evaluasi, Nilai Sempurna, Memberi Masukan.
+- **Sertifikat** (`#/sertifikat`) terbuka setelah lulus evaluasi, bisa dicetak atau disimpan sebagai PDF.
+- Halaman `#/pencapaian` merangkum semuanya. XP dan lencana dihitung dari progres, jadi ikut terhapus saat progres direset.
+
 ## Struktur folder
 ```
 SmartEmailing_Tim7/
