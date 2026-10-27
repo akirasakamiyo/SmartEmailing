@@ -1190,3 +1190,14 @@ body.settled .rail { animation: none; opacity: 1; transform: none; }
 .sc-ic, .mat-ic, .bc-ic, .rail-ic, .act-num, .ip-ic, .how-ic, .ib-ic, .mcol-ic, .env-ic { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), box-shadow .3s; }
 :is(.sc-ic, .mat-ic, .bc-ic, .rail-ic, .act-num, .ip-ic, .how-ic, .ib-ic, .mcol-ic):hover { transform: translateY(-3px) rotate(-4deg); }
 @media (prefers-reduced-motion: reduce) { :is(a, button, label, [class*="-ic"]):hover .ic { animation: none; } }
+
+/* Ikon yang bisa dibawa ke tempatnya */
+[data-to] { cursor: pointer; }
+[data-to]:focus-visible, .lockbox > a:focus-visible, .thanks > a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 8px; }
+.chip-f[data-to], .mc-attach[data-to], .ig h4[data-to], .lbl[data-to] { transition: transform .2s, box-shadow .2s; }
+.chip-f[data-to]:hover, .mc-attach[data-to]:hover, .lbl[data-to]:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.ig h4[data-to]:hover { color: var(--maroon); text-decoration: underline; text-underline-offset: 3px; }
+.lockbox > a, .thanks > a { display: inline-grid; color: inherit; }
+a.how-item { color: inherit; text-decoration: none; border-radius: 14px; transition: background .2s, transform .2s; }
+a.how-item:hover { background: rgba(226, 176, 74, .12); transform: translateX(3px); }
+a.brand-mark { text-decoration: none; }

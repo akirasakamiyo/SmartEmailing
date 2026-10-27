@@ -1201,6 +1201,17 @@ body.settled .rail { animation: none; opacity: 1; transform: none; }
 :is(.sc-ic, .mat-ic, .bc-ic, .rail-ic, .act-num, .ip-ic, .how-ic, .ib-ic, .mcol-ic):hover { transform: translateY(-3px) rotate(-4deg); }
 @media (prefers-reduced-motion: reduce) { :is(a, button, label, [class*="-ic"]):hover .ic { animation: none; } }
 
+/* Ikon yang bisa dibawa ke tempatnya */
+[data-to] { cursor: pointer; }
+[data-to]:focus-visible, .lockbox > a:focus-visible, .thanks > a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 8px; }
+.chip-f[data-to], .mc-attach[data-to], .ig h4[data-to], .lbl[data-to] { transition: transform .2s, box-shadow .2s; }
+.chip-f[data-to]:hover, .mc-attach[data-to]:hover, .lbl[data-to]:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.ig h4[data-to]:hover { color: var(--maroon); text-decoration: underline; text-underline-offset: 3px; }
+.lockbox > a, .thanks > a { display: inline-grid; color: inherit; }
+a.how-item { color: inherit; text-decoration: none; border-radius: 14px; transition: background .2s, transform .2s; }
+a.how-item:hover { background: rgba(226, 176, 74, .12); transform: translateX(3px); }
+a.brand-mark { text-decoration: none; }
+
 </style>
 </head>
 <body>
@@ -1610,16 +1621,16 @@ function viewHome() {
           <a class="btn btn-ghost btn-lg" href="#/materi">Lihat materi</a>
         </div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="mailcard">
+      <div class="hero-art">
+        <div class="mailcard" data-to="#/scene/S05" title="Susunan email lamaran (S05)">
           <div class="mc-top"><i></i><i></i><i></i></div>
           <div class="mc-row"><small>Subject</small>Application for Graphic Designer Position – ${NAMA}</div>
           <div class="mc-line w70"></div><div class="mc-line"></div><div class="mc-line w85"></div>
-          <div class="mc-attach">${icon('clip')} CV_${NAMAF}.pdf</div>
+          <div class="mc-attach" data-to="#/scene/S06" title="Melampirkan CV (S06)">${icon('clip')} CV_${NAMAF}.pdf</div>
         </div>
-        <span class="chip-f c1">${icon('check')} Subject jelas</span>
-        <span class="chip-f c2">${icon('clock')} 08.00–17.00</span>
-        <span class="chip-f c3">${icon('send')} Siap dikirim</span>
+        <span class="chip-f c1" data-to="#/scene/S04" title="Subject yang efektif (S04)">${icon('check')} Subject jelas</span>
+        <span class="chip-f c2" data-to="#/scene/S09" title="Waktu mengirim email (S09)">${icon('clock')} 08.00–17.00</span>
+        <span class="chip-f c3" data-to="#/scene/S06" title="Mengirim CV (S06)">${icon('send')} Siap dikirim</span>
       </div>
     </div>
   </section>
@@ -1723,14 +1734,14 @@ function viewScene(id) {
         </span>
       </div>
       <header class="mv-head">
-        <span class="mv-av">${LOGO}</span>
+        <span class="mv-av" data-to="#/" title="Beranda">${LOGO}</span>
         <div class="mv-meta">
           <div class="mv-from"><b>Smart Emailing</b><small>kepada: kamu · ± ${mins} menit</small></div>
           <h1 class="display">${s.title}</h1>
-          <div class="mv-labels"><span class="lbl">${m.short}</span><span class="lbl code">${id}</span><span class="lbl soft">${icon('pointer')} ${s.type}</span></div>
+          <div class="mv-labels"><span class="lbl" data-to="#/materi" title="Semua materi">${m.short}</span><span class="lbl code" data-to="#/alur" title="Lihat di flowchart">${id}</span><span class="lbl soft" data-to="aktivitas" title="Ke aktivitas">${icon('pointer')} ${s.type}</span></div>
         </div>
       </header>
-      <div class="pin-note"><span class="pin" aria-hidden="true"></span><b>Tujuan</b><p>${s.tujuan}</p></div>
+      <div class="pin-note"><span class="pin" data-to="#/tujuan" title="Semua tujuan belajar"></span><b>Tujuan</b><p>${s.tujuan}</p></div>
       ${s.narasi && id !== 'S01' ? `<section class="audio" id="narasi">
         <button type="button" class="au-play" data-speak aria-label="Putar narasi">${icon('play')}</button>
         <div class="au-body"><div class="au-top"><b>Narasi</b><button type="button" class="au-link" data-script>Lihat teks</button></div>
@@ -1738,7 +1749,7 @@ function viewScene(id) {
         <p class="au-script" hidden>${s.narasi}</p>
       </section>` : ''}
       ${s.uraian ? `<section class="stepper" id="uraian"></section>` : ''}
-      <section class="act-sec" id="aktivitas"><div class="act-label"><span class="act-num">${icon(id === 'S01' ? 'play' : id === 'S12' ? 'flag' : id === 'S13' ? 'award' : 'pointer')}</span><div><small>${id === 'S01' ? 'Tonton dulu' : id === 'S12' ? 'Evaluasi akhir' : id === 'S13' ? 'Penutup' : 'Aktivitas'}</small><h2 class="sec-title">${id === 'S01' ? 'Video pembuka' : id === 'S12' ? 'Kerjakan evaluasi' : id === 'S13' ? 'Rangkuman pelatihan' : 'Ayo coba: ' + s.type.toLowerCase()}</h2></div></div><div class="act-card" id="activity"></div></section>
+      <section class="act-sec" id="aktivitas"><div class="act-label"><span class="act-num" data-to="aktivitas" title="Ke aktivitas">${icon(id === 'S01' ? 'play' : id === 'S12' ? 'flag' : id === 'S13' ? 'award' : 'pointer')}</span><div><small>${id === 'S01' ? 'Tonton dulu' : id === 'S12' ? 'Evaluasi akhir' : id === 'S13' ? 'Penutup' : 'Aktivitas'}</small><h2 class="sec-title">${id === 'S01' ? 'Video pembuka' : id === 'S12' ? 'Kerjakan evaluasi' : id === 'S13' ? 'Rangkuman pelatihan' : 'Ayo coba: ' + s.type.toLowerCase()}</h2></div></div><div class="act-card" id="activity"></div></section>
       <nav class="lesson-nav">${lessonNav(id)}</nav>
     </article>
   </div>`;
@@ -2373,7 +2384,7 @@ function mountLatihan() {
 ACT.S12 = (el, done, st) => {
   if (!materiDone()) {
     const left = MATERI_SCENES.filter(id => !state.done[id]);
-    el.innerHTML = `<div class="lockbox">${icon('lock')}<h3>Evaluasi masih terkunci</h3><p class="muted">Selesaikan dulu semua scene materi. Tinggal ${left.length} lagi:</p>
+    el.innerHTML = `<div class="lockbox"><a href="#/scene/${left[0]}" title="Lanjutkan materi">${icon('lock')}</a><h3>Evaluasi masih terkunci</h3><p class="muted">Selesaikan dulu semua scene materi. Tinggal ${left.length} lagi:</p>
       <div class="rec-links">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div></div>`;
     return;
   }
@@ -2481,18 +2492,18 @@ ACT.S12 = (el, done, st) => {
 
 /* S13 — rangkuman + masukan */
 ACT.S13 = (el, done) => {
-  if (!evalPassed()) { el.innerHTML = `<div class="lockbox">${icon('lock')}<h3>Penutup masih terkunci</h3><p class="muted">Halaman ini terbuka setelah kamu lulus evaluasi.</p><a class="btn btn-primary" href="#/scene/S12">Ke evaluasi ${icon('right')}</a></div>`; return; }
+  if (!evalPassed()) { el.innerHTML = `<div class="lockbox"><a href="#/scene/S12" title="Ke evaluasi">${icon('lock')}</a><h3>Penutup masih terkunci</h3><p class="muted">Halaman ini terbuka setelah kamu lulus evaluasi.</p><a class="btn btn-primary" href="#/scene/S12">Ke evaluasi ${icon('right')}</a></div>`; return; }
   const fb = state.feedback;
-  const thanks = f => `<div class="thanks">${icon('check')}<h3>Terima kasih atas masukanmu!</h3><p class="muted">Nilai ${f.rate}/5${f.saran ? ` · “${esc(f.saran)}”` : ''}</p></div>`;
+  const thanks = f => `<div class="thanks"><a href="#/" title="Beranda">${icon('check')}</a><h3>Terima kasih atas masukanmu!</h3><p class="muted">Nilai ${f.rate}/5${f.saran ? ` · “${esc(f.saran)}”` : ''}</p></div>`;
   el.innerHTML = `<div class="infog" id="infog">
-    <div class="ig-head"><span class="brand-mark sm">${LOGO}</span><div><b>SMART EMAILING</b><small>Rangkuman pelatihan</small></div></div>
+    <div class="ig-head"><a class="brand-mark sm" href="#/" title="Beranda">${LOGO}</a><div><b>SMART EMAILING</b><small>Rangkuman pelatihan</small></div></div>
     <div class="ig-grid">
-      <div class="ig"><h4>${icon('layers')} Bagian email</h4><ol><li>Subject</li><li>Salam pembuka</li><li>Isi email</li><li>Salam penutup</li><li>Tanda tangan</li></ol></div>
-      <div class="ig"><h4>${icon('list')} Cek sebelum kirim</h4><ul class="ticks"><li>Subject jelas</li><li>Salam sesuai</li><li>Perkenalan singkat</li><li>Lampiran disebutkan</li><li>Bahasa formal</li></ul></div>
-      <div class="ig"><h4>${icon('users')} CC dan BCC</h4><p><b>CC</b>: salinan, penerimanya terlihat.</p><p><b>BCC</b>: salinan, penerimanya disembunyikan.</p></div>
-      <div class="ig"><h4>${icon('clock')} Waktu kirim</h4><p class="ig-big">08.00–17.00</p><p>Di jam kerja. Hindari larut malam dan hari libur.</p></div>
-      <div class="ig"><h4>${icon('calendar')} Follow-up</h4><p class="ig-big">5–7 hari kerja</p><p>Kalau belum ada kabar. Sopan, singkat, tidak memaksa.</p></div>
-      <div class="ig"><h4>${icon('type')} Bahasa</h4><p>Jelas dan sopan. Tanpa bahasa gaul, singkatan, emoji, atau kapital berlebihan.</p></div>
+      <div class="ig"><h4 data-to="#/scene/S03" title="Buka S03">${icon('layers')} Bagian email</h4><ol><li>Subject</li><li>Salam pembuka</li><li>Isi email</li><li>Salam penutup</li><li>Tanda tangan</li></ol></div>
+      <div class="ig"><h4 data-to="#/scene/S08" title="Buka S08">${icon('list')} Cek sebelum kirim</h4><ul class="ticks"><li>Subject jelas</li><li>Salam sesuai</li><li>Perkenalan singkat</li><li>Lampiran disebutkan</li><li>Bahasa formal</li></ul></div>
+      <div class="ig"><h4 data-to="#/scene/S09" title="Buka S09">${icon('users')} CC dan BCC</h4><p><b>CC</b>: salinan, penerimanya terlihat.</p><p><b>BCC</b>: salinan, penerimanya disembunyikan.</p></div>
+      <div class="ig"><h4 data-to="#/scene/S09" title="Buka S09">${icon('clock')} Waktu kirim</h4><p class="ig-big">08.00–17.00</p><p>Di jam kerja. Hindari larut malam dan hari libur.</p></div>
+      <div class="ig"><h4 data-to="#/scene/S10" title="Buka S10">${icon('calendar')} Follow-up</h4><p class="ig-big">5–7 hari kerja</p><p>Kalau belum ada kabar. Sopan, singkat, tidak memaksa.</p></div>
+      <div class="ig"><h4 data-to="#/scene/S11" title="Buka S11">${icon('type')} Bahasa</h4><p>Jelas dan sopan. Tanpa bahasa gaul, singkatan, emoji, atau kapital berlebihan.</p></div>
     </div>
   </div>
   <div class="row-btns"><button type="button" class="btn btn-outline btn-sm" data-print>${icon('printer')} Simpan rangkuman (PDF)</button></div>
@@ -2537,7 +2548,7 @@ function viewTujuan() {
 function viewPetunjuk() {
   const kode = [['Normal', 'Tombol', 'Tampilan awal sebelum disentuh.'], ['Hover', 'Tombol', 'Tampilan saat kursor ada di atas tombol (hanya di laptop).'], ['Hit', 'Tombol', 'Diklik atau diketuk untuk lanjut ke tahap berikutnya.'], ['Swipe', 'Objek', 'Digeser atau digulir.'], ['Seret & letakkan', 'Objek', 'Seret lalu lepaskan. Di HP: ketuk kartu, lalu ketuk slotnya.'], ['Show', 'Objek', 'Penjelasan atau umpan balik yang muncul setelah suatu aksi.']];
   return pageWrap('Petunjuk', 'Cara memakai modul ini', `
-    <div class="how">${[['play', 'Mulai dari video pembuka', 'S01 menjelaskan tujuan dan tiga materi.'], ['book', 'Baca materi dan narasinya', 'Kolom kiri berisi materi. Tekan “Dengarkan” untuk memutar narasi.'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.'], ['grid', 'Bebas pindah halaman', 'Buka menu untuk lompat ke scene mana saja. Hasilmu tidak akan hilang.'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`]].map(([ic, t, d]) => `<div class="how-item"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></div>`).join('')}</div>
+    <div class="how">${[['play', 'Mulai dari video pembuka', 'S01 menjelaskan tujuan dan tiga materi.', '#/scene/S01'], ['book', 'Baca materi dan narasinya', 'Kolom kiri berisi materi. Tekan “Dengarkan” untuk memutar narasi.', '#/materi'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.', '#/scene/S02'], ['grid', 'Bebas pindah halaman', 'Buka menu untuk lompat ke scene mana saja. Hasilmu tidak akan hilang.', '#/peta'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`, '#/latihan'], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`, '#/scene/S12']].map(([ic, t, d, h]) => `<a class="how-item" href="${h}"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></a>`).join('')}</div>
     <h2 class="h2">Kode interaksi</h2>
     <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Kode</th><th>Untuk</th><th>Artinya</th></tr></thead><tbody>${kode.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td></tr>`).join('')}</tbody></table></div>
     <h2 class="h2">Progres tersimpan otomatis</h2>
@@ -2754,6 +2765,12 @@ document.addEventListener('pointerdown', e => {
   try { target.animate([{ transform: 'scale(1)' }, { transform: 'scale(.82) rotate(-6deg)' }, { transform: 'scale(1.12) rotate(4deg)' }, { transform: 'scale(1)' }], { duration: 480, easing: 'cubic-bezier(.3, 1.4, .5, 1)' }); } catch (err) { /* tanpa animasi */ }
   if (tile && !e.target.closest('a, button, label, input, select, textarea')) sfx();
 }, { passive: true });
+/* Ikon tanpa tautan tetap punya tujuan: halaman (#/...) atau bagian di halaman yang sama */
+const jumpTo = t => { if (t.startsWith('#')) { location.hash = t; return; } const d = document.getElementById(t); if (d) d.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); };
+const markTo = () => $$('[data-to]:not([tabindex])').forEach(e => { e.tabIndex = 0; e.setAttribute('role', 'link'); });
+document.addEventListener('click', e => { const t = e.target.closest('[data-to]'); if (t && !e.target.closest('a, button')) jumpTo(t.dataset.to); });
+document.addEventListener('keydown', e => { const t = e.target.closest && e.target.closest('[data-to]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); jumpTo(t.dataset.to); } });
+new MutationObserver(markTo).observe(document.body, { childList: true, subtree: true });
 window.addEventListener('hashchange', route);
 window.addEventListener('scroll', () => { const max = document.documentElement.scrollHeight - innerHeight; $('#nav').classList.toggle('scrolled', scrollY > 8); $('#readLine').style.width = (max > 0 ? scrollY / max * 100 : 0) + '%'; }, { passive: true });
 route();
