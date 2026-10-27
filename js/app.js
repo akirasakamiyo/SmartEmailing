@@ -85,7 +85,13 @@ const F = {
   grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>', lock: '<rect x="4" y="11" width="16" height="10" rx="2"/>',
   flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>', printer: '<rect x="6" y="14" width="12" height="8"/>',
 };
-const icon = (n, cls = '') => `<svg class="ic i-${n} ${F[n] ? 'duo' : ''} ${cls}" viewBox="-1 -1 26 26" aria-hidden="true">${F[n] ? `<g class="f">${F[n]}</g>` : ''}<g class="s">${P[n] || ''}</g></svg>`;
+/* Gaya gambar tangan: garis utama + coretan tipis kedua yang sedikit meleset, bidang warna spidol,
+   dan kemiringan kecil yang berbeda untuk tiap ikon (dihitung dari namanya, jadi selalu sama) */
+const tiltOf = n => ((([...n].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7)) % 9) - 4) * .75;
+const drawable = svg => svg.replace(/<(path|polyline|polygon|line|circle|rect|ellipse)\b/g, '<$1 pathLength="1"');
+const icon = (n, cls = '') => `<svg class="ic i-${n} ${F[n] ? 'duo' : ''} ${cls}" viewBox="-1 -1 26 26" aria-hidden="true" style="--tilt:${tiltOf(n)}deg">${F[n] ? `<g class="f">${F[n]}</g>` : ''}<g class="s2">${P[n] || ''}</g><g class="s">${drawable(P[n] || '')}</g></svg>`;
+/* Filter "garis tangan": tiga variasi getaran untuk efek garis bergetar ala animasi kartun */
+document.body.insertAdjacentHTML('afterbegin', `<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>${[3, 9, 17].map((seed, i) => `<filter id="hd${i}" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="2" seed="${seed}" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/></filter>`).join('')}</defs></svg>`);
 
 /* Logo: amplop yang tutupnya membentuk centang + kilau */
 const LOGO = `<svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#7a1f2e"/><rect x="8" y="14" width="31" height="22" rx="4.5" fill="#fbf5ec"/><path class="logo-ck" d="M12 18.5 21.5 26 35.5 15.5" fill="none" stroke="#3b1119" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path class="logo-sp" d="M38 3.5 39.8 8.2 44.5 10 39.8 11.8 38 16.5 36.2 11.8 31.5 10 36.2 8.2Z" fill="#e2b04a" stroke="#7a1f2e" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
@@ -269,14 +275,23 @@ const SCENES = {
 /* ---------- Status kunci ---------- */
 const materiDone = () => MATERI_SCENES.every(id => state.done[id]);
 const evalPassed = () => !!(state.ev && state.ev.done && state.ev.score >= KKM);
-const locked = id => (id === 'S12' && !materiDone()) || (id === 'S13' && !evalPassed());
+/* Semua terbuka berurutan: scene → scene berikutnya, materi → latihan → evaluasi → penutup */
+const latDone = () => !!state.lat && LATIHAN.every((_, k) => state.lat.res && state.lat.res[k] !== undefined);
+const locked = id => {
+  if (id === 'L') return !materiDone();
+  if (id === 'S12') return !materiDone() || !latDone();
+  if (id === 'S13') return !evalPassed();
+  const i = ORDER.indexOf(id);
+  return i > 0 && !state.done[ORDER[i - 1]];
+};
+const readAll = id => { const s = SCENES[id]; if (!s.uraian) return true; const r = A(id).read || []; return s.uraian.every((_, j) => r.includes(j)); };
 const doneCount = () => ORDER.filter(id => state.done[id]).length;
 const pct = () => Math.round(doneCount() / ORDER.length * 100);
 const nextOf = id => ({ S11: '#/latihan', S12: evalPassed() ? '#/scene/S13' : null, S13: null }[id] !== undefined
   ? { S11: '#/latihan', S12: evalPassed() ? '#/scene/S13' : null, S13: null }[id]
   : '#/scene/' + ORDER[ORDER.indexOf(id) + 1]);
 const prevOf = id => id === 'S12' ? '#/latihan' : (ORDER.indexOf(id) > 0 ? '#/scene/' + ORDER[ORDER.indexOf(id) - 1] : '#/materi');
-const resumeHref = () => { const id = MATERI_SCENES.concat('S01').find(x => !state.done[x]); return id ? '#/scene/' + (state.done.S01 ? id : 'S01') : (evalPassed() ? '#/scene/S13' : '#/scene/S12'); };
+const resumeHref = () => { const id = MATERI_SCENES.concat('S01').find(x => !state.done[x]); return id ? '#/scene/' + (state.done.S01 ? id : 'S01') : !latDone() ? '#/latihan' : (evalPassed() ? '#/scene/S13' : '#/scene/S12'); };
 
 /* =========================================================================
    KOMPONEN BERSAMA
@@ -317,7 +332,7 @@ function routeRail(cur) {
   const ci = Math.max(0, seq.indexOf(cur));
   const stop = id => {
     const isL = id === 'L', sc = isL ? { title: 'Latihan Soal', type: `${LATIHAN.length} soal` } : SCENES[id];
-    const d = isL ? false : state.done[id], lk = isL ? false : locked(id);
+    const d = isL ? latDone() : state.done[id], lk = locked(id);
     return `<a class="stop ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-tip="${sc.title}" aria-label="${id} · ${sc.title}${d ? ' (selesai)' : lk ? ' (terkunci)' : ''}">
       <span class="stop-st">${d ? icon('check') : lk ? icon('lock') : id}</span></a>`;
   };
@@ -342,7 +357,7 @@ function viewHome() {
     ['Apa itu Smart Emailing?', 'Pelatihan singkat berbasis multimedia untuk membantu fresh graduate menulis email lamaran kerja yang rapi, sopan, dan sesuai etika komunikasi di dunia kerja.'],
     ['Untuk siapa pelatihan ini?', 'Untuk fresh graduate yang sedang bersiap melamar kerja.'],
     ['Materinya apa saja?', 'Ada tiga materi: dasar komunikasi lewat email, menulis email lamaran kerja, dan etika berkirim email. Setelah itu ada latihan soal dan evaluasi.'],
-    ['Harus belajar berurutan?', 'Tidak wajib. Kamu bisa membuka scene mana saja dari halaman Materi. Tapi evaluasi baru terbuka setelah semua scene materi selesai.'],
+    ['Harus belajar berurutan?', 'Ya. Setiap scene terbuka setelah scene sebelumnya selesai (semua bagian materi dibaca dan aktivitasnya dikerjakan). Latihan terbuka setelah semua materi selesai, dan evaluasi terbuka setelah semua soal latihan diperiksa.'],
     ['Progresku tersimpan di mana?', 'Di browser yang kamu pakai, tanpa akun. Jawaban di setiap aktivitas tidak akan hilang walau kamu pindah halaman. Kalau data browser dihapus, progres mulai dari awal.'],
     ['Bagaimana evaluasi dinilai?', `Evaluasi berisi ${EVALUASI.length} soal tanpa pilihan ganda. Selama mengerjakan tidak ada tanda benar atau salah. Nilai akhir muncul setelah semua jawaban dikirim, dan batas lulusnya ${KKM}.`],
   ];
@@ -440,11 +455,11 @@ function viewHome() {
 function viewMateri() {
   const row = id => { const lk = locked(id), d = state.done[id]; return `<a class="srow ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}"><span class="srow-st">${d ? icon('check') : lk ? icon('lock') : id}</span><span class="srow-t"><b>${SCENES[id].title}</b><small>${id} · ${SCENES[id].type}</small></span>${icon('right')}</a>`; };
   return `<div class="page wrap">
-    <header class="page-head"><div class="eyebrow">Materi</div><h1 class="display">Semua materi</h1><p class="lead-s">Pilih scene mana saja. Hasil kerjamu di setiap aktivitas tersimpan otomatis.</p>
+    <header class="page-head"><div class="eyebrow">Materi</div><h1 class="display">Semua materi</h1><p class="lead-s">Scene terbuka berurutan: baca semua bagian materi, kerjakan aktivitasnya, lalu scene berikutnya terbuka. Hasil kerjamu tersimpan otomatis.</p>
       <div class="page-prog"><span class="bar"><i style="width:${pct()}%"></i></span><b>${pct()}%</b><small>${doneCount()}/13 scene selesai</small></div></header>
     <div class="cat">${MATERI.map(m => `<article class="cat-card">
       <header><span class="cat-no">${m.no}</span><div><small>${m.short}</small><h2>${m.title}</h2>${m.desc ? `<p>${m.desc}</p>` : ''}</div><span class="cat-p">${m.scenes.filter(id => state.done[id]).length}/${m.scenes.length}</span></header>
-      <div class="cat-list">${m.id === 'akhir' ? `<a class="srow" href="#/latihan"><span class="srow-st">L</span><span class="srow-t"><b>Latihan Soal</b><small>L · ${LATIHAN.length} soal campuran dengan pembahasan</small></span>${icon('right')}</a>` : ''}${m.scenes.map(row).join('')}</div>
+      <div class="cat-list">${m.id === 'akhir' ? `<a class="srow ${latDone() ? 'done' : ''} ${locked('L') ? 'locked' : ''}" href="#/latihan"><span class="srow-st">${latDone() ? icon('check') : locked('L') ? icon('lock') : 'L'}</span><span class="srow-t"><b>Latihan Soal</b><small>L · ${LATIHAN.length} soal campuran dengan pembahasan</small></span>${icon('right')}</a>` : ''}${m.scenes.map(row).join('')}</div>
     </article>`).join('')}</div>
   </div>`;
 }
@@ -491,14 +506,19 @@ function viewScene(id) {
 function renderSteps(id) {
   const box = $('#uraian'); if (!box) return;
   const s = SCENES[id], st = A(id);
-  if (s.uraianAfter && !state.done[id]) {
+  if (s.uraianAfter && !state.done[id] && !st.actOk) {
     box.innerHTML = `<div class="step-card locked">${icon('eyeoff')}<div><b>Materi masih disembunyikan</b><p>Rangkuman kesalahan baru terbuka setelah kamu menemukan semuanya di aktivitas bawah, supaya jawabannya tidak bocor.</p><button type="button" class="btn btn-primary btn-sm" data-go-act>Ke aktivitas ${icon('down')}</button></div></div>`;
     return;
   }
-  const n = s.uraian.length, k = Math.min(st.step || 0, n - 1);
+  st.read = st.read || [];
+  const n = s.uraian.length, maxOpen = state.done[id] ? n - 1 : Math.min(n - 1, st.read.length ? Math.max(...st.read) + 1 : 0);
+  const k = Math.min(st.step || 0, maxOpen);
   const u = s.uraian[k];
-  box.innerHTML = `<div class="step-tabs" role="tablist">${s.uraian.map((x, j) => `<button type="button" role="tab" class="st-tab ${j === k ? 'cur' : ''} ${j < k ? 'past' : ''}" data-step="${j}" aria-selected="${j === k}"><span>${j + 1}</span>${x.h}</button>`).join('')}</div>
-    <div class="step-card" key="${k}"><small class="sc-k">Bagian ${k + 1} dari ${n}</small><h2 class="sec-title">${u.h}</h2>${u.p.map(p => p.startsWith('<ol') ? p : `<p>${p}</p>`).join('')}</div>
+  if (!st.read.includes(k)) { st.read.push(k); save(); }
+  const nRead = s.uraian.filter((_, j) => st.read.includes(j)).length;
+  const tabOpen = j => state.done[id] || st.read.includes(j) || j <= Math.max(...st.read);
+  box.innerHTML = `<div class="step-tabs" role="tablist">${s.uraian.map((x, j) => `<button type="button" role="tab" class="st-tab ${j === k ? 'cur' : ''} ${j < k ? 'past' : ''} ${st.read.includes(j) ? 'read' : ''} ${tabOpen(j) ? '' : 'locked'}" data-step="${j}" aria-selected="${j === k}" ${tabOpen(j) ? '' : 'disabled title="Baca bagian sebelumnya dulu"'}><span>${!tabOpen(j) ? icon('lock') : st.read.includes(j) && j !== k ? icon('check') : j + 1}</span>${x.h}</button>`).join('')}</div>
+    <div class="step-card" key="${k}"><small class="sc-k">Bagian ${k + 1} dari ${n} · ${nRead === n ? 'semua bagian sudah dibaca' : `dibaca ${nRead}/${n}`}</small><h2 class="sec-title">${u.h}</h2>${u.p.map(p => p.startsWith('<ol') ? p : `<p>${p}</p>`).join('')}</div>
     <div class="step-nav">
       <button type="button" class="btn btn-outline btn-sm" data-step="${k - 1}" ${k === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
       <span class="st-dots">${s.uraian.map((_, j) => `<i class="${j === k ? 'cur' : j < k ? 'past' : ''}"></i>`).join('')}</span>
@@ -515,23 +535,52 @@ function lessonNav(id) {
 
 function mountScene(id) {
   const btn = $('#nextBtn');
-  if (btn) btn.addEventListener('click', e => { if (btn.classList.contains('is-locked')) { e.preventDefault(); toast('Selesaikan aktivitas di halaman ini dulu, ya.'); $('#aktivitas').scrollIntoView({ behavior: 'smooth' }); } });
+  if (btn) btn.addEventListener('click', e => {
+    if (!btn.classList.contains('is-locked')) return;
+    e.preventDefault();
+    const baca = !readAll(id);
+    toast(baca ? 'Baca dulu semua bagian materinya, lalu kerjakan aktivitasnya.' : 'Selesaikan aktivitas di halaman ini dulu, ya.');
+    $(baca ? '#uraian' : '#aktivitas').scrollIntoView({ behavior: 'smooth' });
+  });
+  /* Aktivitas terkunci sampai semua bagian materi dibaca (kecuali scene yang materinya muncul setelah aktivitas) */
+  const actGate = () => {
+    const sec = $('#aktivitas'); if (!sec) return;
+    const kunci = !SCENES[id].uraianAfter && !readAll(id) && !state.done[id];
+    sec.classList.toggle('act-locked', kunci);
+    let ov = $('.act-lock', sec);
+    if (kunci && !ov) { sec.insertAdjacentHTML('beforeend', `<div class="act-lock">${icon('lock')}<b>Aktivitas masih terkunci</b><p>Baca semua bagian materi di atas dulu, sampai bagian terakhir.</p><button type="button" class="btn btn-primary btn-sm" data-go-read>${icon('up')} Ke materi</button></div>`); $('[data-go-read]', sec).onclick = () => $('#uraian').scrollIntoView({ behavior: 'smooth' }); }
+    if (!kunci && ov) { ov.remove(); if (!state.done[id]) toast('Semua bagian sudah dibaca. Aktivitas terbuka!'); }
+  };
   renderSteps(id);
   const ur = $('#uraian');
   if (ur) ur.addEventListener('click', e => {
     const g = e.target.closest('[data-go-act]'); if (g) { $('#aktivitas').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
     const b = e.target.closest('[data-step]'); if (!b || b.disabled) return;
-    A(id).step = Math.max(0, +b.dataset.step); save(); sfx(); renderSteps(id);
+    A(id).step = Math.max(0, +b.dataset.step); save(); sfx(); renderSteps(id); actGate(); finish(false);
   });
-  const done = silent => {
-    const freshDone = !state.done[id];
+  /* Scene selesai = semua bagian materi dibaca + aktivitas beres */
+  const finish = silent => {
+    if (state.done[id] || !A(id).actOk || !readAll(id)) return;
+    const freshDone = true;
     state.done[id] = true; save(); updateBar();
     if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
     if (freshDone && !silent) celebrate();
     $$('.stop').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.querySelector('.stop-st').innerHTML = icon('check'); } });
+    const rail = $('.rail'); if (rail) rail.outerHTML = routeRail(id);
+    const nx = ORDER[ORDER.indexOf(id) + 1];
+    if (!silent && nx && MATERI_SCENES.includes(nx)) toast(`${nx} · ${SCENES[nx].title} sekarang terbuka!`);
+    if (!silent && id === 'S11') toast('Semua materi selesai! Latihan soal sekarang terbuka.');
+  };
+  const done = silent => {
+    const st = A(id), first = !st.actOk;
+    st.actOk = true; save();
     if (SCENES[id].uraianAfter) renderSteps(id);
+    if (state.done[id]) { if (btn) btn.classList.remove('is-locked'); return; }
+    if (readAll(id)) finish(silent);
+    else if (first && !silent) toast('Aktivitas selesai! Baca semua bagian materinya untuk membuka scene berikutnya.');
   };
   ACT[id]($('#activity'), done, A(id));
+  actGate();
 }
 
 /* =========================================================================
@@ -1049,14 +1098,16 @@ function mountLatihan() {
     const i = L.i, q = LATIHAN[i], checked = L.res[i] !== undefined, a = qInit(q, L.ans[i]);
     if (L.ans[i] === undefined && q.type !== 'mcq') { L.ans[i] = a; save(); }
     const benar = Object.values(L.res).filter(Boolean).length, dijawab = Object.keys(L.res).length;
-    const ok = materiDone();
+    const ok = !locked('S12');
+    /* Soal terbuka berurutan: nomor berikutnya baru bisa dibuka setelah soal sebelumnya diperiksa */
+    const firstOpen = LATIHAN.findIndex((_, k) => L.res[k] === undefined), maxQ = firstOpen < 0 ? LATIHAN.length - 1 : firstOpen;
     box.innerHTML = `    <article class="sheet">
       <div class="eyebrow">Latihan & Evaluasi · <span class="scode">L</span> · Latihan soal</div>
       <h1 class="display">Latihan Soal</h1>
       <p class="meta">${LATIHAN.length} soal campuran · jawab, periksa, lalu baca pembahasannya</p>
       <div class="lat-panel">
         <div class="score-box"><b>${benar}</b><span>benar dari ${dijawab} soal yang sudah diperiksa</span></div>
-        <div class="lat-nums"><div class="qgrid wide">${LATIHAN.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${L.res[k] === true ? 'ok' : L.res[k] === false ? 'no' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
+        <div class="lat-nums"><div class="qgrid wide">${LATIHAN.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${L.res[k] === true ? 'ok' : L.res[k] === false ? 'no' : ''} ${k > maxQ ? 'locked' : ''}" data-go="${k}" ${k > maxQ ? 'disabled aria-label="Soal ' + (k + 1) + ' terkunci"' : ''}>${k > maxQ ? icon('lock') : k + 1}</button>`).join('')}</div>
           <div class="legend-s"><span><i class="lg ok"></i>benar</span><span><i class="lg no"></i>belum tepat</span><button type="button" class="link-btn" data-reset>${icon('refresh')} Ulangi latihan</button></div></div>
       </div>
       <section class="act-sec"><div class="act-head"><span class="act-tag">${icon('pen')} ${q.topic}</span><span class="counter">Soal <b>${i + 1}</b> dari ${LATIHAN.length}</span></div>
@@ -1064,12 +1115,15 @@ function mountLatihan() {
         <div class="quiz-foot">
           <button type="button" class="btn btn-outline btn-sm" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
           ${checked ? '' : `<button type="button" class="btn btn-primary btn-sm" data-check ${qAnswered(q, a) ? '' : 'disabled'}>Periksa jawaban</button>`}
-          <button type="button" class="btn btn-outline btn-sm" data-next ${i === LATIHAN.length - 1 ? 'disabled' : ''}>Berikutnya ${icon('right')}</button>
+          <button type="button" class="btn ${checked ? 'btn-primary' : 'btn-outline'} btn-sm" data-next ${i === LATIHAN.length - 1 || !checked ? 'disabled' : ''} ${checked ? '' : 'title="Periksa jawaban dulu"'}>${checked ? '' : icon('lock')} Berikutnya ${icon('right')}</button>
         </div></div>
       </section>
       <nav class="lesson-nav">
         <a class="btn btn-outline" href="#/scene/S11">${icon('left')} Kembali ke materi</a>
         <a class="btn btn-primary ${ok ? '' : 'is-locked'}" href="#/scene/S12" id="nextBtn">${ok ? '' : icon('lock')} Ke evaluasi ${icon('right')}</a>
+      </nav>
+      ${ok ? '' : `<p class="muted small lat-hint">${icon('lock')} Evaluasi terbuka setelah semua ${LATIHAN.length} soal latihan diperiksa (${dijawab}/${LATIHAN.length}).</p>`}
+      <nav hidden>
       </nav>
     </article>`;
     qRender($('#qbox', box), q, a, { mode: 'latihan', checked, onChange: (v, soft) => { L.ans[i] = v; save(); if (!soft) render(); else { const c = $('[data-check]', box); if (c) c.disabled = false; } } });
@@ -1077,11 +1131,11 @@ function mountLatihan() {
   };
   render();
   box.addEventListener('click', e => {
-    const nb = e.target.closest('#nextBtn'); if (nb && nb.classList.contains('is-locked')) { e.preventDefault(); toast('Evaluasi terbuka setelah semua scene materi selesai.'); return; }
-    const go = e.target.closest('[data-go]'); if (go) { L.i = +go.dataset.go; save(); render(); return; }
+    const nb = e.target.closest('#nextBtn'); if (nb && nb.classList.contains('is-locked')) { e.preventDefault(); toast(materiDone() ? `Kerjakan semua soal latihan dulu (${Object.keys(L.res).length}/${LATIHAN.length}).` : 'Evaluasi terbuka setelah semua scene materi dan latihan selesai.'); return; }
+    const go = e.target.closest('[data-go]'); if (go) { if (go.disabled) return; L.i = +go.dataset.go; save(); render(); return; }
     if (e.target.closest('[data-prev]')) { L.i = Math.max(0, L.i - 1); save(); render(); return; }
-    if (e.target.closest('[data-next]')) { L.i = Math.min(LATIHAN.length - 1, L.i + 1); save(); render(); return; }
-    if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; save(); sfx(ok ? 'ok' : 'no'); render(); updateBar(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan sudah kamu kerjakan!'); return; }
+    const nx = e.target.closest('[data-next]'); if (nx) { if (L.res[L.i] === undefined) { toast('Periksa jawaban soal ini dulu, ya.'); return; } L.i = Math.min(LATIHAN.length - 1, L.i + 1); save(); render(); return; }
+    if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; save(); sfx(ok ? 'ok' : 'no'); render(); updateBar(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan selesai! Evaluasi sekarang terbuka.'); return; }
     if (e.target.closest('[data-reset]')) { if (!confirm('Ulangi latihan dari awal? Jawaban latihan akan dihapus.')) return; state.lat = { i: 0, ans: {}, res: {}, v: 2 }; save(); updateBar(); mountLatihan(); }
   });
 }
@@ -1094,6 +1148,12 @@ ACT.S12 = (el, done, st) => {
     const left = MATERI_SCENES.filter(id => !state.done[id]);
     el.innerHTML = `<div class="lockbox"><a href="#/scene/${left[0]}" title="Lanjutkan materi">${icon('lock')}</a><h3>Evaluasi masih terkunci</h3><p class="muted">Selesaikan dulu semua scene materi. Tinggal ${left.length} lagi:</p>
       <div class="rec-links">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div></div>`;
+    return;
+  }
+  if (!latDone()) {
+    const n = Object.keys((state.lat && state.lat.res) || {}).length;
+    el.innerHTML = `<div class="lockbox"><a href="#/latihan" title="Ke latihan">${icon('lock')}</a><h3>Evaluasi masih terkunci</h3><p class="muted">Materi sudah selesai. Sekarang kerjakan dulu semua soal latihan: ${n}/${LATIHAN.length} sudah diperiksa.</p>
+      <a class="btn btn-primary" href="#/latihan">${icon('pen')} Lanjutkan latihan</a></div>`;
     return;
   }
   const E = state.ev = state.ev || { i: 0, ans: {}, done: false }; save();
@@ -1256,7 +1316,7 @@ function viewTujuan() {
 function viewPetunjuk() {
   const kode = [['Normal', 'Tombol', 'Tampilan awal sebelum disentuh.'], ['Hover', 'Tombol', 'Tampilan saat kursor ada di atas tombol (hanya di laptop).'], ['Hit', 'Tombol', 'Diklik atau diketuk untuk lanjut ke tahap berikutnya.'], ['Swipe', 'Objek', 'Digeser atau digulir.'], ['Seret & letakkan', 'Objek', 'Seret lalu lepaskan. Di HP: ketuk kartu, lalu ketuk slotnya.'], ['Show', 'Objek', 'Penjelasan atau umpan balik yang muncul setelah suatu aksi.']];
   return pageWrap('Petunjuk', 'Cara memakai modul ini', `
-    <div class="how">${[['inbox', 'Mulai dari pengantar', 'S01 menjelaskan tujuan dan tiga materi.', '#/scene/S01'], ['book', 'Baca materinya', 'Materi di setiap scene dibaca per kartu. Pindah kartu dengan tombol Berikutnya.', '#/materi'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.', '#/scene/S02'], ['grid', 'Bebas pindah halaman', 'Buka menu untuk lompat ke scene mana saja. Hasilmu tidak akan hilang.', '#/peta'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`, '#/latihan'], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`, '#/scene/S12']].map(([ic, t, d, h]) => `<a class="how-item" href="${h}"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></a>`).join('')}</div>
+    <div class="how">${[['inbox', 'Mulai dari pengantar', 'S01 menjelaskan tujuan dan tiga materi.', '#/scene/S01'], ['book', 'Baca materinya', 'Materi di setiap scene dibaca per kartu. Pindah kartu dengan tombol Berikutnya.', '#/materi'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.', '#/scene/S02'], ['lock', 'Terbuka berurutan', 'Bagian materi dibaca berurutan, aktivitas terbuka setelah semua bagian dibaca, dan scene berikutnya terbuka setelah aktivitas selesai.', '#/materi'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`, '#/latihan'], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`, '#/scene/S12']].map(([ic, t, d, h]) => `<a class="how-item" href="${h}"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></a>`).join('')}</div>
     <h2 class="h2">Kode interaksi</h2>
     <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Kode</th><th>Untuk</th><th>Artinya</th></tr></thead><tbody>${kode.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td></tr>`).join('')}</tbody></table></div>
     <h2 class="h2">Progres tersimpan otomatis</h2>
@@ -1385,7 +1445,15 @@ async function route() {
   if (app.getAnimations) app.getAnimations().forEach(a => a.cancel());
   firstRoute = false;
   let navKey = '';
-  if (isScene) {
+  const kunciScene = isScene && locked(arg) && MATERI_SCENES.includes(arg), kunciLat = !isScene && page === 'latihan' && locked('L');
+  if (kunciScene || kunciLat) {
+    const prev = kunciLat ? null : ORDER[ORDER.indexOf(arg) - 1], nx = (resumeHref().match(/S\d+|latihan/) || ['S01'])[0];
+    app.innerHTML = `<div class="lesson-wide wrap">${routeRail(kunciLat ? 'L' : arg)}<article class="sheet"><div class="lockbox">${icon('lock')}<h3>${kunciLat ? 'Latihan soal' : `${arg} · ${SCENES[arg].title}`} masih terkunci</h3>
+      <p class="muted">${kunciLat ? 'Latihan soal terbuka setelah <b>semua scene materi (S01–S11)</b> selesai.' : `Scene ini terbuka setelah kamu menyelesaikan <b>${prev} · ${SCENES[prev].title}</b>: baca semua bagian materinya dan kerjakan aktivitasnya.`}</p>
+      <a class="btn btn-primary" href="${resumeHref()}">Lanjutkan ke ${nx === 'latihan' ? 'latihan' : nx} ${icon('right')}</a></div></article></div>`;
+    navKey = kunciLat ? 'latihan' : 'materi';
+    document.title = `${kunciLat ? 'Latihan' : arg} terkunci — Smart Emailing`;
+  } else if (isScene) {
     state.last = arg; save();
     app.innerHTML = viewScene(arg);
     mountScene(arg);
@@ -1411,7 +1479,41 @@ async function route() {
   /* Cadangan agar konten tetap tampil walau animasi tertahan */
   document.body.classList.remove('settled'); later(() => document.body.classList.add('settled'), 1400);
   if (tr && tr !== 'curtain') pageEnter(tr);
+  lazyReveal(app);
   if (curtain.classList.contains('cover')) { curtain.className = 'curtain cover leave'; setTimeout(() => { if (token === routeToken) curtain.className = 'curtain'; }, 600); }
+}
+
+/* Tampil bertahap: bagian halaman muncul saat masuk layar, berurutan seperti lembaran surat yang mendarat */
+const LZ = [
+  ['.sec-head, .continue, .mini-list, .faq-wrap > div:first-child, .pin-note, .stepper, .act-sec, .lesson-nav, .lat-panel, .page-head, .h2, .cmap, .tbl-wrap, .infog, .feedback', 'sheet'],
+  ['.start-card, .mat-card, .big-card, .cat-card, .how-item, .cm-col, .g-item, .rail', 'card'],
+  ['.srow, .mini-row, .faq details, .frow', 'row'],
+];
+let lzIO = null, lzWait = [];
+function lzShow(list) {
+  list.sort((a, b) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1)
+    .forEach((el, i) => {
+      const d = Math.min(i * 75, 600);
+      el.style.setProperty('--lzd', d + 'ms'); el.classList.add('in');
+      /* Setelah mendarat, kelasnya dilepas supaya efek hover kartu kembali normal tanpa jeda */
+      setTimeout(() => { el.classList.remove('lz', 'lz-sheet', 'lz-card', 'lz-row', 'in'); el.style.removeProperty('--lzd'); el.dataset.lzDone = '1'; }, d + 950);
+    });
+  lzWait = lzWait.filter(el => !el.classList.contains('in'));
+}
+function lzCheck() { if (lzWait.length) lzShow(lzWait.filter(el => el.getBoundingClientRect().top < innerHeight * .95)); }
+function lazyReveal(root) {
+  if (lzIO) lzIO.disconnect();
+  lzWait = [];
+  if (reduced || !('IntersectionObserver' in window)) return;
+  LZ.forEach(([sel, kind]) => $$(sel, root).forEach(el => { if (el.classList.contains('lz') || el.dataset.lzDone) return; el.classList.add('lz', 'lz-' + kind); lzWait.push(el); }));
+  lzIO = new IntersectionObserver(entries => {
+    const vis = entries.filter(e => e.isIntersecting).map(e => e.target);
+    vis.forEach(el => lzIO.unobserve(el));
+    if (vis.length) lzShow(vis);
+  }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+  lzWait.forEach(el => lzIO.observe(el));
+  /* Cadangan bila observer tidak jalan (tab disembunyikan, dll.) */
+  later(lzCheck, 900);
 }
 
 function updateBar() {
@@ -1471,6 +1573,8 @@ document.addEventListener('pointerdown', e => {
   const target = tile || ic; if (!target || reduced) return;
   try { target.animate([{ transform: 'scale(1)' }, { transform: 'scale(.82) rotate(-6deg)' }, { transform: 'scale(1.12) rotate(4deg)' }, { transform: 'scale(1)' }], { duration: 480, easing: 'cubic-bezier(.3, 1.4, .5, 1)' }); } catch (err) { /* tanpa animasi */ }
   if (tile && !e.target.closest('a, button, label, input, select, textarea')) sfx();
+  /* Ikon digambar ulang setiap diklik */
+  if (ic) { ic.classList.remove('redraw'); void ic.getBoundingClientRect(); ic.classList.add('redraw'); }
 }, { passive: true });
 /* Ikon tanpa tautan tetap punya tujuan: halaman (#/...) atau bagian di halaman yang sama */
 const jumpTo = t => { if (t.startsWith('#')) { location.hash = t; return; } const d = document.getElementById(t); if (d) d.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); };
@@ -1479,5 +1583,5 @@ document.addEventListener('click', e => { const t = e.target.closest('[data-to]'
 document.addEventListener('keydown', e => { const t = e.target.closest && e.target.closest('[data-to]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); jumpTo(t.dataset.to); } });
 new MutationObserver(markTo).observe(document.body, { childList: true, subtree: true });
 window.addEventListener('hashchange', route);
-window.addEventListener('scroll', () => { const max = document.documentElement.scrollHeight - innerHeight; $('#nav').classList.toggle('scrolled', scrollY > 8); $('#readLine').style.width = (max > 0 ? scrollY / max * 100 : 0) + '%'; }, { passive: true });
+window.addEventListener('scroll', () => { lzCheck(); const max = document.documentElement.scrollHeight - innerHeight; $('#nav').classList.toggle('scrolled', scrollY > 8); $('#readLine').style.width = (max > 0 ? scrollY / max * 100 : 0) + '%'; }, { passive: true });
 route();
