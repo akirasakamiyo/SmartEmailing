@@ -1148,3 +1148,5 @@ body.settled .rail { animation: none; opacity: 1; transform: none; }
   .sec { padding: 40px 0; }
   .sheet { padding: 1.3rem 1rem 1.2rem; }
 }
+.hero { padding-bottom: 56px; }
+@media (max-width: 760px) { .hero { padding-bottom: 40px; } }

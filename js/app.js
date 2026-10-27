@@ -382,9 +382,6 @@ function viewHome() {
         <span class="chip-f c3">${icon('send')} Siap dikirim</span>
       </div>
     </div>
-    <div class="wrap"><div class="stats">
-      <div><b>3</b><span>Materi</span></div><div><b>13</b><span>Scene</span></div><div><b>${LATIHAN.length}</b><span>Soal latihan</span></div><div><b>${EVALUASI.length}</b><span>Soal evaluasi</span></div><div><b>${pct()}%</b><span>Progresmu</span></div>
-    </div></div>
   </section>
 
   <section class="sec">

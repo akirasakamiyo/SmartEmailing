@@ -1158,6 +1158,8 @@ body.settled .rail { animation: none; opacity: 1; transform: none; }
   .sec { padding: 40px 0; }
   .sheet { padding: 1.3rem 1rem 1.2rem; }
 }
+.hero { padding-bottom: 56px; }
+@media (max-width: 760px) { .hero { padding-bottom: 40px; } }
 
 </style>
 </head>
@@ -1580,9 +1582,6 @@ function viewHome() {
         <span class="chip-f c3">${icon('send')} Siap dikirim</span>
       </div>
     </div>
-    <div class="wrap"><div class="stats">
-      <div><b>3</b><span>Materi</span></div><div><b>13</b><span>Scene</span></div><div><b>${LATIHAN.length}</b><span>Soal latihan</span></div><div><b>${EVALUASI.length}</b><span>Soal evaluasi</span></div><div><b>${pct()}%</b><span>Progresmu</span></div>
-    </div></div>
   </section>
 
   <section class="sec">
