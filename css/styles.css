@@ -1162,11 +1162,3 @@ a.brand-mark { text-decoration: none; }
 .i1-map .btn { justify-self: start; }
 .i1-map .btn:disabled { opacity: 1; background: var(--gold-l); color: var(--maroon-3); }
 @media (max-width: 760px) { .intro1 { grid-template-columns: 1fr; } .i1-mail { grid-template-columns: auto 1fr; } .i1-mail span:last-child { grid-column: 1 / -1; white-space: normal; } }
-
-/* Kode scene tidak ditampilkan (kecuali di flowchart) */
-.cur-code:empty { display: none; }
-.mat-scenes span { display: inline-grid; place-items: center; min-width: 1.7rem; }
-.mat-scenes span .ic { width: .75rem; height: .75rem; stroke-width: 3; }
-.mat-scenes span .ic .f { display: none; }
-.srow-st .ic .f, .stop-st .ic .f, .tbl a .ic .f, .cm-t .ic .f { display: none; }
-.cm-t .ic { width: .8rem; height: .8rem; margin-left: auto; opacity: .6; }
