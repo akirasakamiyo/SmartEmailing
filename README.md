@@ -83,12 +83,12 @@ Setiap scene memakai jenis aktivitas yang berbeda, dan semua jawaban tersimpan o
 | S11 | Bahasa yang Formal dan Sopan | Pilih kalimat yang tepat |
 
 ### 4. Latihan soal
-Ada **25 soal campuran**: pilihan ganda, benar/salah, memasangkan, mengurutkan, dan mengelompokkan. Latihan terbuka setelah semua materi selesai. Soal dikerjakan **berurutan**: soal berikutnya baru terbuka setelah soal sekarang diperiksa, jadi nomor di depan tidak bisa diintip. Setiap jawaban langsung diperiksa dan disertai pembahasan. Nomor soal berwarna hijau untuk jawaban benar dan merah untuk yang belum tepat.
+Ada **25 soal campuran**: pilihan ganda, benar/salah, memasangkan, mengurutkan, dan mengelompokkan. Setiap jawaban langsung diperiksa dan disertai pembahasan. Nomor soal berwarna hijau untuk jawaban benar dan merah untuk yang belum tepat, dan soal bisa dikerjakan ulang kapan saja.
 
 ![Latihan soal](docs/screenshots/06-latihan.png)
 
 ### 5. Evaluasi akhir (S12)
-- **Terkunci** sampai semua scene materi selesai dan semua soal latihan sudah diperiksa.
+- **Terkunci** sampai semua scene materi selesai.
 - Berisi **8 soal tanpa pilihan ganda** yang diambil dari jenis aktivitas di materi: urutkan, pasangkan, kelompokkan, tandai kesalahan, dan atur jam kirim.
 - Selama mengerjakan **tidak ada tanda benar/salah**. Jawaban tersimpan otomatis, dan setiap soal yang sudah dijawab ditandai cap.
 - Sebelum dikirim, peserta bisa memeriksa lembar jawabannya. **Nilai akhir** baru muncul setelah semua jawaban dikirim, dengan batas lulus **75**.
@@ -111,21 +111,11 @@ Di HP, semua halaman tampil layar penuh dengan menu di bagian bawah. Seret & let
   <img src="docs/screenshots/12-hp-scene.png" width="260" alt="Scene di HP">
 </p>
 
-### 8. Belajar berurutan
-Semua bagian terbuka berurutan, jadi peserta tidak bisa melompat:
-- **Scene**: scene berikutnya terbuka setelah scene sebelumnya selesai. Scene yang belum terbuka bergembok di Rute Belajar dan halaman Materi.
-- **Sub-materi**: kartu "Bagian 1, 2, …" dibuka berurutan. Kartu yang sudah dibaca diberi centang.
-- **Aktivitas**: terkunci (buram) sampai semua bagian materi dibaca. Tombol *Lanjut* baru aktif setelah aktivitas selesai, dan pesannya menjelaskan apa yang masih kurang.
-- **Latihan → Evaluasi → Penutup**: latihan terbuka setelah materi selesai, evaluasi terbuka setelah semua soal latihan diperiksa, dan penutup terbuka setelah lulus evaluasi.
-
 ## Fitur lain
-- **Ikon gaya gambar tangan**: garis spidol yang sedikit bergelombang dengan coretan kedua dan kemiringan berbeda di tiap ikon. Saat disorot atau diklik, ikon menggambar ulang dirinya dan garisnya bergetar seperti animasi kartun.
-- **Tampil bertahap saat di-scroll**: kartu dan bagian halaman muncul berurutan, mendarat dari posisi agak miring dan buram seperti lembaran surat.
-- **Kontras warna** semua teks, ikon, dan tombol sudah dicek otomatis di setiap halaman dengan standar WCAG AA.
 - **Progres tersimpan otomatis** di browser: scene selesai, jawaban setiap aktivitas, latihan, dan evaluasi. Pindah halaman tidak menghapus apa pun.
 - **Cincin progres dan badge** di navbar: persentase belajar, jumlah soal latihan yang belum dikerjakan, dan status evaluasi.
 - **Panduan**: Tujuan belajar per scene, Petunjuk dan arti kode interaksi (*Normal, Hover, Hit, Swipe, Seret & letakkan, Show*), Flowchart, Peta Konsep, dan Glosarium yang bisa dicari.
-- **Animasi**: transisi berbeda untuk setiap jenis halaman, efek suara klik dan benar/salah (bisa dimatikan), serta konfeti saat scene selesai.
+- **Animasi**: transisi berbeda untuk setiap jenis halaman, ikon yang bergerak saat diklik, efek suara klik dan benar/salah (bisa dimatikan), serta konfeti saat scene selesai.
 - **Tanpa tautan luar**: semua aset ada di dalam web, jadi bisa dipakai tanpa internet.
 - **Warna**: marun, krem, dan emas.
 
