@@ -1,7 +1,7 @@
 'use strict';
 /* =========================================================================
    SMART EMAILING — modul pelatihan interaktif (Kelompok 7)
-   Beranda → materi → scene S01–S13, latihan soal,
+   Tampilan modul 16:9: sampul → menu → scene S01–S13, latihan soal,
    evaluasi tanpa pilihan ganda. Semua progres tersimpan di browser.
    ========================================================================= */
 
@@ -66,8 +66,6 @@ const P = {
   home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
   trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>',
   flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
-  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>',
-  moon: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
 };
 const F = {
   mail: '<rect x="2" y="4" width="20" height="16" rx="2"/>', clip: '<circle cx="12" cy="12" r="6.5"/>', send: '<path d="m22 2-7 20-4-9-9-4Z"/>',
@@ -1402,7 +1400,6 @@ async function route() {
   if (!isScene && !page) navKey = 'home';
   $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === navKey));
   requestAnimationFrame(() => moveInd(activeTab()));
-  setTimeout(() => { if (!indPos) moveInd(activeTab(), true); }, 120);
   /* Rute belajar: geser otomatis supaya scene sekarang berada di tengah */
   const trk = $('.rail-track'), curStop = trk && $('.stop.cur', trk);
   if (curStop) trk.scrollLeft = curStop.closest('.rail-grp').offsetLeft + curStop.offsetLeft - trk.clientWidth / 2 + curStop.offsetWidth / 2;
@@ -1447,32 +1444,11 @@ function togglePop(force) {
   pop.hidden = !open; $('#progBtn').setAttribute('aria-expanded', String(open));
 }
 /* Penanda tab yang meluncur mengikuti kursor */
-/* Penanda tab berbentuk manik: saat pindah, ujung depannya melesat duluan lalu ujung belakang menyusul,
-   jadi manik terlihat memanjang mengikuti arah perjalanan */
-let indPos = null;
-function moveInd(el, instant) {
+function moveInd(el) {
   const ind = $('#tabInd'), tabs = $('#navLinks');
-  if (!el || getComputedStyle(ind).display === 'none') { ind.style.opacity = 0; indPos = null; return; }
+  if (!el || getComputedStyle(ind).display === 'none') { ind.style.opacity = 0; return; }
   const r = el.getBoundingClientRect(), t = tabs.getBoundingClientRect();
-  const to = { x: r.left - t.left, w: r.width }, from = indPos;
-  indPos = to;
-  ind.style.opacity = 1; ind.style.width = to.w + 'px'; ind.style.transform = `translateX(${to.x}px)`;
-  if (!from || instant || reduced || (Math.abs(from.x - to.x) < 1 && Math.abs(from.w - to.w) < 1)) return;
-  const kanan = to.x > from.x;
-  const mid = kanan
-    ? { x: from.x + (to.x - from.x) * .2, r: to.x + to.w * .9 }
-    : { x: to.x + to.w * .1, r: from.x + from.w - (from.x + from.w - to.x - to.w) * .2 };
-  ind.getAnimations().forEach(a => a.cancel());
-  try {
-    ind.animate([
-      { transform: `translateX(${from.x}px) scaleY(1)`, width: from.w + 'px' },
-      { transform: `translateX(${mid.x}px) scaleY(.84)`, width: (mid.r - mid.x) + 'px', offset: .42 },
-      { transform: `translateX(${to.x + (kanan ? 3 : -3)}px) scaleY(1.04)`, width: to.w + 'px', offset: .78 },
-      { transform: `translateX(${to.x}px) scaleY(1)`, width: to.w + 'px' },
-    ], { duration: 560, easing: 'cubic-bezier(.45, 0, .2, 1)' });
-    /* Cadangan: bila tab sedang tidak digambar, animasi dihentikan supaya manik tidak tertinggal */
-    const anim = ind.getAnimations().pop(); setTimeout(() => { if (anim && anim.playState === 'running') anim.cancel(); }, 800);
-  } catch (e) { /* tanpa animasi */ }
+  ind.style.opacity = 1; ind.style.width = r.width + 'px'; ind.style.transform = `translateX(${r.left - t.left}px)`;
 }
 const activeTab = () => $('#navLinks a.active');
 function closeMenu() { togglePop(false); }
@@ -1480,35 +1456,12 @@ function closeMenu() { togglePop(false); }
 /* ---------- Mulai ---------- */
 $('#brandMark').innerHTML = LOGO;
 $$('.t-ic').forEach(e => { e.innerHTML = icon(e.dataset.ic); });
-/* Klik tab: manik langsung berangkat tanpa menunggu transisi halaman; panah ← → berpindah tab */
-$$('#navLinks a').forEach(a => a.addEventListener('click', () => { $$('#navLinks a').forEach(x => x.classList.toggle('active', x === a)); moveInd(a); }));
-$('#navLinks').addEventListener('keydown', e => {
-  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-  const links = $$('#navLinks a'), cur = links.indexOf(document.activeElement); if (cur < 0) return;
-  e.preventDefault();
-  const nx = links[(cur + (e.key === 'ArrowRight' ? 1 : -1) + links.length) % links.length];
-  nx.focus(); nx.click();
-});
-/* Mode terang / gelap */
-function paintThemeBtns() {
-  const dark = document.documentElement.dataset.theme === 'dark';
-  $$('[data-theme-toggle]').forEach(b => { b.innerHTML = `<span class="tb-ic tb-sun">${icon('sun')}</span><span class="tb-ic tb-moon">${icon('moon')}</span>`; b.setAttribute('aria-label', dark ? 'Ganti ke mode terang' : 'Ganti ke mode gelap'); b.title = b.getAttribute('aria-label'); b.setAttribute('aria-pressed', String(dark)); });
-  const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = dark ? '#150a0d' : '#3b1119';
-}
-function setTheme(next, btn) {
-  const apply = () => { document.documentElement.dataset.theme = next; try { localStorage.setItem('smart-emailing:theme', next); } catch (e) { /* mode privat */ } paintThemeBtns(); };
-  const r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
-  const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-  if (reduced || !document.startViewTransition) { document.documentElement.classList.add('theme-fade'); apply(); setTimeout(() => document.documentElement.classList.remove('theme-fade'), 450); return; }
-  const vt = document.startViewTransition(apply);
-  vt.ready.then(() => document.documentElement.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${R}px at ${x}px ${y}px)`] }, { duration: 650, easing: 'cubic-bezier(.4, 0, .2, 1)', pseudoElement: '::view-transition-new(root)' })).catch(() => {});
-}
-paintThemeBtns();
-$$('[data-theme-toggle]').forEach(b => b.addEventListener('click', () => { sfx(); setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark', b); }));
+$$('#navLinks a').forEach(a => { a.addEventListener('mouseenter', () => moveInd(a)); a.addEventListener('focus', () => moveInd(a)); });
+$('#navLinks').addEventListener('mouseleave', () => moveInd(activeTab()));
 $('#progBtn').onclick = e => { e.stopPropagation(); togglePop(); };
 document.addEventListener('click', e => { if (!$('#progPop').hidden && !e.target.closest('#progPop')) togglePop(false); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') togglePop(false); });
-window.addEventListener('resize', () => moveInd(activeTab(), true));
+window.addEventListener('resize', () => moveInd(activeTab()));
 $('.curtain-in').insertAdjacentHTML('afterbegin', `<span class="cur-logo">${LOGO}</span>`);
 $('#soundBtn').onclick = () => { state.sound = !state.sound; save(); updateBar(); sfx(); toast(state.sound ? 'Efek suara aktif.' : 'Efek suara dimatikan.'); };
 /* Semua ikon bisa diklik: memantul + bunyi klik (ubin dekoratif juga) */
