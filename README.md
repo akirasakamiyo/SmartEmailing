@@ -111,7 +111,15 @@ Di HP, semua halaman tampil layar penuh dengan menu di bagian bawah. Seret & let
   <img src="docs/screenshots/12-hp-scene.png" width="260" alt="Scene di HP">
 </p>
 
+### 8. Mode terang dan gelap
+Tombol matahari/bulan di navbar mengganti tema dengan efek lingkaran yang menyebar dari tombolnya. Pilihan tema tersimpan, dan saat pertama dibuka web mengikuti pengaturan perangkat. Semua teks sudah dicek otomatis agar memenuhi kontras WCAG AA (minimal 4,5:1, atau 3:1 untuk teks besar) di kedua mode.
+
+| Mode gelap: beranda | Mode gelap: scene |
+|---|---|
+| ![Beranda mode gelap](docs/screenshots/13-mode-gelap.png) | ![Scene mode gelap](docs/screenshots/14-mode-gelap-scene.png) |
+
 ## Fitur lain
+- **Navbar kaca**: penanda tab berbentuk manik yang memanjang mengikuti arah perpindahan, dan bisa digeser dengan tombol panah ← → di keyboard.
 - **Progres tersimpan otomatis** di browser: scene selesai, jawaban setiap aktivitas, latihan, dan evaluasi. Pindah halaman tidak menghapus apa pun.
 - **Cincin progres dan badge** di navbar: persentase belajar, jumlah soal latihan yang belum dikerjakan, dan status evaluasi.
 - **Panduan**: Tujuan belajar per scene, Petunjuk dan arti kode interaksi (*Normal, Hover, Hit, Swipe, Seret & letakkan, Show*), Flowchart, Peta Konsep, dan Glosarium yang bisa dicari.
