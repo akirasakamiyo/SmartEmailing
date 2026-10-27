@@ -319,21 +319,24 @@ function mcq(el, { q, opts, onDone, store, key }) {
 /* =========================================================================
    NAVIGASI SAMPING (halaman scene, latihan, evaluasi)
    ========================================================================= */
-function sideNav(cur) {
-  const unread = ORDER.filter(id => !state.done[id] && !locked(id)).length;
-  const row = id => {
-    const lk = locked(id), d = state.done[id], sc = SCENES[id];
-    return `<a class="ib-row ${id === cur ? 'cur' : ''} ${d ? 'done' : 'unread'} ${lk ? 'locked' : ''}" href="#/scene/${id}">
-      <span class="ib-av">${lk ? icon('lock') : id}</span>
-      <span class="ib-t"><b>${sc.title}</b><small>${sc.type}</small></span>
-      <span class="ib-st">${d ? icon('check') : lk ? '' : '<i class="ib-dot"></i>'}</span></a>`;
+/* Rute belajar: jalur perangko S01–S13 di atas halaman (pengganti sidebar) */
+function routeRail(cur) {
+  const groups = [...MATERI.slice(0, 4).map(m => [m.short, m.scenes]), ['Latihan', ['L']], ['Akhir', ['S12', 'S13']]];
+  const seq = groups.flatMap(g => g[1]);
+  const ci = Math.max(0, seq.indexOf(cur));
+  const stop = id => {
+    const isL = id === 'L', sc = isL ? { title: 'Latihan Soal', type: `${LATIHAN.length} soal` } : SCENES[id];
+    const d = isL ? false : state.done[id], lk = isL ? false : locked(id);
+    return `<a class="stop ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-tip="${sc.title}" aria-label="${id} · ${sc.title}${d ? ' (selesai)' : lk ? ' (terkunci)' : ''}">
+      <span class="stop-st">${d ? icon('check') : lk ? icon('lock') : id}</span></a>`;
   };
-  return `<div class="ib-head"><span class="ib-ic">${icon('inbox')}</span><div><b>Kotak Masuk Materi</b><small>${unread ? `${unread} belum dibuka` : 'Semua sudah dibuka'}</small></div></div>
-    <div class="side-prog"><span class="bar"><i style="width:${pct()}%"></i></span><small>${doneCount()} / 13 selesai</small></div>
-    <details class="side-list" ${window.innerWidth > 1080 ? 'open' : ''}><summary>${icon('list')} Daftar scene</summary><div class="side-groups">${MATERI.map(m => `<div class="side-group"><div class="side-gh">${icon(m.id === 'akhir' ? 'flag' : 'book')} ${m.id === 'akhir' ? 'Latihan & Evaluasi' : m.short}</div>
-      ${m.id === 'akhir' ? `<a class="ib-row ${cur === 'L' ? 'cur' : ''}" href="#/latihan"><span class="ib-av">L</span><span class="ib-t"><b>Latihan Soal</b><small>${LATIHAN.length} soal campuran</small></span><span class="ib-st"></span></a>` : ''}
-      ${m.scenes.map(row).join('')}</div>`).join('')}</div></details>
-    <a class="side-back" href="#/materi">${icon('grid')} Lihat semua materi</a>`;
+  return `<nav class="rail" aria-label="Rute belajar">
+    <div class="rail-head"><span class="rail-ic">${icon('map')}</span><div><b>Rute Belajar</b><small>${doneCount()} dari 13 scene selesai</small></div><a class="rail-all" href="#/materi">${icon('grid')} Semua materi</a></div>
+    <div class="rail-track" style="--fill:${(ci / (seq.length - 1) * 100).toFixed(1)}%">
+      <span class="rail-line"><i></i></span>
+      ${groups.map(([label, ids]) => `<div class="rail-grp"><small>${label}</small><div class="rail-stops">${ids.map(stop).join('')}</div></div>`).join('')}
+    </div>
+  </nav>`;
 }
 
 /* =========================================================================
@@ -465,21 +468,12 @@ const uraianSections = s => s.uraian.map((u, i) => `<section class="u-sec" id="u
 const uraianHTML = uraianSections;
 
 function viewScene(id) {
-  /* Evaluasi: mode ujian layar penuh, satu soal per layar */
-  if (id === 'S12') return `<div class="exam">
-    <header class="ex-top">
-      <span class="ex-brand"><span class="brand-mark sm">${LOGO}</span><span><b>Evaluasi</b><small>S12 · Smart Emailing</small></span></span>
-      <div class="ex-prog" id="exProg"></div>
-      <a class="btn btn-ghost btn-sm" href="#/materi" aria-label="Keluar dari evaluasi">${icon('x')} Keluar</a>
-    </header>
-    <main class="ex-stage" id="activity"></main>
-  </div>`;
   const s = SCENES[id], m = materiOf(id), i = ORDER.indexOf(id);
   const text = ((s.uraian || []).map(u => u.p.join(' ')).join(' ') + ' ' + (s.narasi || '')).replace(/<[^>]+>/g, '');
   const mins = Math.max(1, Math.round(text.split(/\s+/).length / 170));
   const prev = ORDER[i - 1], next = ORDER[i + 1];
-  return `<div class="lesson wrap">
-    <aside class="side" id="side">${sideNav(id)}</aside>
+  return `<div class="lesson-wide wrap">
+    ${routeRail(id)}
     <article class="sheet mail-view">
       <div class="mv-bar">
         <a class="mv-btn" href="#/materi" title="Semua materi">${icon('left')}<span>Materi</span></a>
@@ -555,7 +549,7 @@ function mountScene(id) {
     state.done[id] = true; save(); updateBar();
     if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
     if (freshDone && !silent) celebrate();
-    $$('.ib-row').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.classList.remove('unread'); a.querySelector('.ib-st').innerHTML = icon('check'); } });
+    $$('.stop').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.querySelector('.stop-st').innerHTML = icon('check'); } });
     if (SCENES[id].uraianAfter) renderSteps(id);
   };
   ACT[id]($('#activity'), done, A(id));
@@ -1089,7 +1083,7 @@ const EVALUASI = [
 /* =========================================================================
    LAYAR: LATIHAN SOAL (ada pembahasan, hasil disimpan)
    ========================================================================= */
-function viewLatihan() { return `<div class="lesson wrap" id="quiz"></div>`; }
+function viewLatihan() { return `<div class="lesson-wide wrap">${routeRail('L')}<div id="quiz"></div></div>`; }
 function mountLatihan() {
   const L = state.lat = state.lat || { i: 0, ans: {}, res: {} }; save();
   const box = $('#quiz');
@@ -1098,18 +1092,15 @@ function mountLatihan() {
     if (L.ans[i] === undefined && q.type !== 'mcq') { L.ans[i] = a; save(); }
     const benar = Object.values(L.res).filter(Boolean).length, dijawab = Object.keys(L.res).length;
     const ok = materiDone();
-    box.innerHTML = `<aside class="side">
-      <a class="side-back" href="#/materi">${icon('left')} Semua materi</a>
-      <div class="score-box"><b>${benar}</b><span>benar dari ${dijawab} soal yang sudah diperiksa</span></div>
-      <div class="side-gh">Nomor soal</div>
-      <div class="qgrid">${LATIHAN.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${L.res[k] === true ? 'ok' : L.res[k] === false ? 'no' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
-      <div class="legend-s"><span><i class="lg ok"></i>benar</span><span><i class="lg no"></i>belum tepat</span></div>
-      <button type="button" class="btn btn-outline btn-sm" data-reset>${icon('refresh')} Ulangi latihan</button>
-    </aside>
-    <article class="sheet">
+    box.innerHTML = `    <article class="sheet">
       <div class="eyebrow">Latihan & Evaluasi · <span class="scode">L</span> · Latihan soal</div>
       <h1 class="display">Latihan Soal</h1>
       <p class="meta">${LATIHAN.length} soal campuran · jawab, periksa, lalu baca pembahasannya</p>
+      <div class="lat-panel">
+        <div class="score-box"><b>${benar}</b><span>benar dari ${dijawab} soal yang sudah diperiksa</span></div>
+        <div class="lat-nums"><div class="qgrid wide">${LATIHAN.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${L.res[k] === true ? 'ok' : L.res[k] === false ? 'no' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
+          <div class="legend-s"><span><i class="lg ok"></i>benar</span><span><i class="lg no"></i>belum tepat</span><button type="button" class="link-btn" data-reset>${icon('refresh')} Ulangi latihan</button></div></div>
+      </div>
       <section class="act-sec"><div class="act-head"><span class="act-tag">${icon('pen')} ${q.topic}</span><span class="counter">Soal <b>${i + 1}</b> dari ${LATIHAN.length}</span></div>
         <div class="act-card"><div id="qbox"></div><div class="fb" id="qfb" hidden></div>
         <div class="quiz-foot">
@@ -1141,85 +1132,108 @@ function mountLatihan() {
    S12 — EVALUASI: tanpa umpan balik per soal, hanya nilai akhir
    ========================================================================= */
 ACT.S12 = (el, done, st) => {
-  const prog = $('#exProg');
-  const setProg = (k, n, label) => { if (prog) prog.innerHTML = n ? `<span class="ex-count">${label}</span><span class="ex-dots">${Array.from({ length: n }, (_, j) => `<i class="${j < k ? 'past' : j === k ? 'cur' : ''}"></i>`).join('')}</span>` : `<span class="ex-count">${label}</span>`; };
   if (!materiDone()) {
     const left = MATERI_SCENES.filter(id => !state.done[id]);
-    setProg(0, 0, 'Terkunci');
-    el.innerHTML = `<div class="ex-slide ex-center">
-      <span class="ex-big-ic">${icon('lock')}</span>
-      <h1 class="ex-title">Evaluasi masih terkunci</h1>
-      <p class="ex-lead">Selesaikan dulu semua scene materi. Tinggal <b>${left.length}</b> lagi:</p>
-      <div class="ex-chips">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div>
-      <a class="btn btn-gold btn-lg" href="#/scene/${left[0]}">Lanjutkan materi ${icon('right')}</a>
-    </div>`;
+    el.innerHTML = `<div class="lockbox">${icon('lock')}<h3>Evaluasi masih terkunci</h3><p class="muted">Selesaikan dulu semua scene materi. Tinggal ${left.length} lagi:</p>
+      <div class="rec-links">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div></div>`;
     return;
   }
   const E = state.ev = state.ev || { i: 0, ans: {}, done: false }; save();
   const N = EVALUASI.length;
-  let dir = 1;
-  const slide = () => { const c = $('.ex-slide', el); if (!c || reduced) return; try { c.animate([{ opacity: 0, transform: `translateX(${dir * 80}px)` }, { opacity: 1, transform: 'translateX(0)' }], { duration: 450, easing: 'cubic-bezier(.2,.8,.2,1)' }); } catch (e) { /* tanpa animasi */ } };
+  const TYPE = { order: ['list', 'Urutkan'], match: ['branch', 'Pasangkan'], sort: ['layers', 'Kelompokkan'], spot: ['search', 'Tandai kesalahan'], hour: ['clock', 'Atur jam'] };
+  const touched = k => !!(E.touched && E.touched[k]);
+  let dir = 0, justSealed = -1, mode = 'q';
+  const anim = (sel, frames, ms) => { const c = $(sel, el); if (!c || reduced) return; try { c.animate(frames, { duration: ms, easing: 'cubic-bezier(.2,.8,.2,1)' }); } catch (e) { /* tanpa animasi */ } };
+  const stamps = cur => `<div class="stamps" role="list">${EVALUASI.map((q, k) => `<button type="button" role="listitem" class="stamp ${k === cur ? 'cur' : ''} ${touched(k) ? 'sealed' : ''} ${k === justSealed ? 'just' : ''}" data-go="${k}" title="Soal ${k + 1} · ${TYPE[q.type][1]}"><span class="st-n">${k + 1}</span>${icon(TYPE[q.type][0])}</button>`).join('')}</div>`;
+
   const intro = () => {
-    setProg(0, 0, `${N} soal`);
-    el.innerHTML = `<div class="ex-slide ex-center">
-      <span class="ex-big-ic">${icon('flag')}</span>
-      <div class="eyebrow light">S12 · Evaluasi akhir</div>
-      <h1 class="ex-title">Siap mengerjakan evaluasi?</h1>
-      <p class="ex-lead">${SCENES.S12.narasi}</p>
-      <div class="ex-stats"><div><b>${N}</b><span>soal</span></div><div><b>${KKM}</b><span>batas lulus</span></div><div><b>${icon('eyeoff')}</b><span>tanpa tanda benar/salah</span></div></div>
-      <p class="ex-note">Soal diambil dari aktivitas di materi: menyusun, memasangkan, mengelompokkan, menandai kesalahan, dan mengatur jam. Pindah soal dengan tombol <b>Berikutnya</b> atau panah ← → di keyboard.</p>
-      <button type="button" class="btn btn-gold btn-lg" data-start>Mulai evaluasi ${icon('right')}</button>
-    </div>`;
+    mode = 'intro';
+    el.innerHTML = `<div class="ev-intro2">
+      <div class="ev-stats"><div><b>${N}</b><span>soal</span></div><div><b>${KKM}</b><span>batas lulus</span></div><div><b>${icon('eyeoff')}</b><span>tanpa tanda benar/salah</span></div></div>
+      <p>Soalnya diambil dari aktivitas di materi. Ada lima jenis soal, arahkan kursor untuk melihat contohnya:</p>
+      <div class="type-tiles">${Object.entries(TYPE).map(([k, [ic, t]]) => `<div class="tt" tabindex="0"><div class="tt-in"><div class="tt-f">${icon(ic)}<b>${t}</b></div><div class="tt-b">${{ order: 'Susun bagian email dari atas ke bawah.', match: 'Pasangkan bagian email dengan fungsinya.', sort: 'Pisahkan mana yang layak dan tidak.', spot: 'Ketuk bagian email yang salah.', hour: 'Geser jam kirim yang tepat.' }[k]}</div></div></div>`).join('')}</div>
+      <p class="muted">Selama mengerjakan, tidak ada tanda benar atau salah. Jawabanmu tersimpan otomatis, dan nilai akhir muncul setelah semua jawaban dikirim.</p>
+      <button type="button" class="btn btn-primary btn-lg" data-start>Mulai evaluasi ${icon('right')}</button></div>`;
   };
-  const result = () => {
-    const pass = E.score >= KKM;
-    setProg(N, N, 'Selesai');
-    el.innerHTML = `<div class="ex-slide ex-center ${pass ? 'pass' : 'fail'}">
-      <div class="ex-ring" style="--p:${E.score}"><b>${E.score}</b><small>nilai akhir</small></div>
-      <div class="badge ${pass ? 'ok' : 'no'}">${pass ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
-      <h1 class="ex-title">${pass ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h1>
-      <p class="ex-lead">${pass ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
-      <div class="row-btns center">${pass ? `<a class="btn btn-gold btn-lg" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-gold btn-lg" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-ghost btn-lg" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
-    </div>`;
-  };
+
   const render = () => {
+    mode = 'q';
     const i = E.i, q = EVALUASI[i], a = qInit(q, E.ans[i]);
     if (E.ans[i] === undefined) { E.ans[i] = a; save(); }
-    const answered = EVALUASI.filter((qq, k) => E.touched && E.touched[k]).length;
-    setProg(i, N, `Soal ${i + 1} dari ${N}`);
-    el.innerHTML = `<div class="ex-slide ex-q">
-      <div class="ex-card"><div class="ex-qn">Soal ${i + 1}</div><div id="qbox"></div></div>
-      <div class="ex-foot">
-        <button type="button" class="btn btn-ghost" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
-        <span class="ex-nums">${EVALUASI.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${E.touched && E.touched[k] ? 'filled' : ''}" data-go="${k}" aria-label="Soal ${k + 1}">${k + 1}</button>`).join('')}</span>
-        ${i < N - 1 ? `<button type="button" class="btn btn-gold btn-lg" data-next>Berikutnya ${icon('right')}</button>` : `<button type="button" class="btn btn-gold btn-lg" data-submit>${icon('send')} Kirim (${answered}/${N})</button>`}
-      </div>
-    </div>`;
-    qRender($('#qbox', el), q, a, { mode: 'ujian', onChange: (v, soft) => { E.ans[i] = v; E.touched = E.touched || {}; E.touched[i] = true; save(); if (!soft) { dir = 0; render(); } } });
-    if (dir) slide();
+    const answered = EVALUASI.filter((_, k) => touched(k)).length;
+    el.innerHTML = `<div class="ev-top"><div><small>Soal ${i + 1} dari ${N} · ${TYPE[q.type][1]}</small><b>${answered}/${N} terjawab</b></div><span class="ev-saved" id="evSaved">${icon('check')} Tersimpan</span></div>
+      ${stamps(i)}
+      <div class="ev-deck"><div class="ev-card"><div id="qbox"></div></div></div>
+      <div class="quiz-foot">
+        <button type="button" class="btn btn-outline" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
+        ${i < N - 1 ? `<button type="button" class="btn btn-primary" data-next>Berikutnya ${icon('right')}</button>` : `<button type="button" class="btn btn-gold" data-review>${icon('list')} Periksa lembar jawaban</button>`}
+      </div>`;
+    qRender($('#qbox', el), q, a, { mode: 'ujian', onChange: (v, soft) => {
+      const first = !touched(i);
+      E.ans[i] = v; E.touched = E.touched || {}; E.touched[i] = true; save();
+      if (!soft) { dir = 0; justSealed = first ? i : -1; render(); }
+      const sv = $('#evSaved', el); if (sv) { sv.classList.remove('show'); void sv.offsetWidth; sv.classList.add('show'); }
+    } });
+    if (dir) anim('.ev-card', [{ opacity: 0, transform: `translateX(${dir * 90}px) rotate(${dir * 2}deg)` }, { opacity: 1, transform: 'none' }], 480);
+    justSealed = -1;
   };
-  const goTo = k => { if (k < 0 || k >= N || k === E.i) return; dir = k > E.i ? 1 : -1; E.i = k; save(); sfx(); render(); };
+
+  const review = () => {
+    mode = 'review';
+    const answered = EVALUASI.filter((_, k) => touched(k)).length;
+    el.innerHTML = `<div class="ev-top"><div><small>Lembar jawaban</small><b>${answered}/${N} terjawab</b></div></div>
+      <p class="muted">Amplop tertutup berarti soal sudah kamu jawab. Klik amplop untuk kembali ke soalnya.</p>
+      <div class="envs">${EVALUASI.map((q, k) => `<button type="button" class="env ${touched(k) ? 'sealed' : 'open'}" data-go="${k}"><span class="env-ic">${icon(touched(k) ? 'mail' : 'inbox')}</span><b>Soal ${k + 1}</b><small>${touched(k) ? 'Terjawab' : 'Belum dijawab'}</small></button>`).join('')}</div>
+      <div class="quiz-foot"><button type="button" class="btn btn-outline" data-back>${icon('left')} Kembali mengerjakan</button><button type="button" class="btn btn-primary btn-lg" data-submit>${icon('send')} Kirim semua jawaban</button></div>`;
+    anim('.envs', [{ opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'none' }], 450);
+  };
+
+  const result = (animated) => {
+    mode = 'result';
+    const pass = E.score >= KKM;
+    el.innerHTML = `<div class="ev-result ${pass ? 'pass' : 'fail'}">
+      <div class="ring big" style="--p:${animated ? 0 : E.score}"><b>${animated ? 0 : E.score}</b><small>nilai akhir</small></div>
+      <div><div class="badge ${pass ? 'ok' : 'no'}">${pass ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
+        <h3>${pass ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h3>
+        <p class="muted">${pass ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
+        <div class="row-btns">${pass ? `<a class="btn btn-primary" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-primary" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-outline" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
+      </div></div>`;
+    if (animated) {
+      const ring = $('.ring', el), b = $('.ring b', el), t0 = performance.now();
+      setTimeout(() => ring.style.setProperty('--p', E.score), 60);
+      const step = t => { const k = Math.min(1, (t - t0) / 1200); b.textContent = Math.round(E.score * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+      later(() => { b.textContent = E.score; ring.style.setProperty('--p', E.score); }, 1500);
+      if (pass) celebrate();
+    }
+  };
+
   const submit = () => {
-    const belum = EVALUASI.filter((q, k) => !(E.touched && E.touched[k])).length;
-    if (belum && !confirm(`Masih ada ${belum} soal yang belum kamu ubah jawabannya. Tetap kirim?`)) return;
-    const total = EVALUASI.reduce((sum, q, k) => sum + qScore(q, E.ans[k]), 0);
+    /* Hanya soal yang benar-benar dijawab yang dinilai (jawaban bawaan tidak diberi poin) */
+    const total = EVALUASI.reduce((sum, q, k) => sum + (touched(k) ? qScore(q, E.ans[k]) : 0), 0);
     E.score = Math.round(total / N * 100); E.done = true; save(); updateBar();
-    sfx(E.score >= KKM ? 'ok' : 'no'); dir = 1; result(); slide();
-    if (E.score >= KKM) done(false);
+    el.innerHTML = `<div class="sending"><span class="plane">${icon('send')}</span><b>Mengirim jawaban…</b></div>`;
+    sfx('click');
+    later(() => { sfx(E.score >= KKM ? 'ok' : 'no'); result(true); if (E.score >= KKM) done(false); }, reduced ? 0 : 1100);
   };
-  if (E.done) { result(); if (E.score >= KKM) done(true); }
-  else if (E.started) { dir = 0; render(); } else intro();
+
+  const goTo = k => { if (k < 0 || k >= N || (k === E.i && mode === 'q')) return; dir = k >= E.i ? 1 : -1; E.i = k; save(); sfx(); render(); };
+  if (E.done) { result(false); if (E.score >= KKM) done(true); }
+  else if (E.started) render(); else intro();
+
   el.onclick = e => {
     if (e.target.closest('[data-start]')) { E.started = true; save(); sfx(); dir = 1; render(); return; }
     if (e.target.closest('[data-retry]')) { state.ev = { i: 0, ans: {}, done: false, started: true }; save(); ACT.S12(el, done, st); return; }
     const g = e.target.closest('[data-go]'); if (g) { goTo(+g.dataset.go); return; }
     if (e.target.closest('[data-prev]')) { goTo(E.i - 1); return; }
     if (e.target.closest('[data-next]')) { goTo(E.i + 1); return; }
+    if (e.target.closest('[data-review]')) { sfx(); review(); return; }
+    if (e.target.closest('[data-back]')) { dir = -1; render(); return; }
     if (e.target.closest('[data-submit]')) submit();
   };
   const onKey = e => {
-    if (!E.started || E.done || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(E.i + 1); }
+    if (mode !== 'q' || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if (e.key === 'ArrowRight' && E.i < N - 1) { e.preventDefault(); goTo(E.i + 1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(E.i - 1); }
   };
   document.addEventListener('keydown', onKey);
@@ -1385,7 +1399,7 @@ async function pageExit(t) {
 }
 function pageEnter(t) {
   try {
-    $$('.side, .sheet > *, .hero-text > *, .hero-art, .start-card, .mat-card, .cat-card').forEach(e => (e.style.animation = 'none'));
+    $$('.rail, .side, .sheet > *, .hero-text > *, .hero-art, .start-card, .mat-card, .cat-card').forEach(e => (e.style.animation = 'none'));
     app.getAnimations().forEach(a => a.cancel());
     const an = app.animate(T_ENTER[t], { duration: T_DUR[t], easing: EASE });
     /* Cadangan: bila timeline tertahan (tab tersembunyi/iframe), lepas animasinya agar konten tetap terlihat */
@@ -1429,9 +1443,11 @@ async function route() {
   if (!isScene && !page) navKey = 'home';
   $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === navKey));
   requestAnimationFrame(() => moveInd(activeTab()));
+  /* Rute belajar: geser otomatis supaya scene sekarang berada di tengah */
+  const trk = $('.rail-track'), curStop = trk && $('.stop.cur', trk);
+  if (curStop) trk.scrollLeft = curStop.closest('.rail-grp').offsetLeft + curStop.offsetLeft - trk.clientWidth / 2 + curStop.offsetWidth / 2;
   $('#readLine').style.width = '0%';
   document.body.classList.toggle('is-home', !isScene && !page);
-  document.body.classList.toggle('exam-mode', isScene && arg === 'S12');
   window.scrollTo({ top: 0, behavior: 'instant' });
   app.focus({ preventScroll: true });
   updateBar();

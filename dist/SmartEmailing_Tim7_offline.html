@@ -1016,64 +1016,108 @@ body.settled .sheet > *, body.settled .side, body.settled .hero-text > *, body.s
 /* backdrop-filter membuat elemen fixed ikut bilah nav; dimatikan di HP agar tab bar menempel di bawah layar */
 @media (max-width: 760px) { .nav-in { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--cream); } }
 
+
 /* =========================================================================
-   EVALUASI: MODE UJIAN LAYAR PENUH (satu soal per layar, tanpa scroll)
+   RUTE BELAJAR (pengganti sidebar) + kolom tunggal
    ========================================================================= */
-body.exam-mode { overflow: hidden; }
-body.exam-mode .nav { display: none; }
-.exam { position: fixed; inset: 0; z-index: 35; display: grid; grid-template-rows: auto 1fr; color: var(--cream);
-  background: radial-gradient(900px 520px at 85% 10%, rgba(201, 149, 46, .18), transparent 70%), linear-gradient(155deg, var(--maroon) 0%, var(--maroon-2) 65%, var(--maroon-3) 100%); }
-.ex-top { display: flex; align-items: center; gap: 1rem; padding: .8rem 1.4rem; border-bottom: 1px solid rgba(251, 245, 236, .12); }
-.ex-brand { display: flex; align-items: center; gap: .6rem; flex: none; }
-.ex-brand .brand-mark.sm { width: 2.1rem; height: 2.1rem; }
-.ex-brand b { display: block; line-height: 1.1; }
-.ex-brand small { font-size: .72rem; color: var(--gold-s); opacity: .8; }
-.ex-prog { flex: 1; display: flex; align-items: center; justify-content: center; gap: .9rem; min-width: 0; }
-.ex-count { font-weight: 700; font-size: .85rem; color: var(--gold-l); white-space: nowrap; }
-.ex-dots { display: flex; gap: .35rem; }
-.ex-dots i { width: 1.6rem; height: .4rem; border-radius: 4px; background: rgba(251, 245, 236, .2); transition: background .3s, width .3s; }
-.ex-dots i.past { background: var(--gold); }
-.ex-dots i.cur { background: var(--gold-l); width: 2.6rem; }
-.ex-stage { position: relative; overflow: hidden; min-height: 0; }
-.ex-slide { height: 100%; padding: 1.4rem 1.6rem; }
-.ex-center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .9rem; overflow: auto; }
-.ex-big-ic { width: 4.4rem; height: 4.4rem; border-radius: 22px; display: grid; place-items: center; background: rgba(251, 245, 236, .1); color: var(--gold-l); --icf: rgba(226, 176, 74, .35); }
-.ex-big-ic .ic { width: 2.2rem; height: 2.2rem; }
-.ex-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; letter-spacing: -.03em; margin: 0; color: var(--cream); }
-.ex-lead { max-width: 52ch; color: rgba(251, 245, 236, .82); margin: 0; }
-.ex-note { max-width: 58ch; color: rgba(251, 245, 236, .65); font-size: .9rem; margin: 0; }
-.ex-stats { display: grid; grid-template-columns: repeat(3, 9rem); gap: .7rem; }
-.ex-stats div { background: rgba(251, 245, 236, .08); border: 1px solid rgba(251, 245, 236, .14); border-radius: 16px; padding: .8rem; display: grid; gap: .1rem; }
-.ex-stats b { font-size: 1.8rem; color: var(--gold-l); line-height: 1; display: grid; place-items: center; }
-.ex-stats b .ic { width: 1.8rem; height: 1.8rem; }
-.ex-stats span { font-size: .76rem; color: rgba(251, 245, 236, .7); }
-.ex-chips { display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center; max-width: 52rem; }
-.row-btns.center { justify-content: center; }
-.ex-ring { --p: 0; width: 11rem; height: 11rem; border-radius: 50%; display: grid; place-content: center; text-align: center; background: radial-gradient(closest-side, var(--maroon-2) 80%, transparent 81% 100%), conic-gradient(var(--gold-l) calc(var(--p) * 1%), rgba(251, 245, 236, .15) 0); transition: --p 1.3s var(--ease); }
-.ex-ring b { font-size: 3rem; color: var(--cream); line-height: 1; }
-.ex-ring small { color: var(--gold-s); }
-.fail .ex-ring { background: radial-gradient(closest-side, var(--maroon-2) 80%, transparent 81% 100%), conic-gradient(#e8836f calc(var(--p) * 1%), rgba(251, 245, 236, .15) 0); }
-.ex-q { display: grid; grid-template-rows: 1fr auto; gap: 1rem; max-width: 62rem; margin: 0 auto; }
-.ex-card { background: var(--card); color: var(--ink); border-radius: 26px; padding: 1.8rem 2rem; box-shadow: 0 30px 70px -30px rgba(0, 0, 0, .7); overflow: auto; min-height: 0; align-self: center; max-height: 100%; }
-.ex-qn { display: inline-block; font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--maroon); background: var(--gold-s); padding: .3em .8em; border-radius: 999px; margin-bottom: .8rem; }
-.ex-card .q { font-size: 1.25rem; font-weight: 700; color: var(--maroon-2); margin-bottom: 1.1rem; }
-.ex-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.ex-foot .btn-ghost:disabled { opacity: .35; cursor: default; }
-.ex-nums { display: flex; gap: .35rem; flex-wrap: wrap; justify-content: center; }
-.ex-nums .qn { width: 2.3rem; background: rgba(251, 245, 236, .08); border-color: rgba(251, 245, 236, .2); color: var(--cream); }
-.ex-nums .qn.filled { background: rgba(226, 176, 74, .25); border-color: var(--gold); }
-.ex-nums .qn.cur { background: var(--gold-l); border-color: var(--gold-l); color: var(--maroon-3); }
+.lesson-wide { max-width: 64rem; padding-top: 1.6rem; padding-bottom: 4rem; }
+.lesson-wide .sheet { margin-top: 1.1rem; }
+.rail { background: var(--card); border-radius: 22px; padding: 1rem 1.2rem 1.1rem; box-shadow: var(--shadow); animation: rise .5s var(--ease) both; }
+.rail-head { display: flex; align-items: center; gap: .7rem; margin-bottom: .9rem; }
+.rail-ic { width: 2.3rem; height: 2.3rem; border-radius: 12px; display: grid; place-items: center; background: var(--maroon); color: var(--cream); --icf: rgba(226, 176, 74, .6); flex: none; }
+.rail-head b { display: block; color: var(--maroon-2); line-height: 1.2; }
+.rail-head small { color: var(--gold); font-weight: 700; font-size: .76rem; }
+.rail-all { margin-left: auto; display: inline-flex; align-items: center; gap: .35rem; font-size: .8rem; font-weight: 700; text-decoration: none; color: var(--maroon); padding: .4em .8em; border-radius: 10px; border: 1px solid var(--line); background: #fff; transition: background .2s; }
+.rail-all:hover { background: var(--gold-s); }
+.rail-all .ic .f { display: none; }
+.rail-track { position: relative; display: flex; gap: .9rem; overflow-x: auto; padding: .2rem .2rem .3rem; scrollbar-width: thin; }
+.rail-line { position: absolute; left: 1.2rem; right: 1.2rem; top: 2.35rem; height: 4px; border-radius: 4px; background: var(--sand); }
+.rail-line i { position: absolute; left: 0; top: 0; bottom: 0; width: var(--fill); background: linear-gradient(90deg, var(--maroon), var(--gold)); border-radius: inherit; transition: width .8s var(--ease); }
+.rail-grp { position: relative; flex: none; display: grid; gap: .35rem; }
+.rail-grp small { font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-left: .2rem; }
+.rail-stops { display: flex; gap: .4rem; }
+.stop { position: relative; text-decoration: none; display: grid; place-items: center; }
+.stop-st { width: 2.6rem; height: 2.6rem; display: grid; place-items: center; font-size: .68rem; font-weight: 800; color: var(--maroon); background: #fff; border: 2px dashed rgba(201, 149, 46, .8); border-radius: 9px; transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), background .2s, box-shadow .2s; }
+.stop-st .ic { width: .95rem; height: .95rem; }
+.stop-st .ic .f { display: none; }
+.stop:hover .stop-st { transform: translateY(-4px) rotate(-6deg); box-shadow: 0 8px 14px -8px rgba(59, 17, 25, .6); }
+.stop.done .stop-st { background: var(--maroon); color: var(--gold-s); border-style: solid; border-color: var(--maroon); }
+.stop.locked .stop-st { opacity: .5; }
+.stop.cur .stop-st { background: var(--gold-l); color: var(--maroon-3); border: 2px solid var(--maroon-2); transform: scale(1.12) rotate(-4deg); animation: stopPulse 2s ease-in-out infinite; }
+@keyframes stopPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(226, 176, 74, .7); } 50% { box-shadow: 0 0 0 8px rgba(226, 176, 74, 0); } }
+.stop::after { content: attr(data-tip); position: absolute; top: calc(100% + 8px); left: 50%; transform: translate(-50%, -4px); white-space: nowrap; background: var(--maroon-2); color: var(--cream); font-size: .72rem; font-weight: 600; padding: .3em .7em; border-radius: 8px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 5; }
+.stop:hover::after, .stop:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+.rail-track:has(.stop:hover) { padding-bottom: 2rem; }
+.mail-view .mv-pos { margin-left: auto; }
+
+/* Latihan: panel atas pengganti sidebar */
+.lat-panel { display: grid; grid-template-columns: 13rem 1fr; gap: 1rem; align-items: start; background: var(--paper); border-radius: 18px; padding: .9rem; margin-bottom: 1.4rem; }
+.lat-panel .score-box { margin: 0; height: 100%; }
+.qgrid.wide { grid-template-columns: repeat(13, 1fr); gap: .3rem; }
+.lat-nums .legend-s { margin: .5rem 0 0; align-items: center; }
+.link-btn { margin-left: auto; display: inline-flex; align-items: center; gap: .3rem; border: 0; background: none; color: var(--maroon); font-weight: 700; font-size: .78rem; cursor: pointer; }
+.link-btn .ic .f { display: none; }
+
+/* =========================================================================
+   EVALUASI INTERAKTIF (dalam halaman)
+   ========================================================================= */
+.ev-intro2 { display: grid; gap: .9rem; justify-items: start; }
+.ev-intro2 p { margin: 0; }
+.type-tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: .6rem; width: 100%; }
+.tt { perspective: 700px; height: 7.2rem; outline: none; }
+.tt-in { position: relative; width: 100%; height: 100%; transition: transform .6s cubic-bezier(.3, 1.3, .5, 1); transform-style: preserve-3d; }
+.tt:hover .tt-in, .tt:focus .tt-in { transform: rotateY(180deg); }
+.tt-f, .tt-b { position: absolute; inset: 0; border-radius: 16px; display: grid; place-content: center; justify-items: center; gap: .4rem; padding: .7rem; text-align: center; backface-visibility: hidden; }
+.tt-f { background: var(--gold-s); color: var(--maroon); border: 1.5px solid var(--maroon); box-shadow: 3px 3px 0 var(--maroon); }
+.tt-f .ic { width: 1.6rem; height: 1.6rem; }
+.tt-f b { font-size: .84rem; }
+.tt-b { background: var(--maroon-2); color: var(--cream); font-size: .8rem; transform: rotateY(180deg); }
+.ev-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: .8rem; }
+.ev-top small { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.ev-top b { color: var(--maroon-2); font-size: 1.05rem; }
+.ev-saved { display: inline-flex; align-items: center; gap: .3rem; font-size: .8rem; font-weight: 700; color: var(--ok); background: var(--ok-bg); padding: .3em .8em; border-radius: 999px; opacity: 0; transform: translateY(4px); }
+.ev-saved .ic .f { display: none; }
+.ev-saved.show { animation: saved 1.6s ease forwards; }
+@keyframes saved { 15%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-4px); } }
+.stamps { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: 1.1rem; }
+.stamp { position: relative; width: 3.1rem; height: 3.5rem; border: 2px dashed rgba(201, 149, 46, .8); border-radius: 8px; background: #fff; display: grid; place-items: center; align-content: center; gap: .1rem; cursor: pointer; color: var(--maroon); transition: transform .25s cubic-bezier(.3, 1.6, .5, 1), background .2s; }
+.stamp .st-n { font-size: .68rem; font-weight: 800; }
+.stamp .ic { width: 1.05rem; height: 1.05rem; }
+.stamp:hover { transform: translateY(-3px) rotate(-4deg); }
+.stamp.cur { border: 2px solid var(--maroon-2); background: var(--gold-s); transform: translateY(-3px); }
+.stamp.sealed { background: var(--maroon); color: var(--gold-s); border-style: solid; border-color: var(--maroon); --icf: rgba(226, 176, 74, .5); }
+.stamp.sealed::after { content: "✓"; position: absolute; top: -7px; right: -7px; width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--gold-l); color: var(--maroon-3); font-size: .62rem; font-weight: 800; display: grid; place-items: center; }
+.stamp.just { animation: stampIn .55s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes stampIn { 0% { transform: scale(1.6) rotate(-14deg); opacity: .3; } 60% { transform: scale(.92) rotate(3deg); opacity: 1; } }
+.ev-deck { position: relative; }
+.ev-deck::before, .ev-deck::after { content: ""; position: absolute; left: 1.2rem; right: 1.2rem; bottom: -7px; height: 12px; border-radius: 0 0 16px 16px; background: var(--sand); z-index: 0; }
+.ev-deck::after { left: 2.4rem; right: 2.4rem; bottom: -14px; opacity: .6; }
+.ev-card { position: relative; z-index: 1; background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 1.4rem 1.5rem; box-shadow: 0 14px 30px -24px rgba(59, 17, 25, .6); }
+.ev-card .q { font-size: 1.1rem; color: var(--maroon-2); }
+.envs { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; margin: 1rem 0 .4rem; }
+.env { display: grid; justify-items: center; gap: .2rem; padding: 1rem .6rem; border-radius: 16px; border: 2px solid var(--line); background: #fff; cursor: pointer; transition: transform .25s cubic-bezier(.3, 1.6, .5, 1), border-color .2s; }
+.env:hover { transform: translateY(-4px); border-color: var(--maroon); }
+.env-ic { width: 2.6rem; height: 2.6rem; border-radius: 50%; display: grid; place-items: center; background: var(--sand); color: var(--maroon); }
+.env.sealed .env-ic { background: var(--maroon); color: var(--gold-s); --icf: rgba(226, 176, 74, .5); }
+.env.open { border-style: dashed; }
+.env b { font-size: .88rem; color: var(--maroon-2); }
+.env small { font-size: .74rem; color: var(--muted); }
+.env.sealed small { color: var(--ok); font-weight: 700; }
+.sending { display: grid; justify-items: center; gap: .8rem; padding: 3rem 1rem; color: var(--maroon-2); }
+.plane { width: 4rem; height: 4rem; border-radius: 50%; display: grid; place-items: center; background: var(--gold-s); color: var(--maroon); animation: fly 1.1s cubic-bezier(.5, 0, .3, 1) forwards; }
+.plane .ic { width: 2rem; height: 2rem; }
+@keyframes fly { 0% { transform: translate(0, 0) rotate(0); } 30% { transform: translate(-12px, 6px) rotate(-8deg); } 100% { transform: translate(260px, -160px) rotate(18deg) scale(.5); opacity: 0; } }
+
 @media (max-width: 760px) {
-  body.exam-mode { padding-bottom: 0; }
-  .ex-top { padding: .7rem .9rem; gap: .6rem; }
-  .ex-brand small, .ex-dots { display: none; }
-  .ex-slide { padding: 1rem; }
-  .ex-card { padding: 1.2rem 1.1rem; border-radius: 20px; }
-  .ex-card .q { font-size: 1.05rem; }
-  .ex-nums { display: none; }
-  .ex-foot .btn { flex: 1; }
-  .ex-stats { grid-template-columns: repeat(3, 1fr); }
+  .rail-head small { display: none; }
+  .rail-line { top: 2.3rem; }
+  .lat-panel { grid-template-columns: 1fr; }
+  .qgrid.wide { grid-template-columns: repeat(9, 1fr); }
+  .type-tiles { grid-template-columns: repeat(2, 1fr); }
+  .envs { grid-template-columns: repeat(2, 1fr); }
+  .stamp { width: 2.6rem; height: 3rem; }
 }
+body.settled .rail { animation: none; opacity: 1; transform: none; }
 
 </style>
 </head>
@@ -1433,21 +1477,24 @@ function mcq(el, { q, opts, onDone, store, key }) {
 /* =========================================================================
    NAVIGASI SAMPING (halaman scene, latihan, evaluasi)
    ========================================================================= */
-function sideNav(cur) {
-  const unread = ORDER.filter(id => !state.done[id] && !locked(id)).length;
-  const row = id => {
-    const lk = locked(id), d = state.done[id], sc = SCENES[id];
-    return `<a class="ib-row ${id === cur ? 'cur' : ''} ${d ? 'done' : 'unread'} ${lk ? 'locked' : ''}" href="#/scene/${id}">
-      <span class="ib-av">${lk ? icon('lock') : id}</span>
-      <span class="ib-t"><b>${sc.title}</b><small>${sc.type}</small></span>
-      <span class="ib-st">${d ? icon('check') : lk ? '' : '<i class="ib-dot"></i>'}</span></a>`;
+/* Rute belajar: jalur perangko S01–S13 di atas halaman (pengganti sidebar) */
+function routeRail(cur) {
+  const groups = [...MATERI.slice(0, 4).map(m => [m.short, m.scenes]), ['Latihan', ['L']], ['Akhir', ['S12', 'S13']]];
+  const seq = groups.flatMap(g => g[1]);
+  const ci = Math.max(0, seq.indexOf(cur));
+  const stop = id => {
+    const isL = id === 'L', sc = isL ? { title: 'Latihan Soal', type: `${LATIHAN.length} soal` } : SCENES[id];
+    const d = isL ? false : state.done[id], lk = isL ? false : locked(id);
+    return `<a class="stop ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-tip="${sc.title}" aria-label="${id} · ${sc.title}${d ? ' (selesai)' : lk ? ' (terkunci)' : ''}">
+      <span class="stop-st">${d ? icon('check') : lk ? icon('lock') : id}</span></a>`;
   };
-  return `<div class="ib-head"><span class="ib-ic">${icon('inbox')}</span><div><b>Kotak Masuk Materi</b><small>${unread ? `${unread} belum dibuka` : 'Semua sudah dibuka'}</small></div></div>
-    <div class="side-prog"><span class="bar"><i style="width:${pct()}%"></i></span><small>${doneCount()} / 13 selesai</small></div>
-    <details class="side-list" ${window.innerWidth > 1080 ? 'open' : ''}><summary>${icon('list')} Daftar scene</summary><div class="side-groups">${MATERI.map(m => `<div class="side-group"><div class="side-gh">${icon(m.id === 'akhir' ? 'flag' : 'book')} ${m.id === 'akhir' ? 'Latihan & Evaluasi' : m.short}</div>
-      ${m.id === 'akhir' ? `<a class="ib-row ${cur === 'L' ? 'cur' : ''}" href="#/latihan"><span class="ib-av">L</span><span class="ib-t"><b>Latihan Soal</b><small>${LATIHAN.length} soal campuran</small></span><span class="ib-st"></span></a>` : ''}
-      ${m.scenes.map(row).join('')}</div>`).join('')}</div></details>
-    <a class="side-back" href="#/materi">${icon('grid')} Lihat semua materi</a>`;
+  return `<nav class="rail" aria-label="Rute belajar">
+    <div class="rail-head"><span class="rail-ic">${icon('map')}</span><div><b>Rute Belajar</b><small>${doneCount()} dari 13 scene selesai</small></div><a class="rail-all" href="#/materi">${icon('grid')} Semua materi</a></div>
+    <div class="rail-track" style="--fill:${(ci / (seq.length - 1) * 100).toFixed(1)}%">
+      <span class="rail-line"><i></i></span>
+      ${groups.map(([label, ids]) => `<div class="rail-grp"><small>${label}</small><div class="rail-stops">${ids.map(stop).join('')}</div></div>`).join('')}
+    </div>
+  </nav>`;
 }
 
 /* =========================================================================
@@ -1579,21 +1626,12 @@ const uraianSections = s => s.uraian.map((u, i) => `<section class="u-sec" id="u
 const uraianHTML = uraianSections;
 
 function viewScene(id) {
-  /* Evaluasi: mode ujian layar penuh, satu soal per layar */
-  if (id === 'S12') return `<div class="exam">
-    <header class="ex-top">
-      <span class="ex-brand"><span class="brand-mark sm">${LOGO}</span><span><b>Evaluasi</b><small>S12 · Smart Emailing</small></span></span>
-      <div class="ex-prog" id="exProg"></div>
-      <a class="btn btn-ghost btn-sm" href="#/materi" aria-label="Keluar dari evaluasi">${icon('x')} Keluar</a>
-    </header>
-    <main class="ex-stage" id="activity"></main>
-  </div>`;
   const s = SCENES[id], m = materiOf(id), i = ORDER.indexOf(id);
   const text = ((s.uraian || []).map(u => u.p.join(' ')).join(' ') + ' ' + (s.narasi || '')).replace(/<[^>]+>/g, '');
   const mins = Math.max(1, Math.round(text.split(/\s+/).length / 170));
   const prev = ORDER[i - 1], next = ORDER[i + 1];
-  return `<div class="lesson wrap">
-    <aside class="side" id="side">${sideNav(id)}</aside>
+  return `<div class="lesson-wide wrap">
+    ${routeRail(id)}
     <article class="sheet mail-view">
       <div class="mv-bar">
         <a class="mv-btn" href="#/materi" title="Semua materi">${icon('left')}<span>Materi</span></a>
@@ -1669,7 +1707,7 @@ function mountScene(id) {
     state.done[id] = true; save(); updateBar();
     if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
     if (freshDone && !silent) celebrate();
-    $$('.ib-row').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.classList.remove('unread'); a.querySelector('.ib-st').innerHTML = icon('check'); } });
+    $$('.stop').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.querySelector('.stop-st').innerHTML = icon('check'); } });
     if (SCENES[id].uraianAfter) renderSteps(id);
   };
   ACT[id]($('#activity'), done, A(id));
@@ -2203,7 +2241,7 @@ const EVALUASI = [
 /* =========================================================================
    LAYAR: LATIHAN SOAL (ada pembahasan, hasil disimpan)
    ========================================================================= */
-function viewLatihan() { return `<div class="lesson wrap" id="quiz"></div>`; }
+function viewLatihan() { return `<div class="lesson-wide wrap">${routeRail('L')}<div id="quiz"></div></div>`; }
 function mountLatihan() {
   const L = state.lat = state.lat || { i: 0, ans: {}, res: {} }; save();
   const box = $('#quiz');
@@ -2212,18 +2250,15 @@ function mountLatihan() {
     if (L.ans[i] === undefined && q.type !== 'mcq') { L.ans[i] = a; save(); }
     const benar = Object.values(L.res).filter(Boolean).length, dijawab = Object.keys(L.res).length;
     const ok = materiDone();
-    box.innerHTML = `<aside class="side">
-      <a class="side-back" href="#/materi">${icon('left')} Semua materi</a>
-      <div class="score-box"><b>${benar}</b><span>benar dari ${dijawab} soal yang sudah diperiksa</span></div>
-      <div class="side-gh">Nomor soal</div>
-      <div class="qgrid">${LATIHAN.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${L.res[k] === true ? 'ok' : L.res[k] === false ? 'no' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
-      <div class="legend-s"><span><i class="lg ok"></i>benar</span><span><i class="lg no"></i>belum tepat</span></div>
-      <button type="button" class="btn btn-outline btn-sm" data-reset>${icon('refresh')} Ulangi latihan</button>
-    </aside>
-    <article class="sheet">
+    box.innerHTML = `    <article class="sheet">
       <div class="eyebrow">Latihan & Evaluasi · <span class="scode">L</span> · Latihan soal</div>
       <h1 class="display">Latihan Soal</h1>
       <p class="meta">${LATIHAN.length} soal campuran · jawab, periksa, lalu baca pembahasannya</p>
+      <div class="lat-panel">
+        <div class="score-box"><b>${benar}</b><span>benar dari ${dijawab} soal yang sudah diperiksa</span></div>
+        <div class="lat-nums"><div class="qgrid wide">${LATIHAN.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${L.res[k] === true ? 'ok' : L.res[k] === false ? 'no' : ''}" data-go="${k}">${k + 1}</button>`).join('')}</div>
+          <div class="legend-s"><span><i class="lg ok"></i>benar</span><span><i class="lg no"></i>belum tepat</span><button type="button" class="link-btn" data-reset>${icon('refresh')} Ulangi latihan</button></div></div>
+      </div>
       <section class="act-sec"><div class="act-head"><span class="act-tag">${icon('pen')} ${q.topic}</span><span class="counter">Soal <b>${i + 1}</b> dari ${LATIHAN.length}</span></div>
         <div class="act-card"><div id="qbox"></div><div class="fb" id="qfb" hidden></div>
         <div class="quiz-foot">
@@ -2255,85 +2290,108 @@ function mountLatihan() {
    S12 — EVALUASI: tanpa umpan balik per soal, hanya nilai akhir
    ========================================================================= */
 ACT.S12 = (el, done, st) => {
-  const prog = $('#exProg');
-  const setProg = (k, n, label) => { if (prog) prog.innerHTML = n ? `<span class="ex-count">${label}</span><span class="ex-dots">${Array.from({ length: n }, (_, j) => `<i class="${j < k ? 'past' : j === k ? 'cur' : ''}"></i>`).join('')}</span>` : `<span class="ex-count">${label}</span>`; };
   if (!materiDone()) {
     const left = MATERI_SCENES.filter(id => !state.done[id]);
-    setProg(0, 0, 'Terkunci');
-    el.innerHTML = `<div class="ex-slide ex-center">
-      <span class="ex-big-ic">${icon('lock')}</span>
-      <h1 class="ex-title">Evaluasi masih terkunci</h1>
-      <p class="ex-lead">Selesaikan dulu semua scene materi. Tinggal <b>${left.length}</b> lagi:</p>
-      <div class="ex-chips">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div>
-      <a class="btn btn-gold btn-lg" href="#/scene/${left[0]}">Lanjutkan materi ${icon('right')}</a>
-    </div>`;
+    el.innerHTML = `<div class="lockbox">${icon('lock')}<h3>Evaluasi masih terkunci</h3><p class="muted">Selesaikan dulu semua scene materi. Tinggal ${left.length} lagi:</p>
+      <div class="rec-links">${left.map(id => `<a class="rec-link" href="#/scene/${id}">${id} · ${SCENES[id].title}</a>`).join('')}</div></div>`;
     return;
   }
   const E = state.ev = state.ev || { i: 0, ans: {}, done: false }; save();
   const N = EVALUASI.length;
-  let dir = 1;
-  const slide = () => { const c = $('.ex-slide', el); if (!c || reduced) return; try { c.animate([{ opacity: 0, transform: `translateX(${dir * 80}px)` }, { opacity: 1, transform: 'translateX(0)' }], { duration: 450, easing: 'cubic-bezier(.2,.8,.2,1)' }); } catch (e) { /* tanpa animasi */ } };
+  const TYPE = { order: ['list', 'Urutkan'], match: ['branch', 'Pasangkan'], sort: ['layers', 'Kelompokkan'], spot: ['search', 'Tandai kesalahan'], hour: ['clock', 'Atur jam'] };
+  const touched = k => !!(E.touched && E.touched[k]);
+  let dir = 0, justSealed = -1, mode = 'q';
+  const anim = (sel, frames, ms) => { const c = $(sel, el); if (!c || reduced) return; try { c.animate(frames, { duration: ms, easing: 'cubic-bezier(.2,.8,.2,1)' }); } catch (e) { /* tanpa animasi */ } };
+  const stamps = cur => `<div class="stamps" role="list">${EVALUASI.map((q, k) => `<button type="button" role="listitem" class="stamp ${k === cur ? 'cur' : ''} ${touched(k) ? 'sealed' : ''} ${k === justSealed ? 'just' : ''}" data-go="${k}" title="Soal ${k + 1} · ${TYPE[q.type][1]}"><span class="st-n">${k + 1}</span>${icon(TYPE[q.type][0])}</button>`).join('')}</div>`;
+
   const intro = () => {
-    setProg(0, 0, `${N} soal`);
-    el.innerHTML = `<div class="ex-slide ex-center">
-      <span class="ex-big-ic">${icon('flag')}</span>
-      <div class="eyebrow light">S12 · Evaluasi akhir</div>
-      <h1 class="ex-title">Siap mengerjakan evaluasi?</h1>
-      <p class="ex-lead">${SCENES.S12.narasi}</p>
-      <div class="ex-stats"><div><b>${N}</b><span>soal</span></div><div><b>${KKM}</b><span>batas lulus</span></div><div><b>${icon('eyeoff')}</b><span>tanpa tanda benar/salah</span></div></div>
-      <p class="ex-note">Soal diambil dari aktivitas di materi: menyusun, memasangkan, mengelompokkan, menandai kesalahan, dan mengatur jam. Pindah soal dengan tombol <b>Berikutnya</b> atau panah ← → di keyboard.</p>
-      <button type="button" class="btn btn-gold btn-lg" data-start>Mulai evaluasi ${icon('right')}</button>
-    </div>`;
+    mode = 'intro';
+    el.innerHTML = `<div class="ev-intro2">
+      <div class="ev-stats"><div><b>${N}</b><span>soal</span></div><div><b>${KKM}</b><span>batas lulus</span></div><div><b>${icon('eyeoff')}</b><span>tanpa tanda benar/salah</span></div></div>
+      <p>Soalnya diambil dari aktivitas di materi. Ada lima jenis soal, arahkan kursor untuk melihat contohnya:</p>
+      <div class="type-tiles">${Object.entries(TYPE).map(([k, [ic, t]]) => `<div class="tt" tabindex="0"><div class="tt-in"><div class="tt-f">${icon(ic)}<b>${t}</b></div><div class="tt-b">${{ order: 'Susun bagian email dari atas ke bawah.', match: 'Pasangkan bagian email dengan fungsinya.', sort: 'Pisahkan mana yang layak dan tidak.', spot: 'Ketuk bagian email yang salah.', hour: 'Geser jam kirim yang tepat.' }[k]}</div></div></div>`).join('')}</div>
+      <p class="muted">Selama mengerjakan, tidak ada tanda benar atau salah. Jawabanmu tersimpan otomatis, dan nilai akhir muncul setelah semua jawaban dikirim.</p>
+      <button type="button" class="btn btn-primary btn-lg" data-start>Mulai evaluasi ${icon('right')}</button></div>`;
   };
-  const result = () => {
-    const pass = E.score >= KKM;
-    setProg(N, N, 'Selesai');
-    el.innerHTML = `<div class="ex-slide ex-center ${pass ? 'pass' : 'fail'}">
-      <div class="ex-ring" style="--p:${E.score}"><b>${E.score}</b><small>nilai akhir</small></div>
-      <div class="badge ${pass ? 'ok' : 'no'}">${pass ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
-      <h1 class="ex-title">${pass ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h1>
-      <p class="ex-lead">${pass ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
-      <div class="row-btns center">${pass ? `<a class="btn btn-gold btn-lg" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-gold btn-lg" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-ghost btn-lg" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
-    </div>`;
-  };
+
   const render = () => {
+    mode = 'q';
     const i = E.i, q = EVALUASI[i], a = qInit(q, E.ans[i]);
     if (E.ans[i] === undefined) { E.ans[i] = a; save(); }
-    const answered = EVALUASI.filter((qq, k) => E.touched && E.touched[k]).length;
-    setProg(i, N, `Soal ${i + 1} dari ${N}`);
-    el.innerHTML = `<div class="ex-slide ex-q">
-      <div class="ex-card"><div class="ex-qn">Soal ${i + 1}</div><div id="qbox"></div></div>
-      <div class="ex-foot">
-        <button type="button" class="btn btn-ghost" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
-        <span class="ex-nums">${EVALUASI.map((_, k) => `<button type="button" class="qn ${k === i ? 'cur' : ''} ${E.touched && E.touched[k] ? 'filled' : ''}" data-go="${k}" aria-label="Soal ${k + 1}">${k + 1}</button>`).join('')}</span>
-        ${i < N - 1 ? `<button type="button" class="btn btn-gold btn-lg" data-next>Berikutnya ${icon('right')}</button>` : `<button type="button" class="btn btn-gold btn-lg" data-submit>${icon('send')} Kirim (${answered}/${N})</button>`}
-      </div>
-    </div>`;
-    qRender($('#qbox', el), q, a, { mode: 'ujian', onChange: (v, soft) => { E.ans[i] = v; E.touched = E.touched || {}; E.touched[i] = true; save(); if (!soft) { dir = 0; render(); } } });
-    if (dir) slide();
+    const answered = EVALUASI.filter((_, k) => touched(k)).length;
+    el.innerHTML = `<div class="ev-top"><div><small>Soal ${i + 1} dari ${N} · ${TYPE[q.type][1]}</small><b>${answered}/${N} terjawab</b></div><span class="ev-saved" id="evSaved">${icon('check')} Tersimpan</span></div>
+      ${stamps(i)}
+      <div class="ev-deck"><div class="ev-card"><div id="qbox"></div></div></div>
+      <div class="quiz-foot">
+        <button type="button" class="btn btn-outline" data-prev ${i === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
+        ${i < N - 1 ? `<button type="button" class="btn btn-primary" data-next>Berikutnya ${icon('right')}</button>` : `<button type="button" class="btn btn-gold" data-review>${icon('list')} Periksa lembar jawaban</button>`}
+      </div>`;
+    qRender($('#qbox', el), q, a, { mode: 'ujian', onChange: (v, soft) => {
+      const first = !touched(i);
+      E.ans[i] = v; E.touched = E.touched || {}; E.touched[i] = true; save();
+      if (!soft) { dir = 0; justSealed = first ? i : -1; render(); }
+      const sv = $('#evSaved', el); if (sv) { sv.classList.remove('show'); void sv.offsetWidth; sv.classList.add('show'); }
+    } });
+    if (dir) anim('.ev-card', [{ opacity: 0, transform: `translateX(${dir * 90}px) rotate(${dir * 2}deg)` }, { opacity: 1, transform: 'none' }], 480);
+    justSealed = -1;
   };
-  const goTo = k => { if (k < 0 || k >= N || k === E.i) return; dir = k > E.i ? 1 : -1; E.i = k; save(); sfx(); render(); };
+
+  const review = () => {
+    mode = 'review';
+    const answered = EVALUASI.filter((_, k) => touched(k)).length;
+    el.innerHTML = `<div class="ev-top"><div><small>Lembar jawaban</small><b>${answered}/${N} terjawab</b></div></div>
+      <p class="muted">Amplop tertutup berarti soal sudah kamu jawab. Klik amplop untuk kembali ke soalnya.</p>
+      <div class="envs">${EVALUASI.map((q, k) => `<button type="button" class="env ${touched(k) ? 'sealed' : 'open'}" data-go="${k}"><span class="env-ic">${icon(touched(k) ? 'mail' : 'inbox')}</span><b>Soal ${k + 1}</b><small>${touched(k) ? 'Terjawab' : 'Belum dijawab'}</small></button>`).join('')}</div>
+      <div class="quiz-foot"><button type="button" class="btn btn-outline" data-back>${icon('left')} Kembali mengerjakan</button><button type="button" class="btn btn-primary btn-lg" data-submit>${icon('send')} Kirim semua jawaban</button></div>`;
+    anim('.envs', [{ opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'none' }], 450);
+  };
+
+  const result = (animated) => {
+    mode = 'result';
+    const pass = E.score >= KKM;
+    el.innerHTML = `<div class="ev-result ${pass ? 'pass' : 'fail'}">
+      <div class="ring big" style="--p:${animated ? 0 : E.score}"><b>${animated ? 0 : E.score}</b><small>nilai akhir</small></div>
+      <div><div class="badge ${pass ? 'ok' : 'no'}">${pass ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
+        <h3>${pass ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h3>
+        <p class="muted">${pass ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
+        <div class="row-btns">${pass ? `<a class="btn btn-primary" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-primary" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-outline" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
+      </div></div>`;
+    if (animated) {
+      const ring = $('.ring', el), b = $('.ring b', el), t0 = performance.now();
+      setTimeout(() => ring.style.setProperty('--p', E.score), 60);
+      const step = t => { const k = Math.min(1, (t - t0) / 1200); b.textContent = Math.round(E.score * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+      later(() => { b.textContent = E.score; ring.style.setProperty('--p', E.score); }, 1500);
+      if (pass) celebrate();
+    }
+  };
+
   const submit = () => {
-    const belum = EVALUASI.filter((q, k) => !(E.touched && E.touched[k])).length;
-    if (belum && !confirm(`Masih ada ${belum} soal yang belum kamu ubah jawabannya. Tetap kirim?`)) return;
-    const total = EVALUASI.reduce((sum, q, k) => sum + qScore(q, E.ans[k]), 0);
+    /* Hanya soal yang benar-benar dijawab yang dinilai (jawaban bawaan tidak diberi poin) */
+    const total = EVALUASI.reduce((sum, q, k) => sum + (touched(k) ? qScore(q, E.ans[k]) : 0), 0);
     E.score = Math.round(total / N * 100); E.done = true; save(); updateBar();
-    sfx(E.score >= KKM ? 'ok' : 'no'); dir = 1; result(); slide();
-    if (E.score >= KKM) done(false);
+    el.innerHTML = `<div class="sending"><span class="plane">${icon('send')}</span><b>Mengirim jawaban…</b></div>`;
+    sfx('click');
+    later(() => { sfx(E.score >= KKM ? 'ok' : 'no'); result(true); if (E.score >= KKM) done(false); }, reduced ? 0 : 1100);
   };
-  if (E.done) { result(); if (E.score >= KKM) done(true); }
-  else if (E.started) { dir = 0; render(); } else intro();
+
+  const goTo = k => { if (k < 0 || k >= N || (k === E.i && mode === 'q')) return; dir = k >= E.i ? 1 : -1; E.i = k; save(); sfx(); render(); };
+  if (E.done) { result(false); if (E.score >= KKM) done(true); }
+  else if (E.started) render(); else intro();
+
   el.onclick = e => {
     if (e.target.closest('[data-start]')) { E.started = true; save(); sfx(); dir = 1; render(); return; }
     if (e.target.closest('[data-retry]')) { state.ev = { i: 0, ans: {}, done: false, started: true }; save(); ACT.S12(el, done, st); return; }
     const g = e.target.closest('[data-go]'); if (g) { goTo(+g.dataset.go); return; }
     if (e.target.closest('[data-prev]')) { goTo(E.i - 1); return; }
     if (e.target.closest('[data-next]')) { goTo(E.i + 1); return; }
+    if (e.target.closest('[data-review]')) { sfx(); review(); return; }
+    if (e.target.closest('[data-back]')) { dir = -1; render(); return; }
     if (e.target.closest('[data-submit]')) submit();
   };
   const onKey = e => {
-    if (!E.started || E.done || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(E.i + 1); }
+    if (mode !== 'q' || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if (e.key === 'ArrowRight' && E.i < N - 1) { e.preventDefault(); goTo(E.i + 1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(E.i - 1); }
   };
   document.addEventListener('keydown', onKey);
@@ -2499,7 +2557,7 @@ async function pageExit(t) {
 }
 function pageEnter(t) {
   try {
-    $$('.side, .sheet > *, .hero-text > *, .hero-art, .start-card, .mat-card, .cat-card').forEach(e => (e.style.animation = 'none'));
+    $$('.rail, .side, .sheet > *, .hero-text > *, .hero-art, .start-card, .mat-card, .cat-card').forEach(e => (e.style.animation = 'none'));
     app.getAnimations().forEach(a => a.cancel());
     const an = app.animate(T_ENTER[t], { duration: T_DUR[t], easing: EASE });
     /* Cadangan: bila timeline tertahan (tab tersembunyi/iframe), lepas animasinya agar konten tetap terlihat */
@@ -2543,9 +2601,11 @@ async function route() {
   if (!isScene && !page) navKey = 'home';
   $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === navKey));
   requestAnimationFrame(() => moveInd(activeTab()));
+  /* Rute belajar: geser otomatis supaya scene sekarang berada di tengah */
+  const trk = $('.rail-track'), curStop = trk && $('.stop.cur', trk);
+  if (curStop) trk.scrollLeft = curStop.closest('.rail-grp').offsetLeft + curStop.offsetLeft - trk.clientWidth / 2 + curStop.offsetWidth / 2;
   $('#readLine').style.width = '0%';
   document.body.classList.toggle('is-home', !isScene && !page);
-  document.body.classList.toggle('exam-mode', isScene && arg === 'S12');
   window.scrollTo({ top: 0, behavior: 'instant' });
   app.focus({ preventScroll: true });
   updateBar();
