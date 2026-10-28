@@ -94,7 +94,8 @@ const LOGO = `<svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect wid
 const KEY = 'smart-emailing:v2';
 const fresh = () => ({ done: {}, act: {}, lat: null, ev: null, feedback: null, sound: true, last: null });
 let state = (() => { try { return Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return fresh(); } })();
-function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* mode privat */ } SCORM.sync(); }
+let gameOn = false;
+function save() { if (gameOn) gameCheck(); try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* mode privat */ } SCORM.sync(); }
 
 /* ---------- Koneksi LMS (SCORM 1.2) ----------
    Bila dibuka di dalam LMS, status belajar dan nilai evaluasi dikirim ke LMS.
@@ -269,7 +270,14 @@ const SCENES = {
 /* ---------- Status kunci ---------- */
 const materiDone = () => MATERI_SCENES.every(id => state.done[id]);
 const evalPassed = () => !!(state.ev && state.ev.done && state.ev.score >= KKM);
-const locked = id => (id === 'S12' && !materiDone()) || (id === 'S13' && !evalPassed());
+/* Kunci berurutan: setiap scene baru terbuka setelah scene sebelumnya selesai (dibaca + aktivitasnya dikerjakan) */
+const locked = id => {
+  if (id === 'S12') return !materiDone();
+  if (id === 'S13') return !evalPassed();
+  const i = ORDER.indexOf(id);
+  return i > 0 && !state.done[ORDER[i - 1]];
+};
+const readAll = id => { const s = SCENES[id]; if (!s.uraian) return true; const r = A(id).read || []; return s.uraian.every((_, j) => r.includes(j)); };
 const doneCount = () => ORDER.filter(id => state.done[id]).length;
 const pct = () => Math.round(doneCount() / ORDER.length * 100);
 const nextOf = id => ({ S11: '#/latihan', S12: evalPassed() ? '#/scene/S13' : null, S13: null }[id] !== undefined
@@ -317,7 +325,7 @@ function routeRail(cur) {
   const ci = Math.max(0, seq.indexOf(cur));
   const stop = id => {
     const isL = id === 'L', sc = isL ? { title: 'Latihan Soal', type: `${LATIHAN.length} soal` } : SCENES[id];
-    const d = isL ? false : state.done[id], lk = isL ? false : locked(id);
+    const d = isL ? false : state.done[id], lk = isL ? !materiDone() : locked(id);
     return `<a class="stop ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-tip="${sc.title}" aria-label="${id} · ${sc.title}${d ? ' (selesai)' : lk ? ' (terkunci)' : ''}">
       <span class="stop-st">${d ? icon('check') : lk ? icon('lock') : id}</span></a>`;
   };
@@ -342,7 +350,7 @@ function viewHome() {
     ['Apa itu Smart Emailing?', 'Pelatihan singkat berbasis multimedia untuk membantu fresh graduate menulis email lamaran kerja yang rapi, sopan, dan sesuai etika komunikasi di dunia kerja.'],
     ['Untuk siapa pelatihan ini?', 'Untuk fresh graduate yang sedang bersiap melamar kerja.'],
     ['Materinya apa saja?', 'Ada tiga materi: dasar komunikasi lewat email, menulis email lamaran kerja, dan etika berkirim email. Setelah itu ada latihan soal dan evaluasi.'],
-    ['Harus belajar berurutan?', 'Tidak wajib. Kamu bisa membuka scene mana saja dari halaman Materi. Tapi evaluasi baru terbuka setelah semua scene materi selesai.'],
+    ['Harus belajar berurutan?', 'Ya. Setiap scene baru terbuka setelah scene sebelumnya selesai: semua bagian materinya sudah dibaca dan aktivitasnya sudah dikerjakan. Evaluasi terbuka setelah semua scene materi selesai.'],
     ['Progresku tersimpan di mana?', 'Di browser yang kamu pakai, tanpa akun. Jawaban di setiap aktivitas tidak akan hilang walau kamu pindah halaman. Kalau data browser dihapus, progres mulai dari awal.'],
     ['Bagaimana evaluasi dinilai?', `Evaluasi berisi ${EVALUASI.length} soal tanpa pilihan ganda. Selama mengerjakan tidak ada tanda benar atau salah. Nilai akhir muncul setelah semua jawaban dikirim, dan batas lulusnya ${KKM}.`],
   ];
@@ -402,6 +410,14 @@ function viewHome() {
   </section>
 
   <section class="sec">
+    <div class="wrap ach-home">
+      <div><div class="eyebrow">Pencapaian</div><h2 class="display-2">Kumpulkan XP dan lencana</h2><p class="lead-s">Setiap scene, soal latihan, dan evaluasi memberi XP. Capai level tertinggi dan dapatkan sertifikat setelah lulus.</p>
+        <a class="btn btn-outline" href="#/pencapaian">${icon('award')} Lihat pencapaian</a></div>
+      <div>${levelCard()}<div class="bdg-row">${BADGES.map(b => `<a class="bdg-mini ${b.ok() ? 'on' : ''}" href="#/pencapaian" title="${b.t}${b.ok() ? '' : ' (belum didapat)'}">${icon(b.ok() ? b.ic : 'lock')}</a>`).join('')}</div></div>
+    </div>
+  </section>
+
+  <section class="sec">
     <div class="wrap">
       <div class="sec-head"><div><div class="eyebrow">Materi</div><h2 class="display-2">Tiga materi, sepuluh scene</h2><p class="lead-s">Setiap scene berisi penjelasan singkat dan satu aktivitas yang langsung bisa dicoba.</p></div>
         <a class="btn btn-outline" href="#/materi">Semua scene ${icon('right')}</a></div>
@@ -440,7 +456,7 @@ function viewHome() {
 function viewMateri() {
   const row = id => { const lk = locked(id), d = state.done[id]; return `<a class="srow ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}"><span class="srow-st">${d ? icon('check') : lk ? icon('lock') : id}</span><span class="srow-t"><b>${SCENES[id].title}</b><small>${id} · ${SCENES[id].type}</small></span>${icon('right')}</a>`; };
   return `<div class="page wrap">
-    <header class="page-head"><div class="eyebrow">Materi</div><h1 class="display">Semua materi</h1><p class="lead-s">Pilih scene mana saja. Hasil kerjamu di setiap aktivitas tersimpan otomatis.</p>
+    <header class="page-head"><div class="eyebrow">Materi</div><h1 class="display">Semua materi</h1><p class="lead-s">Scene terbuka berurutan: baca semua bagian materi dan kerjakan aktivitasnya untuk membuka scene berikutnya. Hasil kerjamu tersimpan otomatis.</p>
       <div class="page-prog"><span class="bar"><i style="width:${pct()}%"></i></span><b>${pct()}%</b><small>${doneCount()}/13 scene selesai</small></div></header>
     <div class="cat">${MATERI.map(m => `<article class="cat-card">
       <header><span class="cat-no">${m.no}</span><div><small>${m.short}</small><h2>${m.title}</h2>${m.desc ? `<p>${m.desc}</p>` : ''}</div><span class="cat-p">${m.scenes.filter(id => state.done[id]).length}/${m.scenes.length}</span></header>
@@ -491,14 +507,16 @@ function viewScene(id) {
 function renderSteps(id) {
   const box = $('#uraian'); if (!box) return;
   const s = SCENES[id], st = A(id);
-  if (s.uraianAfter && !state.done[id]) {
+  if (s.uraianAfter && !state.done[id] && !st.actOk) {
     box.innerHTML = `<div class="step-card locked">${icon('eyeoff')}<div><b>Materi masih disembunyikan</b><p>Rangkuman kesalahan baru terbuka setelah kamu menemukan semuanya di aktivitas bawah, supaya jawabannya tidak bocor.</p><button type="button" class="btn btn-primary btn-sm" data-go-act>Ke aktivitas ${icon('down')}</button></div></div>`;
     return;
   }
   const n = s.uraian.length, k = Math.min(st.step || 0, n - 1);
   const u = s.uraian[k];
-  box.innerHTML = `<div class="step-tabs" role="tablist">${s.uraian.map((x, j) => `<button type="button" role="tab" class="st-tab ${j === k ? 'cur' : ''} ${j < k ? 'past' : ''}" data-step="${j}" aria-selected="${j === k}"><span>${j + 1}</span>${x.h}</button>`).join('')}</div>
-    <div class="step-card" key="${k}"><small class="sc-k">Bagian ${k + 1} dari ${n}</small><h2 class="sec-title">${u.h}</h2>${u.p.map(p => p.startsWith('<ol') ? p : `<p>${p}</p>`).join('')}</div>
+  st.read = st.read || []; if (!st.read.includes(k)) { st.read.push(k); save(); }
+  const nRead = s.uraian.filter((_, j) => st.read.includes(j)).length;
+  box.innerHTML = `<div class="step-tabs" role="tablist">${s.uraian.map((x, j) => `<button type="button" role="tab" class="st-tab ${j === k ? 'cur' : ''} ${j < k ? 'past' : ''} ${st.read.includes(j) ? 'read' : ''}" data-step="${j}" aria-selected="${j === k}"><span>${st.read.includes(j) && j !== k ? icon('check') : j + 1}</span>${x.h}</button>`).join('')}</div>
+    <div class="step-card" key="${k}"><small class="sc-k">Bagian ${k + 1} dari ${n} · ${nRead === n ? 'semua bagian sudah dibaca' : `dibaca ${nRead}/${n}`}</small><h2 class="sec-title">${u.h}</h2>${u.p.map(p => p.startsWith('<ol') ? p : `<p>${p}</p>`).join('')}</div>
     <div class="step-nav">
       <button type="button" class="btn btn-outline btn-sm" data-step="${k - 1}" ${k === 0 ? 'disabled' : ''}>${icon('left')} Sebelumnya</button>
       <span class="st-dots">${s.uraian.map((_, j) => `<i class="${j === k ? 'cur' : j < k ? 'past' : ''}"></i>`).join('')}</span>
@@ -515,21 +533,39 @@ function lessonNav(id) {
 
 function mountScene(id) {
   const btn = $('#nextBtn');
-  if (btn) btn.addEventListener('click', e => { if (btn.classList.contains('is-locked')) { e.preventDefault(); toast('Selesaikan aktivitas di halaman ini dulu, ya.'); $('#aktivitas').scrollIntoView({ behavior: 'smooth' }); } });
+  if (btn) btn.addEventListener('click', e => {
+    if (!btn.classList.contains('is-locked')) return;
+    e.preventDefault();
+    const st = A(id), baca = !readAll(id);
+    if (baca && st.actOk) { toast('Aktivitas sudah selesai. Baca dulu semua bagian materinya, ya.'); $('#uraian').scrollIntoView({ behavior: 'smooth' }); }
+    else { toast(baca ? 'Baca semua bagian materi dan selesaikan aktivitasnya dulu, ya.' : 'Selesaikan aktivitas di halaman ini dulu, ya.'); $(baca ? '#uraian' : '#aktivitas').scrollIntoView({ behavior: 'smooth' }); }
+  });
   renderSteps(id);
   const ur = $('#uraian');
   if (ur) ur.addEventListener('click', e => {
     const g = e.target.closest('[data-go-act]'); if (g) { $('#aktivitas').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
     const b = e.target.closest('[data-step]'); if (!b || b.disabled) return;
-    A(id).step = Math.max(0, +b.dataset.step); save(); sfx(); renderSteps(id);
+    A(id).step = Math.max(0, +b.dataset.step); save(); sfx(); renderSteps(id); finish(false);
   });
-  const done = silent => {
-    const freshDone = !state.done[id];
+  /* Scene selesai = aktivitas beres + semua kartu materi sudah dibuka */
+  const finish = silent => {
+    if (state.done[id] || !A(id).actOk || !readAll(id)) return;
+    const freshDone = true;
     state.done[id] = true; save(); updateBar();
     if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
     if (freshDone && !silent) celebrate();
     $$('.stop').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.querySelector('.stop-st').innerHTML = icon('check'); } });
+    const rail = $('.rail'); if (rail) rail.outerHTML = routeRail(id);
+    const nx = ORDER[ORDER.indexOf(id) + 1];
+    if (freshDone && !silent && nx && MATERI_SCENES.includes(nx)) toast(`${nx} · ${SCENES[nx].title} sekarang terbuka!`);
+  };
+  const done = silent => {
+    const st = A(id), first = !st.actOk;
+    st.actOk = true; save();
     if (SCENES[id].uraianAfter) renderSteps(id);
+    if (state.done[id]) { if (btn) btn.classList.remove('is-locked'); return; }
+    if (readAll(id)) finish(silent);
+    else if (first && !silent) { sfx('ok'); toast('Aktivitas selesai! Baca semua bagian materi untuk membuka scene berikutnya.'); }
   };
   ACT[id]($('#activity'), done, A(id));
 }
@@ -1081,7 +1117,7 @@ function mountLatihan() {
     const go = e.target.closest('[data-go]'); if (go) { L.i = +go.dataset.go; save(); render(); return; }
     if (e.target.closest('[data-prev]')) { L.i = Math.max(0, L.i - 1); save(); render(); return; }
     if (e.target.closest('[data-next]')) { L.i = Math.min(LATIHAN.length - 1, L.i + 1); save(); render(); return; }
-    if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; save(); sfx(ok ? 'ok' : 'no'); render(); updateBar(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan sudah kamu kerjakan!'); return; }
+    if (e.target.closest('[data-check]')) { const q = LATIHAN[L.i], ok = qScore(q, L.ans[L.i]) === 1; L.res[L.i] = ok; L.streak = ok ? (L.streak || 0) + 1 : 0; L.best = Math.max(L.best || 0, L.streak); if (L.streak >= 2) comboPop(L.streak); save(); sfx(ok ? 'ok' : 'no'); render(); updateBar(); if (Object.keys(L.res).length === LATIHAN.length) toast('Semua soal latihan sudah kamu kerjakan!'); return; }
     if (e.target.closest('[data-reset]')) { if (!confirm('Ulangi latihan dari awal? Jawaban latihan akan dihapus.')) return; state.lat = { i: 0, ans: {}, res: {}, v: 2 }; save(); updateBar(); mountLatihan(); }
   });
 }
@@ -1154,7 +1190,7 @@ ACT.S12 = (el, done, st) => {
       <div><div class="badge ${pass ? 'ok' : 'no'}">${pass ? icon('check') + ' Lulus' : icon('refresh') + ' Perlu mengulang'}</div>
         <h3>${pass ? 'Selamat, kamu lulus evaluasi!' : 'Nilaimu belum mencapai batas lulus.'}</h3>
         <p class="muted">${pass ? 'Kamu bisa lanjut ke penutup.' : `Batas lulusnya ${KKM}. Pelajari lagi materinya mulai dari Materi 1, lalu kerjakan ulang evaluasinya.`}</p>
-        <div class="row-btns">${pass ? `<a class="btn btn-primary" href="#/scene/S13">Ke penutup ${icon('right')}</a>` : `<a class="btn btn-primary" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-outline" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
+        <div class="row-btns">${pass ? `<a class="btn btn-primary" href="#/scene/S13">Ke penutup ${icon('right')}</a><a class="btn btn-gold" href="#/sertifikat">${icon('award')} Ambil sertifikat</a>` : `<a class="btn btn-primary" href="#/scene/S02">${icon('book')} Pelajari lagi materinya</a><button type="button" class="btn btn-outline" data-retry>${icon('refresh')} Kerjakan ulang</button>`}</div>
       </div></div>`;
     if (animated) {
       const ring = $('.ring', el), b = $('.ring b', el), t0 = performance.now();
@@ -1214,7 +1250,7 @@ ACT.S13 = (el, done) => {
       <div class="ig"><h4 data-to="#/scene/S11" title="Buka S11">${icon('type')} Bahasa</h4><p>Jelas dan sopan. Tanpa bahasa gaul, singkatan, emoji, atau kapital berlebihan.</p></div>
     </div>
   </div>
-  <div class="row-btns"><button type="button" class="btn btn-outline btn-sm" data-print>${icon('printer')} Simpan rangkuman (PDF)</button></div>
+  <div class="row-btns"><button type="button" class="btn btn-outline btn-sm" data-print>${icon('printer')} Simpan rangkuman (PDF)</button><a class="btn btn-gold btn-sm" href="#/sertifikat">${icon('award')} Ambil sertifikat</a><a class="btn btn-outline btn-sm" href="#/pencapaian">${icon('star')} Pencapaianku</a></div>
   <div class="feedback" id="fbBox">${fb ? thanks(fb) : `<h3>Beri masukan</h3><form id="fbForm">
     <div class="stars" role="radiogroup" aria-label="Nilai 1 sampai 5">${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="rate" value="${n}"><span>${icon('star')}</span><em>${n}</em></label>`).join('')}</div>
     <label class="saran">Saran<textarea name="saran" rows="2" placeholder="Apa yang bisa diperbaiki dari pelatihan ini?"></textarea></label>
@@ -1243,7 +1279,7 @@ const GLOSARIUM = [
   ['Subject', 'Judul email. Bagian pertama yang dilihat penerima, jadi harus singkat, jelas, dan spesifik.', 'S04'],
   ['Tanda tangan', 'Nama pengirim di bagian paling bawah email.', 'S03'],
 ];
-const pageWrap = (eyebrow, title, inner) => `<div class="page wrap"><article class="sheet wide"><div class="eyebrow">Panduan · ${eyebrow}</div><h1 class="display">${title}</h1>${inner}</article></div>`;
+const pageWrap = (eyebrow, title, inner, grup = 'Panduan') => `<div class="page wrap"><article class="sheet wide"><div class="eyebrow">${grup} · ${eyebrow}</div><h1 class="display">${title}</h1>${inner}</article></div>`;
 
 function viewTujuan() {
   return pageWrap('Tujuan belajar', 'Yang akan kamu kuasai', `
@@ -1256,7 +1292,7 @@ function viewTujuan() {
 function viewPetunjuk() {
   const kode = [['Normal', 'Tombol', 'Tampilan awal sebelum disentuh.'], ['Hover', 'Tombol', 'Tampilan saat kursor ada di atas tombol (hanya di laptop).'], ['Hit', 'Tombol', 'Diklik atau diketuk untuk lanjut ke tahap berikutnya.'], ['Swipe', 'Objek', 'Digeser atau digulir.'], ['Seret & letakkan', 'Objek', 'Seret lalu lepaskan. Di HP: ketuk kartu, lalu ketuk slotnya.'], ['Show', 'Objek', 'Penjelasan atau umpan balik yang muncul setelah suatu aksi.']];
   return pageWrap('Petunjuk', 'Cara memakai modul ini', `
-    <div class="how">${[['inbox', 'Mulai dari pengantar', 'S01 menjelaskan tujuan dan tiga materi.', '#/scene/S01'], ['book', 'Baca materinya', 'Materi di setiap scene dibaca per kartu. Pindah kartu dengan tombol Berikutnya.', '#/materi'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.', '#/scene/S02'], ['grid', 'Bebas pindah halaman', 'Buka menu untuk lompat ke scene mana saja. Hasilmu tidak akan hilang.', '#/peta'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`, '#/latihan'], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`, '#/scene/S12']].map(([ic, t, d, h]) => `<a class="how-item" href="${h}"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></a>`).join('')}</div>
+    <div class="how">${[['inbox', 'Mulai dari pengantar', 'S01 menjelaskan tujuan dan tiga materi.', '#/scene/S01'], ['book', 'Baca materinya', 'Materi di setiap scene dibaca per kartu. Pindah kartu dengan tombol Berikutnya.', '#/materi'], ['pointer', 'Kerjakan aktivitasnya', 'Tombol Lanjut aktif setelah aktivitas di halaman itu selesai.', '#/scene/S02'], ['lock', 'Scene terbuka berurutan', 'Scene berikutnya terbuka setelah semua bagian materi dibaca dan aktivitasnya selesai. Hasilmu tidak akan hilang.', '#/materi'], ['pen', 'Latihan soal', `Ada ${LATIHAN.length} soal campuran dengan pembahasan.`, '#/latihan'], ['flag', 'Evaluasi', `Terbuka setelah semua materi selesai. Batas lulus ${KKM}, dan nilainya baru muncul di akhir.`, '#/scene/S12']].map(([ic, t, d, h]) => `<a class="how-item" href="${h}"><span class="how-ic">${icon(ic)}</span><div><b>${t}</b><p>${d}</p></div></a>`).join('')}</div>
     <h2 class="h2">Kode interaksi</h2>
     <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Kode</th><th>Untuk</th><th>Artinya</th></tr></thead><tbody>${kode.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td></tr>`).join('')}</tbody></table></div>
     <h2 class="h2">Progres tersimpan otomatis</h2>
@@ -1296,6 +1332,131 @@ function mountGlosarium() { $('#gq').oninput = e => { const q = e.target.value.t
 /* =========================================================================
    ROUTER
    ========================================================================= */
+/* =========================================================================
+   GAMIFIKASI — poin (XP), level, lencana, dan sertifikat.
+   Semua dihitung ulang dari progres, jadi tidak bisa dobel dan ikut terhapus saat progres direset.
+   ========================================================================= */
+const latBenar = () => state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
+const latDikerjakan = () => state.lat ? Object.keys(state.lat.res || {}).length : 0;
+const evScore = () => state.ev && state.ev.done ? state.ev.score : null;
+function xpParts() {
+  const ev = evScore();
+  return [
+    ['inbox', 'Pengantar', state.done.S01 ? 20 : 0, 20],
+    ['book', 'Scene materi (50/scene)', MATERI_SCENES.filter(id => state.done[id]).length * 50, MATERI_SCENES.length * 50],
+    ['pen', 'Soal latihan benar (20/soal)', latBenar() * 20, LATIHAN.length * 20],
+    ['star', 'Bonus combo latihan (10 × combo terbaik)', Math.min(state.lat && state.lat.best || 0, LATIHAN.length) * 10, LATIHAN.length * 10],
+    ['flag', 'Nilai evaluasi (×3)', ev === null ? 0 : ev * 3, 300],
+    ['award', 'Bonus lulus evaluasi', evalPassed() ? 100 : 0, 100],
+    ['check', 'Penutup', state.done.S13 ? 30 : 0, 30],
+  ];
+}
+const xpTotal = () => xpParts().reduce((t, p) => t + p[2], 0);
+const xpMax = () => xpParts().reduce((t, p) => t + p[3], 0);
+const LEVELS = [[0, 'Pemula'], [200, 'Pengirim Rapi'], [500, 'Penulis Lamaran'], [900, 'Komunikator Sopan'], [1300, 'Email Profesional']];
+function levelOf(xp) {
+  let k = 0; LEVELS.forEach(([min], i) => { if (xp >= min) k = i; });
+  const nx = LEVELS[k + 1];
+  return { n: k + 1, name: LEVELS[k][1], min: LEVELS[k][0], next: nx ? nx[0] : null, nextName: nx ? nx[1] : null, pct: nx ? Math.round((xp - LEVELS[k][0]) / (nx[0] - LEVELS[k][0]) * 100) : 100 };
+}
+const materiSelesai = mid => MATERI.find(m => m.id === mid).scenes.every(id => state.done[id]);
+const BADGES = [
+  { k: 'mulai', ic: 'inbox', t: 'Langkah Pertama', d: 'Menyelesaikan pengantar (S01).', to: '#/scene/S01', ok: () => !!state.done.S01 },
+  { k: 'm1', ic: 'mail', t: 'Paham Dasar Email', d: 'Menyelesaikan semua scene Materi 1.', to: '#/scene/S02', ok: () => materiSelesai('m1') },
+  { k: 'm2', ic: 'briefcase', t: 'Siap Melamar', d: 'Menyelesaikan semua scene Materi 2.', to: '#/scene/S05', ok: () => materiSelesai('m2') },
+  { k: 'm3', ic: 'shield', t: 'Beretika', d: 'Menyelesaikan semua scene Materi 3.', to: '#/scene/S09', ok: () => materiSelesai('m3') },
+  { k: 'rajin', ic: 'pen', t: 'Rajin Berlatih', d: 'Memeriksa semua soal latihan.', to: '#/latihan', ok: () => latDikerjakan() === LATIHAN.length },
+  { k: 'jitu', ic: 'target', t: 'Latihan Sempurna', d: 'Semua soal latihan dijawab benar.', to: '#/latihan', ok: () => latBenar() === LATIHAN.length },
+  { k: 'combo', ic: 'star', t: 'Tak Terbendung', d: 'Combo 5× di latihan soal.', to: '#/latihan', ok: () => !!(state.lat && state.lat.best >= 5) },
+  { k: 'lulus', ic: 'flag', t: 'Lulus Evaluasi', d: `Nilai evaluasi minimal ${KKM}.`, to: '#/scene/S12', ok: evalPassed },
+  { k: 'seratus', ic: 'award', t: 'Nilai Sempurna', d: 'Nilai evaluasi 100.', to: '#/scene/S12', ok: () => evScore() === 100 },
+  { k: 'masukan', ic: 'chat', t: 'Memberi Masukan', d: 'Mengisi masukan di penutup.', to: '#/scene/S13', ok: () => !!state.feedback },
+];
+const badgesGot = () => BADGES.filter(b => b.ok());
+
+/* Dipanggil setiap progres disimpan: munculkan +XP, lencana baru, dan naik level */
+let popQ = Promise.resolve();
+function gameCheck() {
+  const xp = xpTotal(), got = badgesGot().map(b => b.k), g = state.game;
+  if (!g) { state.game = { xp, got }; return; }
+  const baru = got.filter(k => !g.got.includes(k)), naik = levelOf(xp).n > levelOf(g.xp).n, gain = xp - g.xp;
+  g.xp = xp; g.got = got;
+  if (gain > 0) xpFloat(gain);
+  if (baru.length > 2) unlockPop(icon('award'), `${baru.length} lencana baru!`, BADGES.filter(x => baru.includes(x.k)).map(x => x.t).join(' · '), '#/pencapaian');
+  else baru.forEach(k => { const b = BADGES.find(x => x.k === k); unlockPop(icon(b.ic), 'Lencana baru!', b.t, '#/pencapaian'); });
+  if (naik) { const L = levelOf(xp); unlockPop(`<b class="lv-n">${L.n}</b>`, 'Naik level!', `Level ${L.n} · ${L.name}`, '#/pencapaian'); }
+}
+function comboPop(n) {
+  const el = document.createElement('div'); el.className = 'combo'; el.innerHTML = `<b>Combo ${n}×</b><small>${n} jawaban benar berturut-turut</small>`;
+  document.body.appendChild(el); setTimeout(() => el.remove(), 1500);
+}
+function xpFloat(gain) {
+  const chip = $('#xpChip'); if (!chip) return;
+  const r = chip.getBoundingClientRect(), f = document.createElement('span');
+  f.className = 'xp-float'; f.textContent = `+${gain} XP`;
+  f.style.left = (r.left + r.width / 2) + 'px'; f.style.top = (r.bottom + 6) + 'px';
+  document.body.appendChild(f); setTimeout(() => f.remove(), 1700);
+  chip.classList.remove('bump'); void chip.offsetWidth; chip.classList.add('bump');
+}
+function unlockPop(art, kicker, title, href) {
+  popQ = popQ.then(() => new Promise(res => {
+    const el = document.createElement('a');
+    el.className = 'unlock'; el.href = href; el.setAttribute('role', 'status');
+    el.innerHTML = `<span class="ul-art">${art}</span><span><small>${kicker}</small><b>${title}</b></span>`;
+    document.body.appendChild(el); sfx('ok'); celebrate();
+    setTimeout(() => el.classList.add('show'), 30);
+    setTimeout(() => { el.classList.remove('show'); setTimeout(() => { el.remove(); res(); }, 400); }, 2800);
+  }));
+}
+const badgeTile = b => { const on = b.ok(); return `<a class="bdg ${on ? 'on' : ''}" href="${b.to}" title="${on ? 'Didapat' : 'Belum didapat'}: ${b.d}"><span class="bdg-ic">${icon(on ? b.ic : 'lock')}</span><b>${b.t}</b><small>${b.d}</small></a>`; };
+const levelCard = (cls = '') => { const xp = xpTotal(), L = levelOf(xp); return `<div class="lv-card ${cls}">
+  <span class="lv-badge"><small>Level</small><b>${L.n}</b></span>
+  <div class="lv-body"><small>${xp} XP dari ${xpMax()}</small><b>${L.name}</b>
+    <span class="bar"><i style="width:${L.pct}%"></i></span>
+    <small>${L.next !== null ? `${L.next - xp} XP lagi menuju <b>${L.nextName}</b>` : 'Level tertinggi tercapai!'}</small></div></div>`; };
+
+function viewPencapaian() {
+  const got = badgesGot().length;
+  return pageWrap('Pencapaian', 'Pencapaianmu', `
+    <p class="muted">Kumpulkan XP dari setiap scene, latihan, dan evaluasi. XP menaikkan levelmu, dan setiap target yang tercapai memberi lencana.</p>
+    ${levelCard('big')}
+    <h2 class="h2">Asal XP</h2>
+    <div class="xp-list">${xpParts().map(([ic, t, v, m]) => `<div class="xp-row ${v >= m ? 'full' : ''}"><span class="xp-ic">${icon(ic)}</span><span>${t}</span><span class="bar"><i style="width:${m ? v / m * 100 : 0}%"></i></span><b>${v}/${m}</b></div>`).join('')}</div>
+    <h2 class="h2">Lencana <small class="muted">${got}/${BADGES.length}</small></h2>
+    <div class="bdg-grid">${BADGES.map(badgeTile).join('')}</div>
+    <h2 class="h2">Tangga level</h2>
+    <ol class="lv-ladder">${LEVELS.map(([min, n], i) => `<li class="${xpTotal() >= min ? 'on' : ''}"><b>${i + 1}</b><span>${n}</span><small>${min} XP</small></li>`).join('')}</ol>
+    <div class="cert-cta">${icon(evalPassed() ? 'award' : 'lock')}<div><b>Sertifikat</b><p class="muted">${evalPassed() ? 'Kamu sudah lulus evaluasi. Sertifikatmu siap dicetak.' : `Terbuka setelah kamu lulus evaluasi dengan nilai minimal ${KKM}.`}</p></div><a class="btn ${evalPassed() ? 'btn-gold' : 'btn-outline'}" href="${evalPassed() ? '#/sertifikat' : materiDone() ? '#/scene/S12' : resumeHref()}">${evalPassed() ? 'Lihat sertifikat' : materiDone() ? 'Ke evaluasi' : 'Lanjutkan belajar'} ${icon('right')}</a></div>`, 'Progres');
+}
+
+function viewSertifikat() {
+  if (!evalPassed()) return pageWrap('Sertifikat', 'Sertifikat belum terbuka', `<div class="lockbox"><a href="#/scene/S12" title="Ke evaluasi">${icon('lock')}</a><h3>Lulus evaluasi dulu, ya</h3><p class="muted">Sertifikat terbuka setelah nilai evaluasimu minimal ${KKM}.</p><a class="btn btn-primary" href="${materiDone() ? '#/scene/S12' : resumeHref()}">${materiDone() ? 'Ke evaluasi' : 'Lanjutkan belajar'} ${icon('right')}</a></div>`, 'Progres');
+  const g = state.game || {};
+  if (!g.tgl) { g.tgl = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); save(); }
+  const L = levelOf(xpTotal());
+  return `<div class="page wrap cert-page">
+    <div class="cert-tools"><label class="cert-name">Nama di sertifikat<input id="certNama" type="text" maxlength="60" placeholder="Tulis nama lengkapmu" value="${esc(g.nama || '')}"></label>
+      <button type="button" class="btn btn-gold" id="certPrint">${icon('printer')} Cetak / simpan PDF</button></div>
+    <div class="cert" id="cert">
+      <div class="cert-in">
+        <span class="cert-logo">${LOGO}</span>
+        <small class="cert-k">Sertifikat penyelesaian</small>
+        <h1>Smart Emailing</h1>
+        <p>Diberikan kepada</p>
+        <b class="cert-nm" id="certNm">${esc(g.nama || 'Nama Peserta')}</b>
+        <p>atas keberhasilannya menyelesaikan pelatihan <b>Menulis Email Lamaran Kerja</b> yang rapi, sopan, dan sesuai etika komunikasi profesional.</p>
+        <div class="cert-stats"><div><b>${evScore()}</b><small>Nilai evaluasi</small></div><div><b>${L.n}</b><small>${L.name}</small></div><div><b>${badgesGot().length}/${BADGES.length}</b><small>Lencana</small></div></div>
+        <div class="cert-foot"><span>${g.tgl}</span><span>Kelompok 7</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+function mountSertifikat() {
+  const inp = $('#certNama'); if (!inp) return;
+  inp.oninput = () => { state.game.nama = inp.value.trim(); save(); $('#certNm').textContent = state.game.nama || 'Nama Peserta'; };
+  $('#certPrint').onclick = () => { if (!state.game.nama) { toast('Tulis namamu dulu, ya.'); inp.focus(); return; } document.body.classList.add('print-cert'); window.print(); setTimeout(() => document.body.classList.remove('print-cert'), 500); };
+}
+
 const PAGES = {
   '': { v: viewHome, title: '' },
   materi: { v: viewMateri, title: 'Materi', nav: 'materi' },
@@ -1306,6 +1467,8 @@ const PAGES = {
   alur: { v: viewAlur, title: 'Alur belajar', nav: 'panduan' },
   peta: { v: viewPeta, title: 'Peta konsep', nav: 'panduan' },
   glosarium: { v: viewGlosarium, m: mountGlosarium, title: 'Glosarium', nav: 'panduan' },
+  pencapaian: { v: viewPencapaian, title: 'Pencapaian' },
+  sertifikat: { v: viewSertifikat, m: mountSertifikat, title: 'Sertifikat' },
 };
 
 let routeToken = 0, firstRoute = true, lastKey = null;
@@ -1385,7 +1548,21 @@ async function route() {
   if (app.getAnimations) app.getAnimations().forEach(a => a.cancel());
   firstRoute = false;
   let navKey = '';
-  if (isScene) {
+  if (isScene && locked(arg) && MATERI_SCENES.concat('S01').includes(arg)) {
+    const prev = ORDER[ORDER.indexOf(arg) - 1];
+    app.innerHTML = `<div class="lesson-wide wrap">${routeRail(arg)}<article class="sheet"><div class="lockbox">${icon('lock')}<h3>${arg} · ${SCENES[arg].title} masih terkunci</h3>
+      <p class="muted">Scene ini terbuka setelah kamu menyelesaikan <b>${prev} · ${SCENES[prev].title}</b>: baca semua bagian materinya dan kerjakan aktivitasnya.</p>
+      <a class="btn btn-primary" href="${resumeHref()}">Lanjutkan ke ${(resumeHref().match(/S\d+/) || ['S01'])[0]} ${icon('right')}</a></div></article></div>`;
+    navKey = 'materi';
+    document.title = `${arg} terkunci — Smart Emailing`;
+  } else if (page === 'latihan' && !materiDone()) {
+    const left = MATERI_SCENES.filter(id => !state.done[id]);
+    app.innerHTML = `<div class="lesson-wide wrap">${routeRail('L')}<article class="sheet"><div class="lockbox">${icon('lock')}<h3>Latihan soal masih terkunci</h3>
+      <p class="muted">Latihan terbuka setelah semua scene materi selesai. Tinggal <b>${left.length}</b> scene lagi.</p>
+      <a class="btn btn-primary" href="${resumeHref()}">Lanjutkan ke ${(resumeHref().match(/S\d+/) || ['S01'])[0]} ${icon('right')}</a></div></article></div>`;
+    navKey = 'latihan';
+    document.title = 'Latihan terkunci — Smart Emailing';
+  } else if (isScene) {
     state.last = arg; save();
     app.innerHTML = viewScene(arg);
     mountScene(arg);
@@ -1418,6 +1595,9 @@ function updateBar() {
   const p = pct(), C = 2 * Math.PI * 16;
   const ring = $('#progRing'); ring.style.strokeDasharray = C; ring.style.strokeDashoffset = C * (1 - p / 100);
   $('#progText').textContent = p + '%';
+  const xp = xpTotal(), L = levelOf(xp);
+  $('#xpChip').innerHTML = `<span class="xc-lv">${L.n}</span><span class="xc-t"><b>${xp}</b> XP</span>`;
+  $('#xpChip').title = `Level ${L.n} · ${L.name} · ${xp} XP. Lihat pencapaian`;
   const sb = $('#soundBtn');
   sb.innerHTML = icon(state.sound ? 'vol' : 'mute');
   sb.setAttribute('aria-label', state.sound ? 'Matikan efek suara' : 'Nyalakan efek suara'); sb.title = sb.getAttribute('aria-label');
@@ -1433,6 +1613,7 @@ function renderPop() {
   const latOk = state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
   const ev = state.ev && state.ev.done ? state.ev.score : null;
   $('#progPop').innerHTML = `<div class="pp-h"><b>Progres kamu</b><small>${doneCount()} dari 13 scene selesai</small></div>
+    <a class="pp-lv" href="#/pencapaian">${levelCard('mini')}<span class="pp-bdg">${BADGES.map(b => `<i class="${b.ok() ? 'on' : ''}" title="${b.t}">${icon(b.ok() ? b.ic : 'lock')}</i>`).join('')}</span></a>
     ${MATERI.map(m => { const d = m.scenes.filter(id => state.done[id]).length; return `<div class="pp-row"><span>${m.short}</span><span class="bar"><i style="width:${d / m.scenes.length * 100}%"></i></span><b>${d}/${m.scenes.length}</b></div>`; }).join('')}
     <div class="pp-sub"><span>${icon('pen')} Latihan</span><b>${latOk}/${LATIHAN.length} benar</b></div>
     <div class="pp-sub"><span>${icon('flag')} Evaluasi</span><b>${ev !== null ? 'Nilai ' + ev : materiDone() ? 'Siap dikerjakan' : 'Terkunci'}</b></div>
@@ -1478,6 +1659,9 @@ const markTo = () => $$('[data-to]:not([tabindex])').forEach(e => { e.tabIndex =
 document.addEventListener('click', e => { const t = e.target.closest('[data-to]'); if (t && !e.target.closest('a, button')) jumpTo(t.dataset.to); });
 document.addEventListener('keydown', e => { const t = e.target.closest && e.target.closest('[data-to]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); jumpTo(t.dataset.to); } });
 new MutationObserver(markTo).observe(document.body, { childList: true, subtree: true });
+$('#xpChip').onclick = () => { location.hash = '#/pencapaian'; };
 window.addEventListener('hashchange', route);
 window.addEventListener('scroll', () => { const max = document.documentElement.scrollHeight - innerHeight; $('#nav').classList.toggle('scrolled', scrollY > 8); $('#readLine').style.width = (max > 0 ? scrollY / max * 100 : 0) + '%'; }, { passive: true });
+if (!state.game) gameCheck();
+gameOn = true;
 route();
