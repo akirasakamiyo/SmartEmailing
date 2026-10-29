@@ -342,71 +342,112 @@ function routeRail(cur) {
    BERANDA
    ========================================================================= */
 function viewHome() {
-  const started = doneCount() > 0, res = started ? resumeHref() : '#/scene/S01';
-  const nx = (res.match(/S\d+/) || ['S01'])[0], nxm = materiOf(nx);
-  const latOk = latBenar(), ev = evScore(), L = levelOf(xpTotal()), p = pct();
-  const sapa = !started ? 'Mulai dari pengantar dulu, isinya cuma sebentar.'
-    : evalPassed() ? 'Kamu sudah lulus. Sertifikatmu bisa dicetak kapan saja.'
-    : materiDone() ? 'Materi sudah beres. Tinggal latihan dan evaluasi.'
-    : `Terakhir sampai ${nxm.short.toLowerCase()}. ${doneCount()} dari 13 scene sudah beres.`;
-  const mats = MATERI.filter(m => /^m\d$/.test(m.id));
-  const tile = (h, ic, t, s, lk) => `<a class="hm-q ${lk ? 'locked' : ''}" href="${h}"><span class="hm-q-ic">${icon(lk ? 'lock' : ic)}</span><b>${t}</b><small>${s}</small></a>`;
-  return `<div class="home wrap">
-    <section class="hm-hello">
-      <div class="hm-hi">
-        <small class="hm-k">Smart Emailing · Kelompok 7</small>
-        <h1>${started ? `Lanjut: ${SCENES[nx].title}` : 'Biar lamaranmu nggak cuma dibaca sekilas'}</h1>
-        <p>${sapa}</p>
-        <div class="hm-cta"><a class="btn btn-gold" href="${evalPassed() ? '#/sertifikat' : res}">${evalPassed() ? 'Lihat sertifikat' : started ? 'Lanjutkan' : 'Mulai belajar'} ${icon('right')}</a>
-          <a class="hm-lv" href="#/pencapaian" title="Lihat pencapaian"><b>${L.n}</b><span>${L.name}<small>${xpTotal()} XP</small></span></a></div>
-      </div>
-      <div class="hm-ring" style="--p:${p}"><b>${p}%</b><small>selesai</small></div>
-    </section>
-
-    <div class="hm-grid">
-      <section class="hm-mats" aria-label="Materi">
-        <div class="hm-h"><h2>Materi</h2><a href="#/materi">Lihat semua ${icon('right')}</a></div>
-        ${mats.map((m, i) => { const d = m.scenes.filter(id => state.done[id]).length, open = m.scenes.includes(nx) || (!started && i === 0); return `<div class="hm-m ${open ? 'open' : ''} ${d === m.scenes.length ? 'full' : ''}">
-          <button type="button" class="hm-m-top" aria-expanded="${open}"><span class="hm-m-no">${d === m.scenes.length ? icon('check') : m.no}</span><span class="hm-m-t"><b>${m.title}</b><small>${d}/${m.scenes.length} scene</small></span><span class="hm-m-bar"><i style="width:${d / m.scenes.length * 100}%"></i></span><span class="hm-chev">${icon('down')}</span></button>
-          <div class="hm-m-list"><div>${m.scenes.map(id => { const lk = locked(id), ok = state.done[id]; return `<a class="hm-s ${ok ? 'ok' : ''} ${lk ? 'locked' : ''} ${id === nx && started ? 'cur' : ''}" href="#/scene/${id}"><span>${ok ? icon('check') : lk ? icon('lock') : id}</span>${SCENES[id].title}</a>`; }).join('')}</div></div>
-        </div>`; }).join('')}
-      </section>
-
-      <aside class="hm-side">
-        <section class="hm-kilat" id="kilat" aria-live="polite"></section>
-        <div class="hm-qs">
-          ${tile('#/latihan', 'pen', 'Latihan', materiDone() ? `${latOk}/${LATIHAN.length} benar` : 'Kebuka setelah materi beres', !materiDone())}
-          ${tile('#/scene/S12', 'flag', 'Evaluasi', ev !== null ? `Nilai ${ev}` : materiDone() ? 'Siap dikerjakan' : `Kurang ${MATERI_SCENES.filter(id => !state.done[id]).length} scene`, !materiDone())}
-          ${tile('#/panduan', 'help', 'Panduan', 'Cara pakai, alur, istilah', false)}
+  const started = doneCount() > 0, res = resumeHref();
+  const nx = (res.match(/S\d+/) || ['S01'])[0], nxs = SCENES[nx], nxm = materiOf(nx);
+  const latOk = state.lat ? Object.values(state.lat.res || {}).filter(Boolean).length : 0;
+  const ev = state.ev && state.ev.done ? state.ev.score : null;
+  const faq = [
+    ['Apa itu Smart Emailing?', 'Pelatihan singkat berbasis multimedia untuk membantu fresh graduate menulis email lamaran kerja yang rapi, sopan, dan sesuai etika komunikasi di dunia kerja.'],
+    ['Untuk siapa pelatihan ini?', 'Untuk fresh graduate yang sedang bersiap melamar kerja.'],
+    ['Materinya apa saja?', 'Ada tiga materi: dasar komunikasi lewat email, menulis email lamaran kerja, dan etika berkirim email. Setelah itu ada latihan soal dan evaluasi.'],
+    ['Harus belajar berurutan?', 'Ya. Setiap scene baru terbuka setelah scene sebelumnya selesai: semua bagian materinya sudah dibaca dan aktivitasnya sudah dikerjakan. Evaluasi terbuka setelah semua scene materi selesai.'],
+    ['Progresku tersimpan di mana?', 'Di browser yang kamu pakai, tanpa akun. Jawaban di setiap aktivitas tidak akan hilang walau kamu pindah halaman. Kalau data browser dihapus, progres mulai dari awal.'],
+    ['Bagaimana evaluasi dinilai?', `Evaluasi berisi ${EVALUASI.length} soal tanpa pilihan ganda. Selama mengerjakan tidak ada tanda benar atau salah. Nilai akhir muncul setelah semua jawaban dikirim, dan batas lulusnya ${KKM}.`],
+  ];
+  return `
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div class="hero-text">
+        <div class="pill-tag"><span class="dot"></span>Media pembelajaran · Kelompok 7</div>
+        <h1 class="hero-title">Smart <span>Emailing<svg class="swoosh" viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true"><path d="M5 18 C 80 5, 170 3, 295 13"/></svg></span></h1>
+        <p class="hero-hook"><span class="q-mark">“</span>Lamaran tak kunjung dibalas? Bisa jadi masalahnya ada di <mark>emailnya.</mark></p>
+        <p class="hero-sub">Pelatihan singkat untuk fresh graduate. Belajar menulis email lamaran yang rapi dan sopan lewat ${MATERI_SCENES.length} scene materi, ${LATIHAN.length} soal latihan, dan evaluasi akhir.</p>
+        <div class="hero-cta">
+          <a class="btn btn-gold btn-lg" href="${started ? res : '#/scene/S01'}">${started ? 'Lanjutkan belajar' : 'Mulai belajar'} ${icon('right')}</a>
+          <a class="btn btn-ghost btn-lg" href="#/materi">Lihat materi</a>
         </div>
-      </aside>
+      </div>
+      <div class="hero-art">
+        <div class="mailcard" data-to="#/scene/S05" title="Susunan email lamaran (S05)">
+          <div class="mc-top"><i></i><i></i><i></i></div>
+          <div class="mc-row"><small>Subject</small>Application for Graphic Designer Position – ${NAMA}</div>
+          <div class="mc-line w70"></div><div class="mc-line"></div><div class="mc-line w85"></div>
+          <div class="mc-attach" data-to="#/scene/S06" title="Melampirkan CV (S06)">${icon('clip')} CV_${NAMAF}.pdf</div>
+        </div>
+        <span class="chip-f c1" data-to="#/scene/S04" title="Subject yang efektif (S04)">${icon('check')} Subject jelas</span>
+        <span class="chip-f c2" data-to="#/scene/S09" title="Waktu mengirim email (S09)">${icon('clock')} 08.00–17.00</span>
+        <span class="chip-f c3" data-to="#/scene/S06" title="Mengirim CV (S06)">${icon('send')} Siap dikirim</span>
+      </div>
     </div>
-  </div>`;
-}
-function mountHome() {
-  $$('.hm-m-top').forEach(b => b.onclick = () => { const m = b.parentElement, o = !m.classList.contains('open'); m.classList.toggle('open', o); b.setAttribute('aria-expanded', o); sfx(); });
-  /* Soal kilat: satu soal pilihan ganda acak dari bank latihan, tidak memengaruhi nilai */
-  const box = $('#kilat'), bank = LATIHAN.filter(q => q.type === 'mcq');
-  let last = -1, streak = 0;
-  const show = () => {
-    let k; do { k = Math.floor(Math.random() * bank.length); } while (k === last && bank.length > 1); last = k;
-    const q = bank[k];
-    box.innerHTML = `<div class="kl-h"><span>${icon('star')} Soal kilat</span><small>${streak ? `${streak} benar beruntun` : q.topic}</small></div>
-      <p class="kl-q">${q.q}</p>
-      <div class="kl-opts">${q.opts.map((o, j) => `<button type="button" class="kl-o" data-o="${j}"><span>${'ABCD'[j]}</span>${o}</button>`).join('')}</div>
-      <div class="kl-f"></div>`;
-    box.classList.remove('in'); void box.offsetWidth; box.classList.add('in');
-    box.onclick = e => {
-      const b = e.target.closest('[data-o]'); if (!b || box.dataset.lock) return;
-      box.dataset.lock = 1; const ok = +b.dataset.o === q.a;
-      streak = ok ? streak + 1 : 0; sfx(ok ? 'ok' : 'no');
-      $$('.kl-o', box).forEach((x, j) => { x.disabled = true; if (j === q.a) x.classList.add('right'); });
-      if (!ok) b.classList.add('wrong');
-      $('.kl-f', box).innerHTML = `<p><b>${ok ? 'Betul.' : 'Belum tepat.'}</b> ${q.why || ''}</p><button type="button" class="btn btn-outline btn-sm" data-next>Soal lain ${icon('refresh')}</button>`;
-      $('[data-next]', box).onclick = ev => { ev.stopPropagation(); delete box.dataset.lock; sfx(); show(); };
-    };
-  };
-  show();
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow">Mulai dari sini</div><h2 class="display-2">Kenali pelatihannya dulu</h2><p class="lead-s">Baca tujuan dan petunjuknya, lihat alurnya, lalu mulai dari materi yang paling kamu butuhkan.</p></div>
+        <a class="btn btn-outline" href="#/glosarium">${icon('book')} Glosarium istilah</a></div>
+      <div class="start-grid">
+        ${[['01', 'Tujuan belajar', 'Apa yang akan kamu kuasai di setiap scene.', '#/tujuan', 'target'], ['02', 'Petunjuk', 'Cara memakai modul, arti kode interaksi, dan menyimpan progres.', '#/petunjuk', 'help'], ['03', 'Alur belajar', 'Flowchart dari pengantar sampai evaluasi dan penutup.', '#/alur', 'branch'], ['04', 'Peta konsep', 'Seluruh isi materi dalam satu peta. Klik untuk langsung membuka.', '#/peta', 'map']]
+          .map(([n, t, d, h, ic]) => `<a class="start-card" href="${h}"><span class="sc-n">${n}</span><span class="sc-ic">${icon(ic)}</span><h3>${t}</h3><p>${d}</p><span class="sc-go">Buka ${icon('right')}</span></a>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tint">
+    <div class="wrap continue-grid">
+      <div class="continue">
+        <div class="eyebrow light">${started ? 'Lanjutkan belajar' : 'Mulai belajar'}</div>
+        <h3>${nxs.title}</h3>
+        <p>${nxm.short} · <span class="scode">${nx}</span> · ${nxs.type}</p>
+        <span class="bar light"><i style="width:${pct()}%"></i></span>
+        <small>${doneCount()}/13 scene selesai · latihan ${latOk}/${LATIHAN.length} benar · evaluasi ${ev === null ? 'belum' : ev}</small>
+        <a class="btn btn-gold" href="${started ? res : '#/scene/S01'}">${started ? 'Lanjutkan' : 'Mulai'} ${icon('right')}</a>
+      </div>
+      <div class="mini-list">
+        <div class="eyebrow">Progres per materi</div>
+        ${MATERI.map(m => `<a class="mini-row" href="#/scene/${m.scenes.find(id => !state.done[id] && !locked(id)) || m.scenes[0]}"><span class="mr-n">${m.no}</span><span class="mr-t">${m.title}</span><span class="mr-p">${m.scenes.filter(id => state.done[id]).length}/${m.scenes.length}</span></a>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap ach-home">
+      <div><div class="eyebrow">Pencapaian</div><h2 class="display-2">Kumpulkan XP dan lencana</h2><p class="lead-s">Setiap scene, soal latihan, dan evaluasi memberi XP. Capai level tertinggi dan dapatkan sertifikat setelah lulus.</p>
+        <a class="btn btn-outline" href="#/pencapaian">${icon('award')} Lihat pencapaian</a></div>
+      <div>${levelCard()}<div class="bdg-row">${BADGES.map(b => `<a class="bdg-mini ${b.ok() ? 'on' : ''}" href="#/pencapaian" title="${b.t}${b.ok() ? '' : ' (belum didapat)'}">${icon(b.ok() ? b.ic : 'lock')}</a>`).join('')}</div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow">Materi</div><h2 class="display-2">Tiga materi, sepuluh scene</h2><p class="lead-s">Setiap scene berisi penjelasan singkat dan satu aktivitas yang langsung bisa dicoba.</p></div>
+        <a class="btn btn-outline" href="#/materi">Semua scene ${icon('right')}</a></div>
+      <div class="mat-grid">
+        ${MATERI.filter(m => /^m\d$/.test(m.id)).map(m => { const d = m.scenes.filter(id => state.done[id]).length; return `<a class="mat-card" href="#/scene/${m.scenes.find(id => !state.done[id]) || m.scenes[0]}">
+          <div class="mat-top"><span class="mat-no">${m.no}</span><span class="mat-ic">${icon(m.icon)}</span></div>
+          <small>${m.short}</small><h3>${m.title}</h3><p>${m.desc}</p>
+          <div class="mat-scenes">${m.scenes.map(id => `<span class="${state.done[id] ? 'ok' : ''}">${id}</span>`).join('')}</div>
+          <div class="mat-foot"><span class="bar"><i style="width:${d / m.scenes.length * 100}%"></i></span><b>${d}/${m.scenes.length}</b></div>
+        </a>`; }).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tint">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow">Latihan & evaluasi</div><h2 class="display-2">Uji pemahamanmu</h2><p class="lead-s">Latihan untuk mengasah diri dengan pembahasan. Evaluasi untuk nilai akhir.</p></div></div>
+      <div class="two-cards">
+        <a class="big-card" href="#/latihan"><span class="bc-ic">${icon('pen')}</span><div><small>Latihan soal</small><h3>${LATIHAN.length} soal campuran</h3><p>Pilihan ganda, benar/salah, pasangkan, urutkan, dan kelompokkan. Setiap jawaban langsung diperiksa dan dijelaskan.</p><span class="bc-meta">${latOk} soal sudah dijawab benar</span></div></a>
+        <a class="big-card dark ${materiDone() ? '' : 'locked'}" href="#/scene/S12"><span class="bc-ic">${icon(materiDone() ? 'flag' : 'lock')}</span><div><small>Evaluasi · S12</small><h3>${EVALUASI.length} soal tanpa pilihan ganda</h3><p>Soal diambil dari aktivitas di materi. Tidak ada tanda benar atau salah, hanya nilai akhir. Batas lulus ${KKM}.</p><span class="bc-meta">${ev !== null ? `Nilai terakhir: ${ev}` : materiDone() ? 'Sudah bisa dikerjakan' : `Terbuka setelah ${MATERI_SCENES.filter(id => !state.done[id]).length} scene materi lagi`}</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap faq-wrap">
+      <div><div class="eyebrow">Yang sering ditanyakan</div><h2 class="display-2">Pertanyaan umum</h2><p class="lead-s">Masih bingung? Buka halaman petunjuk.</p><a class="btn btn-outline" href="#/petunjuk">Petunjuk</a></div>
+      <div class="faq">${faq.map(([q, a], i) => `<details ${i === 0 ? 'open' : ''}><summary>${q}<span class="plus"></span></summary><p>${a}</p></details>`).join('')}</div>
+    </div>
+  </section>`;
 }
 
 /* =========================================================================
@@ -1439,7 +1480,7 @@ function mountSertifikat() {
 }
 
 const PAGES = {
-  '': { v: viewHome, m: mountHome, title: '' },
+  '': { v: viewHome, title: '' },
   materi: { v: viewMateri, title: 'Materi', nav: 'materi' },
   menu: { v: viewMateri, title: 'Materi', nav: 'materi' },
   latihan: { v: viewLatihan, m: mountLatihan, title: 'Latihan soal', nav: 'latihan' },

@@ -49,7 +49,7 @@ Mulai → S01 Pengantar
 ## Isi di dalam web
 
 ### 1. Beranda dan katalog materi
-Beranda dibuat ringkas seperti aplikasi, cukup satu layar: tombol **Lanjutkan** ke scene terakhir, persentase selesai, level dan XP, daftar materi yang bisa dibuka-tutup untuk melihat scene-nya, **soal kilat** acak yang langsung dicek, serta pintasan ke Latihan, Evaluasi, dan Panduan. Halaman **Materi** menampilkan ketiga materi beserta scene-nya. Materi dipelajari berurutan: scene yang sudah selesai diberi centang, yang belum terbuka diberi gembok.
+Beranda berisi pengenalan pelatihan, pintasan ke Tujuan, Petunjuk, Alur, dan Peta Konsep, tombol **Lanjutkan belajar** yang langsung membuka scene terakhir, serta progres per materi. Halaman **Materi** menampilkan ketiga materi beserta scene-nya. Scene yang sudah selesai diberi tanda centang, dan scene yang masih terkunci diberi gembok.
 
 ![Katalog materi](docs/screenshots/02-materi.png)
 
