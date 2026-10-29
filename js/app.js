@@ -343,7 +343,7 @@ function routeRail(cur) {
    ========================================================================= */
 function viewHome() {
   const started = doneCount() > 0, res = resumeHref();
-  return `
+  return `<div class="home-fit">
   <section class="hero">
     <div class="wrap hero-in">
       <div class="hero-text">
@@ -370,7 +370,7 @@ function viewHome() {
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec hf-start">
     <div class="wrap">
       <div class="sec-head"><div><div class="eyebrow">Mulai dari sini</div><h2 class="display-2">Kenali pelatihannya dulu</h2><p class="lead-s">Baca tujuan dan petunjuknya, lihat alurnya, lalu mulai dari materi yang paling kamu butuhkan.</p></div>
         <a class="btn btn-outline" href="#/glosarium">${icon('book')} Glosarium istilah</a></div>
@@ -379,7 +379,7 @@ function viewHome() {
           .map(([n, t, d, h, ic]) => `<a class="start-card" href="${h}"><span class="sc-n">${n}</span><span class="sc-ic">${icon(ic)}</span><h3>${t}</h3><p>${d}</p><span class="sc-go">Buka ${icon('right')}</span></a>`).join('')}
       </div>
     </div>
-  </section>`;
+  </section></div>`;
 }
 
 /* =========================================================================
