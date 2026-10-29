@@ -1341,6 +1341,71 @@ a.brand-mark { text-decoration: none; }
 .sheet.wide, .lesson-wide { max-width: none; }
 .read-line { max-width: none; }
 
+/* ---------- Rute Belajar (stepper ala LMS) ---------- */
+.r2 { padding: 1rem 1.25rem 1.1rem; border: 1px solid var(--line); }
+.r2-head { display: flex; align-items: center; gap: .85rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.r2-tt { display: grid; line-height: 1.25; }
+.r2-tt > b { color: var(--maroon-2); font-size: 1rem; }
+.r2-tt small { color: var(--muted); font-size: .78rem; }
+.r2-tt small b { color: var(--maroon); }
+.r2-prog { flex: 1 1 160px; max-width: 340px; display: flex; align-items: center; gap: .6rem; }
+.r2-bar { flex: 1; height: 8px; border-radius: 99px; background: var(--sand); overflow: hidden; }
+.r2-bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--maroon), var(--gold-l)); transition: width .8s var(--ease); }
+.r2-prog > b { font-size: .82rem; color: var(--maroon); min-width: 2.6em; }
+.r2-act { margin-left: auto; display: flex; gap: .5rem; align-items: center; }
+.r2-act .rail-all { margin-left: 0; }
+.r2-go { display: inline-flex; align-items: center; gap: .35rem; font-size: .8rem; font-weight: 700; text-decoration: none; color: var(--maroon-3); background: var(--gold-l); padding: .45em .9em; border-radius: 10px; box-shadow: 0 6px 14px -8px rgba(122, 31, 46, .7); transition: transform .2s var(--ease), box-shadow .2s; }
+.r2-go:hover { transform: translateY(-2px); box-shadow: 0 10px 18px -10px rgba(122, 31, 46, .8); }
+.r2-go .ic { width: .9rem; height: .9rem; }
+.r2-go .ic .f { display: none; }
+
+.r2-track { position: relative; display: flex; overflow-x: auto; overflow-y: visible; padding: .2rem .1rem .3rem; scrollbar-width: thin; scroll-behavior: smooth; }
+.r2-grp { flex: calc(var(--n) + .7) 1 0; min-width: max(118px, calc(var(--n) * 66px)); position: relative; padding: 0 .1rem; }
+.r2-grp + .r2-grp { border-left: 1px dashed var(--line); }
+.r2-gh { display: flex; align-items: center; justify-content: space-between; gap: .4rem; padding: .25rem .6rem .5rem; }
+.r2-gh b { font-size: .66rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--maroon-2); white-space: nowrap; }
+.r2-gh span { display: inline-flex; align-items: center; gap: .2rem; font-size: .68rem; font-weight: 700; color: var(--muted); background: var(--paper); padding: .1em .5em; border-radius: 99px; }
+.r2-gh .ic { width: .75rem; height: .75rem; }
+.r2-gh .ic .f { display: none; }
+.r2-grp.full .r2-gh span { background: var(--ok-bg); color: var(--ok); }
+.r2-grp.go .r2-gh span { background: var(--gold-s); color: var(--maroon); }
+.r2-grp.lock .r2-gh b { color: var(--muted); }
+
+.r2-stops { position: relative; display: grid; grid-template-columns: repeat(var(--n), 1fr); }
+.r2-stops::before, .r2-stops::after { content: ''; position: absolute; left: 0; top: 19px; height: 4px; border-radius: 4px; }
+.r2-stops::before { right: 0; background: var(--sand); }
+.r2-stops::after { width: var(--fill); background: linear-gradient(90deg, var(--maroon), var(--gold)); transition: width .9s var(--ease); }
+.r2-stop { position: relative; z-index: 1; display: grid; justify-items: center; gap: .35rem; text-decoration: none; padding-bottom: .1rem; outline: none; animation: r2In .5s var(--ease) both; animation-delay: calc(var(--i) * 35ms); }
+@keyframes r2In { from { opacity: 0; transform: translateY(8px) scale(.85); } }
+.r2-dot { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: var(--maroon); border: 2.5px solid var(--maroon); font-size: .8rem; box-shadow: 0 0 0 4px var(--card); transition: transform .25s cubic-bezier(.3, 1.5, .5, 1), box-shadow .25s, background .25s; }
+.r2-dot b { font-weight: 800; }
+.r2-dot .ic { width: 1rem; height: 1rem; }
+.r2-dot .ic .f { display: none; }
+.r2-lbl { font-size: .68rem; font-weight: 700; color: var(--muted); letter-spacing: .02em; white-space: nowrap; }
+.r2-stop:hover .r2-dot, .r2-stop:focus-visible .r2-dot { transform: translateY(-3px) scale(1.08); box-shadow: 0 0 0 4px var(--card), 0 10px 18px -8px rgba(59, 17, 25, .55); }
+.r2-stop:focus-visible .r2-dot { box-shadow: 0 0 0 4px var(--card), 0 0 0 7px var(--gold); }
+.r2-stop.done .r2-dot { background: var(--maroon); color: var(--gold-s); border-color: var(--maroon); }
+.r2-stop.done .r2-lbl { color: var(--maroon); }
+.r2-stop.locked .r2-dot { background: var(--sand); color: #8a7476; border: 2px solid #e2cfb0; }
+.r2-stop.locked:hover .r2-dot { transform: translateY(-2px); animation: r2Shake .4s; }
+@keyframes r2Shake { 25% { rotate: -8deg; } 75% { rotate: 8deg; } }
+.r2-stop.cur .r2-dot { width: 48px; height: 48px; margin-top: -3px; margin-bottom: -3px; background: var(--gold-l); color: var(--maroon-3); border: 3px solid var(--maroon-2); animation: r2Pulse 2s ease-in-out infinite; }
+.r2-stop.cur.is-done .r2-dot { background: var(--maroon); color: var(--gold-s); }
+.r2-stop.cur .r2-lbl { color: #fff; background: var(--maroon); padding: .1em .55em; border-radius: 99px; }
+@keyframes r2Pulse { 0%, 100% { box-shadow: 0 0 0 4px var(--card), 0 0 0 4px rgba(226, 176, 74, .55); } 50% { box-shadow: 0 0 0 4px var(--card), 0 0 0 12px rgba(226, 176, 74, 0); } }
+body.settled .r2-stop { animation: none; }
+@media (prefers-reduced-motion: reduce) { .r2-stop, .r2-stop.cur .r2-dot { animation: none; } }
+@media (max-width: 760px) {
+  .r2 { padding: .85rem .8rem .9rem; }
+  .r2-head { gap: .6rem; margin-bottom: .7rem; }
+  .r2-prog { order: 5; flex-basis: 100%; max-width: none; }
+  .r2-act .rail-all span { display: none; }
+  .r2-grp { min-width: max(104px, calc(var(--n) * 58px)); }
+  .r2-dot { width: 36px; height: 36px; }
+  .r2-stops::before, .r2-stops::after { top: 16px; }
+  .r2-stop.cur .r2-dot { width: 42px; height: 42px; }
+}
+
 </style>
 </head>
 <body>
@@ -1702,20 +1767,36 @@ function mcq(el, { q, opts, onDone, store, key }) {
 /* Rute belajar: jalur perangko S01–S13 di atas halaman (pengganti sidebar) */
 function routeRail(cur) {
   const groups = [...MATERI.slice(0, 4).map(m => [m.short, m.scenes]), ['Latihan', ['L']], ['Akhir', ['S12', 'S13']]];
-  const seq = groups.flatMap(g => g[1]);
-  const ci = Math.max(0, seq.indexOf(cur));
-  const stop = id => {
-    const isL = id === 'L', sc = isL ? { title: 'Latihan Soal', type: `${LATIHAN.length} soal` } : SCENES[id];
-    const d = isL ? false : state.done[id], lk = isL ? !materiDone() : locked(id);
-    return `<a class="stop ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-peek="${id}" aria-label="${id} · ${sc.title}${d ? ' (selesai)' : lk ? ' (terkunci)' : ''}">
-      <span class="stop-st">${d ? icon('check') : lk ? icon('lock') : id}</span></a>`;
+  const isDone = id => id === 'L' ? latDikerjakan() === LATIHAN.length : !!state.done[id];
+  const isLock = id => id === 'L' ? !materiDone() : locked(id);
+  const total = ORDER.length, n = doneCount(), p = Math.round(n / total * 100);
+  const res = resumeHref(), resId = (res.match(/S\d+/) || [''])[0];
+  let prevFull = true, k = 0;
+  const grp = ([label, ids]) => {
+    const d = ids.filter(isDone).length, full = d === ids.length, anyOpen = ids.some(id => !isLock(id));
+    /* garis terisi sampai titik pertama yang belum selesai di kelompok yang sedang berjalan */
+    const fill = full ? 100 : (d || prevFull) && anyOpen ? (d + .5) / ids.length * 100 : 0;
+    prevFull = full;
+    const st = full ? 'full' : anyOpen ? 'go' : 'lock';
+    return `<div class="r2-grp ${st}" style="--n:${ids.length}">
+      <div class="r2-gh"><b>${label}</b><span>${full ? icon('check') : st === 'lock' ? icon('lock') : ''}${d}/${ids.length}</span></div>
+      <div class="r2-stops" style="--fill:${fill.toFixed(1)}%">${ids.map(id => {
+        const isL = id === 'L', dn = isDone(id), lk = isLock(id), c = id === cur;
+        const cls = c ? 'cur' : dn ? 'done' : lk ? 'locked' : 'open';
+        const t = isL ? 'Latihan Soal' : SCENES[id].title;
+        return `<a class="r2-stop ${cls} ${dn ? 'is-done' : ''}" style="--i:${k++}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-peek="${id}" aria-label="${id} · ${t}${dn ? ' (selesai)' : lk ? ' (terkunci)' : ''}"${c ? ' aria-current="step"' : ''}>
+          <span class="r2-dot">${dn && !c ? icon('check') : lk ? icon('lock') : `<b>${isL ? 'L' : id.slice(1)}</b>`}</span>
+          <span class="r2-lbl">${c ? 'Di sini' : id}</span></a>`;
+      }).join('')}</div></div>`;
   };
-  return `<nav class="rail" aria-label="Rute belajar">
-    <div class="rail-head"><span class="rail-ic">${icon('map')}</span><div><b>Rute Belajar</b><small>${doneCount()} dari 13 scene selesai</small></div><a class="rail-all" href="#/materi">${icon('grid')} Semua materi</a></div>
-    <div class="rail-track" style="--fill:${(ci / (seq.length - 1) * 100).toFixed(1)}%">
-      <span class="rail-line"><i></i></span>
-      ${groups.map(([label, ids]) => `<div class="rail-grp"><small>${label}</small><div class="rail-stops">${ids.map(stop).join('')}</div></div>`).join('')}
+  return `<nav class="rail r2" aria-label="Rute belajar">
+    <div class="r2-head">
+      <span class="rail-ic">${icon('map')}</span>
+      <div class="r2-tt"><b>Rute Belajar</b><small><b>${n}</b> dari ${total} scene selesai</small></div>
+      <div class="r2-prog" title="${p}% selesai"><span class="r2-bar"><i style="width:${p}%"></i></span><b>${p}%</b></div>
+      <div class="r2-act">${resId && resId !== cur && !isLock(resId) ? `<a class="r2-go" href="${res}">${icon('right')} Lanjut ${resId}</a>` : ''}<a class="rail-all" href="#/materi">${icon('grid')}<span>Semua materi</span></a></div>
     </div>
+    <div class="r2-track">${groups.map(grp).join('')}</div>
   </nav>`;
 }
 
@@ -1907,7 +1988,6 @@ function mountScene(id) {
     state.done[id] = true; save(); updateBar();
     if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
     if (freshDone && !silent) celebrate();
-    $$('.stop').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.querySelector('.stop-st').innerHTML = icon('check'); } });
     const rail = $('.rail'); if (rail) rail.outerHTML = routeRail(id);
     const nx = ORDER[ORDER.indexOf(id) + 1];
     if (freshDone && !silent && nx && MATERI_SCENES.includes(nx)) toast(`${nx} · ${SCENES[nx].title} sudah kebuka.`);
@@ -2954,8 +3034,8 @@ async function route() {
   $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === navKey));
   requestAnimationFrame(() => moveInd(activeTab()));
   /* Rute belajar: geser otomatis supaya scene sekarang berada di tengah */
-  const trk = $('.rail-track'), curStop = trk && $('.stop.cur', trk);
-  if (curStop) trk.scrollLeft = curStop.closest('.rail-grp').offsetLeft + curStop.offsetLeft - trk.clientWidth / 2 + curStop.offsetWidth / 2;
+  const trk = $('.r2-track'), curStop = trk && $('.r2-stop.cur', trk);
+  if (curStop && trk.scrollWidth > trk.clientWidth) trk.scrollLeft = curStop.getBoundingClientRect().left - trk.getBoundingClientRect().left + trk.scrollLeft - trk.clientWidth / 2 + curStop.offsetWidth / 2;
   $('#readLine').style.width = '0%';
   document.body.classList.toggle('is-home', !isScene && !page);
   window.scrollTo({ top: 0, behavior: 'instant' });

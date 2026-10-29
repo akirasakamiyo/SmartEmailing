@@ -321,20 +321,36 @@ function mcq(el, { q, opts, onDone, store, key }) {
 /* Rute belajar: jalur perangko S01–S13 di atas halaman (pengganti sidebar) */
 function routeRail(cur) {
   const groups = [...MATERI.slice(0, 4).map(m => [m.short, m.scenes]), ['Latihan', ['L']], ['Akhir', ['S12', 'S13']]];
-  const seq = groups.flatMap(g => g[1]);
-  const ci = Math.max(0, seq.indexOf(cur));
-  const stop = id => {
-    const isL = id === 'L', sc = isL ? { title: 'Latihan Soal', type: `${LATIHAN.length} soal` } : SCENES[id];
-    const d = isL ? false : state.done[id], lk = isL ? !materiDone() : locked(id);
-    return `<a class="stop ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-peek="${id}" aria-label="${id} · ${sc.title}${d ? ' (selesai)' : lk ? ' (terkunci)' : ''}">
-      <span class="stop-st">${d ? icon('check') : lk ? icon('lock') : id}</span></a>`;
+  const isDone = id => id === 'L' ? latDikerjakan() === LATIHAN.length : !!state.done[id];
+  const isLock = id => id === 'L' ? !materiDone() : locked(id);
+  const total = ORDER.length, n = doneCount(), p = Math.round(n / total * 100);
+  const res = resumeHref(), resId = (res.match(/S\d+/) || [''])[0];
+  let prevFull = true, k = 0;
+  const grp = ([label, ids]) => {
+    const d = ids.filter(isDone).length, full = d === ids.length, anyOpen = ids.some(id => !isLock(id));
+    /* garis terisi sampai titik pertama yang belum selesai di kelompok yang sedang berjalan */
+    const fill = full ? 100 : (d || prevFull) && anyOpen ? (d + .5) / ids.length * 100 : 0;
+    prevFull = full;
+    const st = full ? 'full' : anyOpen ? 'go' : 'lock';
+    return `<div class="r2-grp ${st}" style="--n:${ids.length}">
+      <div class="r2-gh"><b>${label}</b><span>${full ? icon('check') : st === 'lock' ? icon('lock') : ''}${d}/${ids.length}</span></div>
+      <div class="r2-stops" style="--fill:${fill.toFixed(1)}%">${ids.map(id => {
+        const isL = id === 'L', dn = isDone(id), lk = isLock(id), c = id === cur;
+        const cls = c ? 'cur' : dn ? 'done' : lk ? 'locked' : 'open';
+        const t = isL ? 'Latihan Soal' : SCENES[id].title;
+        return `<a class="r2-stop ${cls} ${dn ? 'is-done' : ''}" style="--i:${k++}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-peek="${id}" aria-label="${id} · ${t}${dn ? ' (selesai)' : lk ? ' (terkunci)' : ''}"${c ? ' aria-current="step"' : ''}>
+          <span class="r2-dot">${dn && !c ? icon('check') : lk ? icon('lock') : `<b>${isL ? 'L' : id.slice(1)}</b>`}</span>
+          <span class="r2-lbl">${c ? 'Di sini' : id}</span></a>`;
+      }).join('')}</div></div>`;
   };
-  return `<nav class="rail" aria-label="Rute belajar">
-    <div class="rail-head"><span class="rail-ic">${icon('map')}</span><div><b>Rute Belajar</b><small>${doneCount()} dari 13 scene selesai</small></div><a class="rail-all" href="#/materi">${icon('grid')} Semua materi</a></div>
-    <div class="rail-track" style="--fill:${(ci / (seq.length - 1) * 100).toFixed(1)}%">
-      <span class="rail-line"><i></i></span>
-      ${groups.map(([label, ids]) => `<div class="rail-grp"><small>${label}</small><div class="rail-stops">${ids.map(stop).join('')}</div></div>`).join('')}
+  return `<nav class="rail r2" aria-label="Rute belajar">
+    <div class="r2-head">
+      <span class="rail-ic">${icon('map')}</span>
+      <div class="r2-tt"><b>Rute Belajar</b><small><b>${n}</b> dari ${total} scene selesai</small></div>
+      <div class="r2-prog" title="${p}% selesai"><span class="r2-bar"><i style="width:${p}%"></i></span><b>${p}%</b></div>
+      <div class="r2-act">${resId && resId !== cur && !isLock(resId) ? `<a class="r2-go" href="${res}">${icon('right')} Lanjut ${resId}</a>` : ''}<a class="rail-all" href="#/materi">${icon('grid')}<span>Semua materi</span></a></div>
     </div>
+    <div class="r2-track">${groups.map(grp).join('')}</div>
   </nav>`;
 }
 
@@ -526,7 +542,6 @@ function mountScene(id) {
     state.done[id] = true; save(); updateBar();
     if (btn) { btn.classList.remove('is-locked'); if (freshDone && !silent) btn.classList.add('glow'); }
     if (freshDone && !silent) celebrate();
-    $$('.stop').forEach(a => { if (a.getAttribute('href') === '#/scene/' + id) { a.classList.add('done'); a.querySelector('.stop-st').innerHTML = icon('check'); } });
     const rail = $('.rail'); if (rail) rail.outerHTML = routeRail(id);
     const nx = ORDER[ORDER.indexOf(id) + 1];
     if (freshDone && !silent && nx && MATERI_SCENES.includes(nx)) toast(`${nx} · ${SCENES[nx].title} sudah kebuka.`);
@@ -1573,8 +1588,8 @@ async function route() {
   $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === navKey));
   requestAnimationFrame(() => moveInd(activeTab()));
   /* Rute belajar: geser otomatis supaya scene sekarang berada di tengah */
-  const trk = $('.rail-track'), curStop = trk && $('.stop.cur', trk);
-  if (curStop) trk.scrollLeft = curStop.closest('.rail-grp').offsetLeft + curStop.offsetLeft - trk.clientWidth / 2 + curStop.offsetWidth / 2;
+  const trk = $('.r2-track'), curStop = trk && $('.r2-stop.cur', trk);
+  if (curStop && trk.scrollWidth > trk.clientWidth) trk.scrollLeft = curStop.getBoundingClientRect().left - trk.getBoundingClientRect().left + trk.scrollLeft - trk.clientWidth / 2 + curStop.offsetWidth / 2;
   $('#readLine').style.width = '0%';
   document.body.classList.toggle('is-home', !isScene && !page);
   window.scrollTo({ top: 0, behavior: 'instant' });
