@@ -131,7 +131,7 @@ Setiap scene baru terbuka setelah scene sebelumnya selesai, dan latihan soal ter
 ## Fitur lain
 - **Progres tersimpan otomatis** di browser: scene selesai, kartu yang sudah dibaca, jawaban setiap aktivitas, latihan, evaluasi, skor, dan lencana. Pindah halaman tidak menghapus apa pun.
 - **Cincin progres dan badge** di navbar: persentase belajar, jumlah soal latihan yang belum dikerjakan, dan status evaluasi.
-- **Panduan** dalam satu halaman bertab: Cara pakai dan arti kode interaksi, Tujuan belajar per scene (*Normal, Hover, Hit, Swipe, Seret & letakkan, Show*), Flowchart, Peta Konsep, dan Glosarium yang bisa dicari.
+- **Panduan** dalam satu halaman bertab: Cara pakai dan arti kode interaksi (*Normal, Hover, Hit, Swipe, Seret & letakkan, Show*), Tujuan belajar per scene, Flowchart, Peta Konsep, dan Glosarium yang bisa dicari.
 - **Animasi**: transisi berbeda untuk setiap jenis halaman, ikon yang bergerak saat diklik, efek suara klik dan benar/salah (bisa dimatikan), serta konfeti saat scene selesai.
 - **Tanpa tautan luar**: semua aset ada di dalam web, jadi bisa dipakai tanpa internet.
 - **Warna**: marun, krem, dan emas.
