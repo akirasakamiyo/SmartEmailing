@@ -326,7 +326,7 @@ function routeRail(cur) {
   const stop = id => {
     const isL = id === 'L', sc = isL ? { title: 'Latihan Soal', type: `${LATIHAN.length} soal` } : SCENES[id];
     const d = isL ? false : state.done[id], lk = isL ? !materiDone() : locked(id);
-    return `<a class="stop ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-tip="${sc.title}" aria-label="${id} · ${sc.title}${d ? ' (selesai)' : lk ? ' (terkunci)' : ''}">
+    return `<a class="stop ${id === cur ? 'cur' : ''} ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="${isL ? '#/latihan' : '#/scene/' + id}" data-peek="${id}" aria-label="${id} · ${sc.title}${d ? ' (selesai)' : lk ? ' (terkunci)' : ''}">
       <span class="stop-st">${d ? icon('check') : lk ? icon('lock') : id}</span></a>`;
   };
   return `<nav class="rail" aria-label="Rute belajar">
@@ -337,6 +337,46 @@ function routeRail(cur) {
     </div>
   </nav>`;
 }
+
+/* Mini preview saat kursor/fokus berada di scene pada Rute Belajar dan daftar materi.
+   Ditempel di <body> dengan posisi fixed supaya tidak terpotong oleh wadah yang bisa digulir */
+const peekInfo = id => {
+  if (id === 'L') {
+    const lk = !materiDone();
+    return { code: 'L', grp: 'Latihan', title: 'Latihan Soal', type: `${LATIHAN.length} soal campuran`, desc: 'Pilihan ganda, benar/salah, pasangkan, urutkan, dan kelompokkan, lengkap dengan pembahasan.', st: lk ? 'lock' : 'open', why: 'Selesaikan semua scene materi dulu.' };
+  }
+  const s = SCENES[id], m = materiOf(id), i = ORDER.indexOf(id);
+  const why = id === 'S12' ? 'Selesaikan semua scene materi dulu.' : id === 'S13' ? `Lulus evaluasi dulu (nilai minimal ${KKM}).` : i < 1 ? '' : `Selesaikan ${ORDER[i - 1]} · ${SCENES[ORDER[i - 1]].title} dulu.`;
+  return { code: id, grp: m ? m.short : '', title: s.title, type: s.type, desc: s.tujuan, st: state.done[id] ? 'done' : locked(id) ? 'lock' : 'open', why };
+};
+(() => {
+  const el = document.createElement('div');
+  el.className = 'peek'; el.setAttribute('role', 'tooltip'); el.id = 'peek';
+  document.body.appendChild(el);
+  let cur = null;
+  const hide = () => { cur = null; el.classList.remove('show'); };
+  const show = t => {
+    const p = peekInfo(t.dataset.peek); if (!p) return;
+    cur = t;
+    el.innerHTML = `<div class="pk-top"><span class="pk-code">${p.code}</span><small>${p.grp}</small><span class="pk-st ${p.st}">${icon(p.st === 'done' ? 'check' : p.st === 'lock' ? 'lock' : 'right')}${p.st === 'done' ? 'Selesai' : p.st === 'lock' ? 'Terkunci' : 'Bisa dibuka'}</span></div>
+      <b class="pk-t">${p.title}</b><small class="pk-type">${icon('pointer')} ${p.type}</small>
+      <p class="pk-d">${p.desc}</p>${p.st === 'lock' ? `<div class="pk-why">${icon('lock')} ${p.why}</div>` : ''}`;
+    el.classList.add('show');
+    const r = t.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight, gap = 10, pad = 8;
+    let x = r.left + r.width / 2 - w / 2;
+    x = Math.max(pad, Math.min(x, innerWidth - w - pad));
+    let y = r.bottom + gap, below = true;
+    if (y + h > innerHeight - pad) { y = r.top - gap - h; below = false; }
+    if (y < pad) { y = pad; }
+    el.style.left = x + 'px'; el.style.top = y + 'px';
+    el.style.setProperty('--ax', Math.max(14, Math.min(w - 14, r.left + r.width / 2 - x)) + 'px');
+    el.classList.toggle('up', !below);
+  };
+  document.addEventListener('mouseover', e => { if (matchMedia('(hover: none)').matches) return; const t = e.target.closest('[data-peek]'); if (t && t !== cur) show(t); else if (!t && cur) hide(); });
+  document.addEventListener('focusin', e => { const t = e.target.closest('[data-peek]'); if (t) show(t); else hide(); });
+  document.addEventListener('focusout', e => { if (e.target.closest('[data-peek]')) hide(); });
+  addEventListener('scroll', hide, true); addEventListener('hashchange', hide); addEventListener('resize', hide);
+})();
 
 /* =========================================================================
    BERANDA
@@ -386,7 +426,7 @@ function viewHome() {
    KATALOG MATERI
    ========================================================================= */
 function viewMateri() {
-  const row = id => { const lk = locked(id), d = state.done[id]; return `<a class="srow ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}"><span class="srow-st">${d ? icon('check') : lk ? icon('lock') : id}</span><span class="srow-t"><b>${SCENES[id].title}</b><small>${id} · ${SCENES[id].type}</small></span>${icon('right')}</a>`; };
+  const row = id => { const lk = locked(id), d = state.done[id]; return `<a class="srow ${d ? 'done' : ''} ${lk ? 'locked' : ''}" href="#/scene/${id}" data-peek="${id}"><span class="srow-st">${d ? icon('check') : lk ? icon('lock') : id}</span><span class="srow-t"><b>${SCENES[id].title}</b><small>${id} · ${SCENES[id].type}</small></span>${icon('right')}</a>`; };
   return `<div class="page wrap">
     <header class="page-head"><div class="eyebrow">Materi</div><h1 class="display">Materi</h1><p class="lead-s">Kerjakan dari atas ke bawah. Scene berikutnya kebuka setelah kartu materinya dibaca dan aktivitasnya beres.</p>
       <div class="page-prog"><span class="bar"><i style="width:${pct()}%"></i></span><b>${pct()}%</b><small>${doneCount()}/13 scene selesai</small></div></header>
