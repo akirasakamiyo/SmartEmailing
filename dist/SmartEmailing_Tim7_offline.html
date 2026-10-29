@@ -1334,6 +1334,13 @@ a.brand-mark { text-decoration: none; }
 .pk-why .ic { flex: none; width: .9rem; height: .9rem; margin-top: .1rem; }
 .pk-why .ic .f { display: none; }
 
+/* ---------- Semua halaman selebar layar (tanpa ruang kosong kiri-kanan) ---------- */
+:root { --wrap: 100%; }
+.wrap, .page { max-width: none; padding-left: clamp(16px, 2.4vw, 32px); padding-right: clamp(16px, 2.4vw, 32px); }
+.nav-in { max-width: none; }
+.sheet.wide, .lesson-wide { max-width: none; }
+.read-line { max-width: none; }
+
 </style>
 </head>
 <body>
