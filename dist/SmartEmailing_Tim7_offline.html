@@ -1802,6 +1802,21 @@ function routeRail(cur) {
 
 /* Mini preview saat kursor/fokus berada di scene pada Rute Belajar dan daftar materi.
    Ditempel di <body> dengan posisi fixed supaya tidak terpotong oleh wadah yang bisa digulir */
+const PEEK_TEKS = {
+  S01: 'Kenalan dulu dengan pelatihannya: mau belajar apa saja dan urutannya seperti apa.',
+  S02: 'Kenapa email masih jadi andalan di kantor, dan kenapa nadanya harus tetap profesional.',
+  S03: 'Bongkar satu per satu bagian email, mulai dari subject sampai tanda tangan.',
+  S04: 'Cara menulis subject yang bikin email dibuka, plus salam pembuka dan penutup yang pas.',
+  S05: 'Lihat kerangka email lamaran yang rapi, lalu pahami fungsi tiap bagiannya.',
+  S06: 'Latihan memperkenalkan diri dengan singkat dan melampirkan CV serta portofolio tanpa salah.',
+  S07: 'Berburu kesalahan kecil yang sering bikin lamaran dilewati HR.',
+  S08: 'Saatnya praktik: susun email lamaranmu sendiri sampai siap dikirim.',
+  S09: 'Kapan pakai CC, kapan BCC, dan jam berapa email sebaiknya dikirim.',
+  S10: 'Belum ada kabar dari HR? Di sini dibahas cara menanyakannya dengan sopan.',
+  S11: 'Ubah kalimat santai jadi formal dan sopan, tanpa terdengar kaku.',
+  S12: 'Ujian akhir untuk mengukur pemahaman seluruh materi. Nilainya baru keluar setelah semua jawaban dikirim.',
+  S13: 'Rangkuman satu halaman yang bisa disimpan, ditambah tempat untuk memberi masukan.',
+};
 const peekInfo = id => {
   if (id === 'L') {
     const lk = !materiDone();
@@ -1809,7 +1824,7 @@ const peekInfo = id => {
   }
   const s = SCENES[id], m = materiOf(id), i = ORDER.indexOf(id);
   const why = id === 'S12' ? 'Selesaikan semua scene materi dulu.' : id === 'S13' ? `Lulus evaluasi dulu (nilai minimal ${KKM}).` : i < 1 ? '' : `Selesaikan ${ORDER[i - 1]} · ${SCENES[ORDER[i - 1]].title} dulu.`;
-  return { code: id, grp: m ? m.short : '', title: s.title, type: s.type, desc: s.tujuan, st: state.done[id] ? 'done' : locked(id) ? 'lock' : 'open', why };
+  return { code: id, grp: m ? m.short : '', title: s.title, type: s.type, desc: PEEK_TEKS[id] || s.tujuan, st: state.done[id] ? 'done' : locked(id) ? 'lock' : 'open', why };
 };
 (() => {
   const el = document.createElement('div');
